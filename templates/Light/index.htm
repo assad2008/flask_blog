@@ -1,0 +1,31 @@
+{% include 'Light/header.htm' %}
+<div id="content" class="inner">
+	<div id="main-col" class="alignleft">
+		<div id="wrapper">
+			{% for blog in blogs %}
+			<article class="post">
+				<div class="post-content">
+					<header>
+						<div class="icon"></div>
+						<time datetime="{{blog.get('Date')}}">{{blog.get('Date')}}</time>
+						<h1 class="title"><a href="/posts/{{ blog.get('filename') }}.html">{{ blog.get('Title') }}</a></h1>
+					</header>
+					<div class="entry">
+						<p>{{ blog.get('Summary') }}</p>
+					</div>
+					<footer>
+						<div class="alignleft">
+						<a href="/posts/{{ blog.get('filename') }}.html" class="more-link">阅读全文</a>
+						</div>
+						<div class="clearfix"></div>
+					</footer>
+				</div>
+			</article>
+			{% endfor %}
+		{% include 'Light/page.htm' %}
+		</div>
+	</div>
+	{% include 'Light/sidebar.htm' %}
+	<div class="clearfix"></div>
+</div>
+{% include 'Light/footer.htm' %}

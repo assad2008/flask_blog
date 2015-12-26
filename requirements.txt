@@ -1,0 +1,10 @@
+Flask
+Flask-Cache
+Flask-Script
+Flask-Babel
+pygments
+markdown2
+redis
+rc
+oss2
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Archives - IT笔记</title>
+	{% include 'Light/css.htm' %}
+</head>
+<body>
+{% include 'Light/nav.htm' %}
+<div id="content" class="inner">
+	<div id="main-col" class="alignleft">
+		<div id="wrapper">
+		<h2 class="archive-title">Archives</h2>
+		<div class="archive">
+			{% for blog in blogs %}
+			<article class="post">
+				<div class="post-content">
+					<header>
+						<div class="icon"></div>
+						<time datetime="{{blog.get('Date')}}">{{blog.get('Date')}}</time>
+						<h1 class="title"><a href="/posts/{{ blog.get('filename') }}.html">{{ blog.get('Title') }}</a></h1>
+					</header>
+				</div>
+			</article>
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+{% include 'Light/sidebar.htm' %}
+<div class="clearfix"></div>
+</div>
+{% include 'Light/footer.htm' %}

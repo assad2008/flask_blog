@@ -1,0 +1,13 @@
+<nav id="pagination">
+{% if pages.current == 1 %}
+	<a href="/page/{{ pages.next }}.html" class="alignright next">后一页</a>
+	<!--<a href="/page/1" class="alignright">第1页</a>-->
+{% elif pages.current < pages.page_num %}
+	<a href="/page/{{ pages.next }}.html" class="alignright next">后一页</a>
+	<!--<a href="/page/{{ pages.current }}" class="alignright">第{{ pages.current }}页</a>-->
+	<a href="/page/{{ pages.previous }}.html" class="alignleft prev">前一页</a>
+{% elif pages.current == pages.page_num %}
+	<!--<a href="/page/{{ pages.current }}" class="alignright">第{{ pages.current }}页</a>-->
+	<a href="/page/{{ pages.previous }}.html" class="alignleft prev">前一页</a>
+{% endif %}
+</nav>
