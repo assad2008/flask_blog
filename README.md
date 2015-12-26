@@ -27,7 +27,7 @@
 
 博客文章示例：
 
-见：<>
+见：<https://raw.githubusercontent.com/assad2012/flask_blog/master/awesome-php.md>
 
 Nginx配置：
 
