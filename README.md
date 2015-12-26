@@ -2,6 +2,10 @@
 
 基于阿里云OSS为存储，采用`Flask`和`Tornado`以及`markdown`构建博客
 
+示例：
+
+<https://ittech.ren/>
+
 首先在aliyun上创建一个OSS
 然后创建两个目录，`blogs`用来存放博客，`topics`用来存放page页面。
 
