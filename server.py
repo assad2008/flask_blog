@@ -5,11 +5,12 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.options import define, options,parse_command_line
+from app.settings import WEB_LOG
 from app import app
 
 define("port", default = 8080, help = "miss port",type = int)
 define("host", default = "0.0.0.0")
-define("log_file_prefix",default = "/data/pythonproject/dev_ittech.ren/ittech/logs/web.log")
+define("log_file_prefix",default = WEB_LOG)
 
 def main():
 	parse_command_line()
