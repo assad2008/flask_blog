@@ -5,7 +5,7 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.options import define, options,parse_command_line
-from app.settings import WEB_LOG
+from blog.settings import WEB_LOG
 from app import app
 
 define("port", default = 8080, help = "miss port",type = int)
