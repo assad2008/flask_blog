@@ -1,0 +1,10 @@
+# flask-blog development dependencies
+# Install: pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+# Testing
+pytest==9.1.1
+
+# Lint & format
+ruff==0.15.20

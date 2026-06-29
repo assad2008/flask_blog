@@ -63,6 +63,13 @@ source .venv/bin/activate # Linux/macOS
 ### 安装
 
 ```bash
+# 方式一：使用 requirements.txt
+pip install -r requirements.txt
+
+# 方式二：开发模式（含 pytest、ruff）
+pip install -r requirements-dev.txt
+
+# 方式三：使用 pyproject.toml
 pip install -e ".[dev,server]"
 ```
 
