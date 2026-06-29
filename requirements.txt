@@ -1,11 +1,3 @@
-Flask
-Tornado
-Flask-Cache
-Flask-Script
-Flask-Babel
-pygments
-markdown2
-redis
-rc
-oss2
-
+# This project now uses pyproject.toml.
+# Install with:
+#   pip install -e ".[dev,server]"

@@ -1,0 +1,39 @@
+{% extends "light/base.html" %}
+
+{% block title %}首页 — 随笔记录{% endblock %}
+
+{% block content %}
+  <!-- Hero -->
+  <div class="page-header" style="border-bottom:none;margin-bottom:1.5rem;">
+    <h1>随笔记录</h1>
+    <p class="page-subtitle">
+      互联网开发 <span style="color:var(--text-tertiary);margin:0 .25rem;">·</span>
+      前端 <span style="color:var(--text-tertiary);margin:0 .25rem;">·</span>
+      后端 <span style="color:var(--text-tertiary);margin:0 .25rem;">·</span>
+      AI 技术文章
+    </p>
+  </div>
+
+  {% if page.items %}
+    <div class="post-list">
+      {% for post in page.items %}
+        <article class="post-card">
+          {% if post.date %}
+            <time datetime="{{ post.date.isoformat() }}">{{ post.date.isoformat() }}</time>
+          {% endif %}
+          <h2><a href="/posts/{{ post.slug }}.html">{{ post.title }}</a></h2>
+          {% if post.summary %}
+            <p class="summary">{{ post.summary }}</p>
+          {% endif %}
+          <a href="/posts/{{ post.slug }}.html" class="read-more">阅读全文</a>
+        </article>
+      {% endfor %}
+    </div>
+    {% include "light/page.html" %}
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">~/posts $ ls</div>
+      <p>暂无文章，敬请期待...</p>
+    </div>
+  {% endif %}
+{% endblock %}

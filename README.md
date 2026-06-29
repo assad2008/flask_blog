@@ -1,81 +1,85 @@
 # flask_blog
 
-基于阿里云OSS为存储，采用`Flask`和`Tornado`以及`markdown`构建博客
+一个使用 Flask 和本地 Markdown 文件构建的博客系统。内容保存在 `content/posts/` 和 `content/topics/` 中，并通过 Git 管理。
 
-示例：
+## 技术栈
 
-<https://ittech.ren/>
+- Python 3.12+
+- Flask 3.x
+- Jinja2
+- 本地 Markdown 文件
+- python-frontmatter
+- markdown-it-py
+- pytest
+- ruff
 
-首先在aliyun上创建一个OSS
-然后创建两个目录，`blogs`用来存放博客，`topics`用来存放page页面。
+## 安装
 
-然后在`/blog/settings.py`配置OSS
+```bash
+pip install -e ".[dev,server]"
+```
 
-	OSS_ENDPOINT = "oss-cn-beijing-internal.aliyuncs.com"
-	OSS_KEY = ""
-	OSS_SECRET = ""
-	OSS_BUCKET = ""
-	
-这样就不用数据库或者其他存储了。
+## 启动开发服务器
 
-然后配置Redis
+```bash
+flask --app blog:create_app --debug run
+```
 
-	REDIS_HOST = '127.0.0.1'
-	REDIS_PORT = 6000
-	
-博客业务使用Flask编写，请求处理使用的`Tornado`。端口默认为：8080
+也可以运行：
 
-启动：
+```bash
+python app.py
+```
 
-	python PATH/server.py --port=8080
+## 生产运行
 
-博客文章示例：
+Linux：
 
-见：<https://raw.githubusercontent.com/assad2012/flask_blog/master/awesome-php.md>
+```bash
+gunicorn "blog:create_app()" --bind 0.0.0.0:8080
+```
 
-Nginx配置：
+Windows 或简单部署：
 
-	log_format  blogaccess  '$remote_addr - $remote_user [$time_local] "$request" '
-				 '$status $body_bytes_sent "$http_referer" '
-				 '"$http_user_agent" $http_x_forwarded_for';
-				 
-	upstream blogserver
-		{
-			server 127.0.0.1:8080;
-		}
-		
-	server
-		{
-			listen       80;
-			server_name yourdomain.com;
-			index index.html index.htm;
-			
-			location ^~ /static/ {
-				root PATH/app/;
-			}
-			
-			location / {
-				proxy_read_timeout 1800;
-				proxy_pass_header Server;
-				proxy_set_header Host $host;
-				proxy_redirect off;
-				proxy_set_header X-Real-IP $remote_addr;
-				proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-				proxy_set_header X-Scheme $scheme;
-				proxy_pass http://blogserver;
-			}
+```bash
+waitress-serve --listen=0.0.0.0:8080 --call blog:create_app
+```
 
-			location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
-			{
-				expires      30d;
-			}
+## 内容目录
 
-			location ~ .*\.(js|css)?$
-			{
-				expires      12h;
-			}
-			access_log  blogaccess.log  blogaccess;
-		}
+```text
+content/posts/   文章 Markdown
+content/topics/  独立页面 Markdown
+```
 
+文章文件示例：
 
+```markdown
+---
+title: Example title
+summary: Example summary
+authors:
+  - Author name
+date: 2026-06-28
+---
 
+Markdown content...
+```
+
+兼容旧字段：`Title`、`Summary`、`Authors`、`Date`。
+
+## URL
+
+- `/`
+- `/page/<page>.html`
+- `/archives.html`
+- `/posts/<slug>.html`
+- `/topic/<slug>.html`
+
+## 测试和格式化
+
+```bash
+pytest
+ruff check .
+ruff format .
+```

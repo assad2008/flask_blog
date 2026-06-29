@@ -1,0 +1,14 @@
+.idea
+data
+vendor
+.vscode
+.claude
+docs
+car-test-ui\node_modules
+car-test-ui\dist
+.venv
+.pytest_cache
+__pycache__/
+*.py[cod]
+*$py.class
+.env

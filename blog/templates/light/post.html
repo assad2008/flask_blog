@@ -1,0 +1,23 @@
+{% extends "light/base.html" %}
+
+{% block title %}{{ post.title }} — 随笔记录{% endblock %}
+
+{% block content %}
+  <article>
+    <header class="article-header">
+      {% if post.date %}
+        <time datetime="{{ post.date.isoformat() }}">{{ post.date.isoformat() }}</time>
+      {% endif %}
+      <h1>{{ post.title }}</h1>
+      {% if post.authors %}
+        <div class="article-meta">
+          <span class="authors">{{ post.authors | join(", ") }}</span>
+        </div>
+      {% endif %}
+    </header>
+
+    <div class="article-body">
+      {{ post.html | safe }}
+    </div>
+  </article>
+{% endblock %}

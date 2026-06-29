@@ -1,0 +1,30 @@
+{% extends "light/base.html" %}
+
+{% block title %}归档 — 随笔记录{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h1>归档</h1>
+    <p class="page-subtitle">全部 {{ posts|length }} 篇文章</p>
+  </div>
+
+  {% if posts %}
+    <ul class="archive-list">
+      {% for post in posts %}
+        <li>
+          {% if post.date %}
+            <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%Y-%m-%d') }}</time>
+          {% else %}
+            <time>----</time>
+          {% endif %}
+          <a href="/posts/{{ post.slug }}.html">{{ post.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">~/posts $ find . -name '*.md'</div>
+      <p>暂无文章。</p>
+    </div>
+  {% endif %}
+{% endblock %}

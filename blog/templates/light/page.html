@@ -1,0 +1,19 @@
+<nav class="pagination" aria-label="分页导航">
+  {% if page.has_previous %}
+    <a href="{% if page.previous_page == 1 %}/{% else %}/page/{{ page.previous_page }}.html{% endif %}" rel="prev">
+      ← 上一页
+    </a>
+  {% else %}
+    <span></span>
+  {% endif %}
+
+  <span>{{ page.current_page }} / {{ page.total_pages }}</span>
+
+  {% if page.has_next %}
+    <a href="/page/{{ page.next_page }}.html" rel="next">
+      下一页 →
+    </a>
+  {% else %}
+    <span></span>
+  {% endif %}
+</nav>
