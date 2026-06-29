@@ -80,6 +80,91 @@
         --shadow-card-hover: 0 4px 20px rgba(0,0,0,.3), 0 2px 8px rgba(59,130,246,.12);
         --shadow-lg: 0 12px 40px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.2);
       }
+
+      /* Pygments 语法高亮 — 暗色主题 (monokai) */
+      .highlight{background:#272822;color:#F8F8F2;padding:1.1rem 1.4rem;border-radius:var(--radius);overflow-x:auto;font-family:var(--font-mono);font-size:.84rem;line-height:1.7;border:1px solid #3E3D32}
+      .highlight pre{background:none;border:none;border-radius:0;padding:0;margin:0;overflow:visible;line-height:inherit}
+      .highlight code{background:none;padding:0;border:none;color:inherit;font-size:inherit}
+      .highlight .hll{background-color:#49483e}
+      .highlight .c{color:#959077}
+      .highlight .err{color:#ED007E;background-color:#1E0010}
+      .highlight .esc{color:#F8F8F2}
+      .highlight .g{color:#F8F8F2}
+      .highlight .k{color:#66D9EF}
+      .highlight .l{color:#AE81FF}
+      .highlight .n{color:#F8F8F2}
+      .highlight .o{color:#FF4689}
+      .highlight .x{color:#F8F8F2}
+      .highlight .p{color:#F8F8F2}
+      .highlight .ch{color:#959077}
+      .highlight .cm{color:#959077}
+      .highlight .cp{color:#959077}
+      .highlight .cpf{color:#959077}
+      .highlight .c1{color:#959077}
+      .highlight .cs{color:#959077}
+      .highlight .gd{color:#FF4689}
+      .highlight .ge{color:#F8F8F2;font-style:italic}
+      .highlight .ges{color:#F8F8F2;font-weight:bold;font-style:italic}
+      .highlight .gr{color:#F8F8F2}
+      .highlight .gh{color:#F8F8F2}
+      .highlight .gi{color:#A6E22E}
+      .highlight .go{color:#66D9EF}
+      .highlight .gp{color:#FF4689;font-weight:bold}
+      .highlight .gs{color:#F8F8F2;font-weight:bold}
+      .highlight .gu{color:#959077}
+      .highlight .gt{color:#F8F8F2}
+      .highlight .kc{color:#66D9EF}
+      .highlight .kd{color:#66D9EF}
+      .highlight .kn{color:#FF4689}
+      .highlight .kp{color:#66D9EF}
+      .highlight .kr{color:#66D9EF}
+      .highlight .kt{color:#66D9EF}
+      .highlight .ld{color:#E6DB74}
+      .highlight .m{color:#AE81FF}
+      .highlight .s{color:#E6DB74}
+      .highlight .na{color:#A6E22E}
+      .highlight .nb{color:#F8F8F2}
+      .highlight .nc{color:#A6E22E}
+      .highlight .no{color:#66D9EF}
+      .highlight .nd{color:#A6E22E}
+      .highlight .ni{color:#F8F8F2;font-weight:bold}
+      .highlight .ne{color:#A6E22E}
+      .highlight .nf{color:#A6E22E}
+      .highlight .nl{color:#F8F8F2}
+      .highlight .nn{color:#F8F8F2}
+      .highlight .nx{color:#A6E22E}
+      .highlight .py{color:#F8F8F2}
+      .highlight .nt{color:#FF4689}
+      .highlight .nv{color:#F8F8F2}
+      .highlight .ow{color:#FF4689}
+      .highlight .pm{color:#F8F8F2}
+      .highlight .w{color:#F8F8F2}
+      .highlight .mb{color:#AE81FF}
+      .highlight .mf{color:#AE81FF}
+      .highlight .mh{color:#AE81FF}
+      .highlight .mi{color:#AE81FF}
+      .highlight .mo{color:#AE81FF}
+      .highlight .sa{color:#E6DB74}
+      .highlight .sb{color:#E6DB74}
+      .highlight .sc{color:#E6DB74}
+      .highlight .dl{color:#E6DB74}
+      .highlight .sd{color:#E6DB74}
+      .highlight .s2{color:#E6DB74}
+      .highlight .se{color:#AE81FF}
+      .highlight .sh{color:#E6DB74}
+      .highlight .si{color:#E6DB74}
+      .highlight .sx{color:#E6DB74}
+      .highlight .sr{color:#E6DB74}
+      .highlight .s1{color:#E6DB74}
+      .highlight .ss{color:#E6DB74}
+      .highlight .bp{color:#F8F8F2}
+      .highlight .fm{color:#A6E22E}
+      .highlight .vc{color:#F8F8F2}
+      .highlight .vg{color:#F8F8F2}
+      .highlight .vi{color:#F8F8F2}
+      .highlight .vm{color:#F8F8F2}
+      .highlight .il{color:#AE81FF}
+    }
     }
 
     /* ---------- Reset ---------- */
@@ -276,6 +361,11 @@
       line-height:1.85;font-size:1rem;
       box-shadow:var(--shadow-card);
     }
+    /* 锚点跳转偏移（避免被 sticky header 遮挡） */
+    .article-body h2[id],.article-body h3[id],.article-body h4[id],
+    .article-body h5[id],.article-body h6[id]{
+      scroll-margin-top:80px;
+    }
     .article-body > * + *{margin-top:1.25rem}
     .article-body h2{
       font-family:var(--font-mono);font-size:1.35rem;font-weight:700;
@@ -350,6 +440,80 @@
     .article-body pre code{
       background:none;padding:0;border:none;color:var(--text-primary);font-size:.85rem;
     }
+
+    /* Pygments 语法高亮 — 亮色主题 */
+    .highlight{background:#f8f8f8;padding:1.1rem 1.4rem;border-radius:var(--radius);overflow-x:auto;font-family:var(--font-mono);font-size:.84rem;line-height:1.7;border:1px solid var(--border)}
+    .highlight pre{background:none;border:none;border-radius:0;padding:0;margin:0;overflow:visible;line-height:inherit}
+    .highlight code{background:none;padding:0;border:none;color:inherit;font-size:inherit}
+    .highlight .hll{background-color:#ffffcc}
+    .highlight .c{color:#3D7B7B;font-style:italic}
+    .highlight .err{border:1px solid #F00}
+    .highlight .k{color:#008000;font-weight:bold}
+    .highlight .o{color:#666}
+    .highlight .ch{color:#3D7B7B;font-style:italic}
+    .highlight .cm{color:#3D7B7B;font-style:italic}
+    .highlight .cp{color:#9C6500}
+    .highlight .cpf{color:#3D7B7B;font-style:italic}
+    .highlight .c1{color:#3D7B7B;font-style:italic}
+    .highlight .cs{color:#3D7B7B;font-style:italic}
+    .highlight .gd{color:#A00000}
+    .highlight .ge{font-style:italic}
+    .highlight .ges{font-weight:bold;font-style:italic}
+    .highlight .gr{color:#E40000}
+    .highlight .gh{color:#000080;font-weight:bold}
+    .highlight .gi{color:#008400}
+    .highlight .go{color:#717171}
+    .highlight .gp{color:#000080;font-weight:bold}
+    .highlight .gs{font-weight:bold}
+    .highlight .gu{color:#800080;font-weight:bold}
+    .highlight .gt{color:#04D}
+    .highlight .kc{color:#008000;font-weight:bold}
+    .highlight .kd{color:#008000;font-weight:bold}
+    .highlight .kn{color:#008000;font-weight:bold}
+    .highlight .kp{color:#008000}
+    .highlight .kr{color:#008000;font-weight:bold}
+    .highlight .kt{color:#B00040}
+    .highlight .m{color:#666}
+    .highlight .s{color:#BA2121}
+    .highlight .na{color:#687822}
+    .highlight .nb{color:#008000}
+    .highlight .nc{color:#00F;font-weight:bold}
+    .highlight .no{color:#800}
+    .highlight .nd{color:#A2F}
+    .highlight .ni{color:#717171;font-weight:bold}
+    .highlight .ne{color:#CB3F38;font-weight:bold}
+    .highlight .nf{color:#00F}
+    .highlight .nl{color:#767600}
+    .highlight .nn{color:#00F;font-weight:bold}
+    .highlight .nt{color:#008000;font-weight:bold}
+    .highlight .nv{color:#19177C}
+    .highlight .ow{color:#A2F;font-weight:bold}
+    .highlight .w{color:#BBB}
+    .highlight .mb{color:#666}
+    .highlight .mf{color:#666}
+    .highlight .mh{color:#666}
+    .highlight .mi{color:#666}
+    .highlight .mo{color:#666}
+    .highlight .sa{color:#BA2121}
+    .highlight .sb{color:#BA2121}
+    .highlight .sc{color:#BA2121}
+    .highlight .dl{color:#BA2121}
+    .highlight .sd{color:#BA2121;font-style:italic}
+    .highlight .s2{color:#BA2121}
+    .highlight .se{color:#AA5D1F;font-weight:bold}
+    .highlight .sh{color:#BA2121}
+    .highlight .si{color:#A45A77;font-weight:bold}
+    .highlight .sx{color:#008000}
+    .highlight .sr{color:#A45A77}
+    .highlight .s1{color:#BA2121}
+    .highlight .ss{color:#19177C}
+    .highlight .bp{color:#008000}
+    .highlight .fm{color:#00F}
+    .highlight .vc{color:#19177C}
+    .highlight .vg{color:#19177C}
+    .highlight .vi{color:#19177C}
+    .highlight .vm{color:#19177C}
+    .highlight .il{color:#666}
 
     /* Tables */
     .article-body table{
@@ -488,6 +652,112 @@
       *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
     }
 
+    /* ---------- Back to Top ---------- */
+    .back-to-top{
+      position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;
+      width:44px;height:44px;border-radius:50%;border:none;
+      background:var(--accent);color:#fff;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 12px rgba(37,99,235,.35);
+      opacity:0;visibility:hidden;transform:translateY(8px) scale(.9);
+      transition:all 250ms cubic-bezier(.4,0,.2,1);
+    }
+    .back-to-top.visible{
+      opacity:1;visibility:visible;transform:translateY(0) scale(1);
+    }
+    .back-to-top:hover{
+      background:var(--accent-hover);
+      box-shadow:0 6px 20px rgba(37,99,235,.45);
+      transform:translateY(-2px) scale(1.05);
+    }
+    .back-to-top:active{transform:scale(.92)}
+    .back-to-top svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+    /* ---------- TOC Sidebar ---------- */
+    .toc-sidebar{
+      position:fixed;top:59px;left:15%;bottom:0;z-index:80;width: 300px;
+      background:var(--bg-glass);backdrop-filter:blur(16px) saturate(180%);
+      -webkit-backdrop-filter:blur(16px) saturate(180%);
+      border-right:1px solid var(--border-light);
+      transform:translateX(-100%);transition:transform 300ms cubic-bezier(.4,0,.2,1);
+      overflow-y:auto;overscroll-behavior:contain;
+    }
+    .toc-sidebar.open{transform:translateX(0)}
+    .toc-inner{padding:1rem .75rem 2rem}
+    .toc-header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 .5rem .85rem;margin-bottom:.25rem;
+      border-bottom:1px solid var(--border-light);
+    }
+    .toc-title{
+      font-family:var(--font-mono);font-size:.68rem;font-weight:600;
+      color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.1em;
+    }
+    .toc-close{
+      display:none;width:32px;height:32px;border-radius:var(--radius-sm);
+      border:1px solid var(--border);background:var(--bg-secondary);
+      color:var(--text-tertiary);cursor:pointer;
+      align-items:center;justify-content:center;transition:all var(--transition);
+    }
+    .toc-close:hover{color:var(--accent);border-color:var(--accent)}
+    .toc-close svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:.1rem}
+    .toc-item a{
+      display:block;font-size:.82rem;color:var(--text-secondary);
+      text-decoration:none;padding:.5rem .65rem;border-radius:var(--radius-sm);
+      border-left:2px solid transparent;
+      transition:all var(--transition);line-height:1.5;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+    }
+    .toc-item a:hover{color:var(--text-primary);background:var(--accent-soft)}
+    .toc-item a:active{background:var(--accent-soft);opacity:.8}
+    .toc-item.toc-level-3 a{padding-left:1.15rem;font-size:.78rem}
+    .toc-item.toc-level-4 a{padding-left:1.7rem;font-size:.76rem}
+    .toc-item.toc-level-5 a{padding-left:2.25rem;font-size:.74rem}
+    .toc-item.toc-level-6 a{padding-left:2.8rem;font-size:.74rem}
+    .toc-item a.active{
+      color:var(--accent);border-left-color:var(--accent);
+      background:var(--accent-soft);font-weight:600;
+    }
+
+    /* TOC 阅读进度条 */
+    .toc-progress{
+      height:2px;background:var(--gradient-accent);
+      border-radius:1px;width:0%;transition:width 80ms linear;
+      margin-bottom:.85rem;
+    }
+
+    /* TOC 移动端蒙层 */
+    .toc-backdrop{
+      display:none;position:fixed;inset:0;top:59px;z-index:79;
+      background:rgba(0,0,0,.25);backdrop-filter:blur(2px);
+      opacity:0;transition:opacity 300ms ease;
+    }
+    .toc-backdrop.visible{display:block;opacity:1}
+
+    /* TOC toggle button (mobile) */
+    .toc-toggle{
+      display:none;position:fixed;top:72px;left:15%;z-index:85;
+      width:44px;height:44px;border-radius:50%;border:1px solid var(--border);
+      background:var(--bg-raised);color:var(--text-tertiary);
+      cursor:pointer;align-items:center;justify-content:center;
+      box-shadow:var(--shadow-card);transition:all var(--transition);
+    }
+    .toc-toggle:hover{color:var(--accent);border-color:var(--accent)}
+    .toc-toggle:active{transform:scale(.95)}
+    .has-toc .toc-toggle{display:flex}
+
+    @media (min-width:1024px){
+      .site-main{padding:3.5rem 0 5rem}
+      .article-body{padding:2.5rem 3rem}
+      .toc-sidebar{transform:translateX(0)!important}
+      .has-toc .container{max-width:920px;margin-left:calc(15% + 300px);margin-right:auto}
+      .toc-toggle{display:none!important}
+      .toc-backdrop{display:none!important}
+      .toc-close{display:none!important}
+    }
+
     /* ---------- Responsive ---------- */
     @media (max-width:640px){
       .container{padding:0 1rem}
@@ -506,6 +776,10 @@
       .archive-list li{flex-direction:column;gap:.1rem;padding:.5rem .75rem}
       .error-page .error-code{font-size:4rem}
       .post-card::before{left:12px;right:12px}
+
+      /* 移动端 header 50px + 1px border = 51px */
+      .toc-sidebar{top:51px}
+      .toc-backdrop{top:51px}
     }
 
     /* Larger screens — subtle layout enhancement */
@@ -538,5 +812,149 @@
       随笔记录<span class="footer-dot"></span>互联网开发 · 前端 · 后端 · AI
     </div>
   </footer>
+
+  <!-- 返回顶部 -->
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部" title="返回顶部">
+    <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script>
+    (function () {
+      /* ---------- 返回顶部 ---------- */
+      const topBtn = document.getElementById("backToTop");
+      if (topBtn) {
+        const toggleTop = () => {
+          topBtn.classList.toggle("visible", window.scrollY > 200);
+        };
+        topBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+        window.addEventListener("scroll", toggleTop, { passive: true });
+        toggleTop();
+      }
+
+      /* ---------- 目录（TOC）---------- */
+      const toc = document.getElementById("tocSidebar");
+      const main = document.querySelector(".site-main");
+      if (!toc || !main) return;
+
+      // 标记页面有目录，用于 CSS 布局
+      main.classList.add("has-toc");
+
+      const tocToggle = document.getElementById("tocToggle");
+      const tocBackdrop = document.getElementById("tocBackdrop");
+      const tocClose = document.getElementById("tocClose");
+      const tocProgress = document.getElementById("tocProgress");
+      const isMobile = () => window.innerWidth < 1024;
+
+      // 打开 / 关闭目录
+      const openToc = () => {
+        toc.classList.add("open");
+        if (tocBackdrop) tocBackdrop.classList.add("visible");
+        document.body.style.overflow = "hidden";
+      };
+      const closeToc = () => {
+        toc.classList.remove("open");
+        if (tocBackdrop) tocBackdrop.classList.remove("visible");
+        document.body.style.overflow = "";
+      };
+
+      if (tocToggle) tocToggle.addEventListener("click", () => {
+        toc.classList.contains("open") ? closeToc() : openToc();
+      });
+      if (tocClose) tocClose.addEventListener("click", closeToc);
+      if (tocBackdrop) tocBackdrop.addEventListener("click", closeToc);
+
+      // 点击目录链接后自动收起（移动端）
+      toc.querySelectorAll(".toc-item a").forEach(link => {
+        link.addEventListener("click", (e) => {
+          const slug = link.dataset.slug;
+          if (!slug) return;
+          const target = document.getElementById(slug);
+          if (!target) return;
+
+          // 平滑滚动到锚点，考虑 sticky header 高度
+          e.preventDefault();
+          const headerOffset = 80;
+          const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - headerOffset;
+
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+
+          // 更新 URL hash 但不跳转
+          if (history.replaceState) history.replaceState(null, null, `#${slug}`);
+
+          if (isMobile()) closeToc();
+        });
+      });
+
+      // ESC 关闭
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && toc.classList.contains("open")) closeToc();
+      });
+
+      // 阅读进度条
+      function updateProgress() {
+        if (!tocProgress) return;
+        const headings = toc.querySelectorAll(".toc-item a[data-slug]");
+        if (headings.length === 0) return;
+        const slugs = Array.from(headings).map(a => a.dataset.slug);
+        const firstHeading = document.getElementById(slugs[0]);
+        const lastHeading = document.getElementById(slugs[slugs.length - 1]);
+        if (!firstHeading || !lastHeading) return;
+
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const startOffset = firstHeading.getBoundingClientRect().top + scrollTop - 120;
+        const endOffset = lastHeading.getBoundingClientRect().top + scrollTop - 120;
+
+        if (scrollTop <= startOffset) {
+          tocProgress.style.width = "0%";
+        } else if (scrollTop >= endOffset) {
+          tocProgress.style.width = "100%";
+        } else {
+          const progress = ((scrollTop - startOffset) / (endOffset - startOffset)) * 100;
+          tocProgress.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        }
+      }
+
+      // ScrollSpy：用 IntersectionObserver 高亮当前章节
+      const tocLinks = toc.querySelectorAll(".toc-item a[data-slug]");
+      if (tocLinks.length > 0) {
+        const slugs = Array.from(tocLinks).map(a => a.dataset.slug);
+        const sections = slugs.map(slug => {
+          const el = document.getElementById(slug);
+          return el ? { slug, el } : null;
+        }).filter(Boolean);
+
+        if (sections.length > 0 && "IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              const link = toc.querySelector(`.toc-item a[data-slug="${entry.target.id}"]`);
+              if (!link) return;
+              if (entry.isIntersecting) {
+                tocLinks.forEach(l => l.classList.remove("active"));
+                link.classList.add("active");
+              }
+            });
+          }, { rootMargin: "0px 0px -55% 0px", threshold: 0 });
+
+          sections.forEach(({ el }) => observer.observe(el));
+        }
+      }
+
+      // 统一滚动处理
+      let ticking = false;
+      window.addEventListener("scroll", () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            updateProgress();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      updateProgress();
+    })();
+  </script>
 </body>
 </html>

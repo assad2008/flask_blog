@@ -1,7 +1,7 @@
 from datetime import date
 
-from blog.content.markdown import render_markdown
-from blog.content.types import Post, Topic
+from blog.content.markdown import extract_headings, render_markdown
+from blog.content.types import Heading, Post, Topic
 
 
 def test_render_post_supports_legacy_metadata_keys():
@@ -78,3 +78,68 @@ Welcome.
     assert topic.summary == "About this site"
     assert topic.date == date(2022, 5, 6)
     assert "Welcome" in topic.html
+
+
+def test_extract_headings_filters_and_slugifies():
+    raw = """---
+title: Test
+---
+
+# H1 ignored
+
+## Section A
+
+Some text.
+
+### Sub A1
+
+More text.
+
+#### Sub A1a
+
+Even more.
+
+##### H5
+
+###### H6
+
+# Another H1 ignored
+
+## Section--B
+
+Text."""
+
+    headings = extract_headings(raw)
+
+    assert len(headings) == 6
+    assert headings[0] == Heading(level=2, text="Section A", slug="section-a")
+    assert headings[1] == Heading(level=3, text="Sub A1", slug="sub-a1")
+    assert headings[2] == Heading(level=4, text="Sub A1a", slug="sub-a1a")
+    assert headings[3] == Heading(level=5, text="H5", slug="h5")
+    assert headings[4] == Heading(level=6, text="H6", slug="h6")
+    assert headings[5] == Heading(level=2, text="Section--B", slug="section--b")
+
+
+def test_render_post_includes_headings():
+    raw = """---
+title: Test
+summary: Test
+date: 2024-01-01
+---
+
+## First
+
+Body.
+
+## Second
+
+More body.
+"""
+
+    post = render_markdown("test", raw, "post")
+
+    assert isinstance(post, Post)
+    assert len(post.headings) == 2
+    assert post.headings[0] == Heading(level=2, text="First", slug="first")
+    assert post.headings[0].level == 2
+    assert post.headings[1] == Heading(level=2, text="Second", slug="second")

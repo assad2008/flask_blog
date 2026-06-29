@@ -67,3 +67,7 @@ Markdown content...
 - 内容通过本地文件系统读取，无需缓存失效逻辑。
 - 依赖由 `pyproject.toml` 管理，使用 `pip install -e ".[dev,server]"` 安装。
 - 使用 `pytest` 进行测试，`ruff` 进行 lint 和格式化。
+
+## 其他要求
+
+- 生成代码一定要有必要的备注
