@@ -11,7 +11,8 @@
 | Jinja2 | 模板引擎 |
 | python-frontmatter | Front matter 解析 |
 | markdown-it-py | Markdown 渲染 |
-| Pygments | 代码高亮 |
+| mdit-py-plugins | 锚点链接、脚注等插件 |
+| Pygments | 代码语法高亮 |
 | Waitress | Windows 生产服务器 |
 | Gunicorn | Linux 生产服务器 |
 | pytest | 测试框架 |
@@ -28,8 +29,8 @@ flask_blog/
 │   ├── config.py             # Settings 数据类 (环境变量加载)
 │   ├── content/
 │   │   ├── __init__.py
-│   │   ├── types.py          # Post、Topic、Page 数据类
-│   │   ├── markdown.py       # Markdown 解析与 front matter 提取
+│   │   ├── types.py          # Post、Topic、Heading 数据类
+│   │   ├── markdown.py       # Markdown 解析、front matter、Pygments 高亮、锚点
 │   │   ├── repository.py     # ContentRepository 文件系统读取
 │   │   └── pagination.py     # 纯分页函数
 │   ├── routes/
@@ -42,7 +43,9 @@ flask_blog/
 ├── content/
 │   ├── posts/                # 文章 Markdown 文件
 │   └── topics/               # 独立页面 Markdown 文件
-└── tests/                    # pytest 测试套件
+├── tests/                    # pytest 测试套件
+├── .env.example              # 环境变量示例
+└── .env                      # 环境变量（已忽略）
 ```
 
 ## 快速开始
@@ -89,7 +92,7 @@ waitress-serve --listen=0.0.0.0:8080 --call blog:create_app
 
 ## 配置
 
-通过环境变量进行配置，所有变量都有默认值：
+通过 `.env` 文件或环境变量进行配置，所有变量都有默认值：
 
 | 环境变量 | 默认值 | 说明 |
 |----------|--------|------|
@@ -97,6 +100,12 @@ waitress-serve --listen=0.0.0.0:8080 --call blog:create_app
 | `BLOG_POSTS_PER_PAGE` | `20` | 每页文章数 |
 | `BLOG_THEME` | `light` | 主题名称 |
 | `BLOG_SECRET_KEY` | `dev-secret-key` | Flask Secret Key（生产环境务必修改） |
+
+复制 `.env.example` 为 `.env` 即可开始：
+
+```bash
+cp .env.example .env
+```
 
 ## 内容格式
 
@@ -111,10 +120,35 @@ authors:
 date: 2026-06-28
 ---
 
-Markdown 正文内容...
+## 一级标题
+
+正文内容...
+
+### 二级标题
+
+更多内容...
+
+\`\`\`python
+# 代码块会自动语法高亮
+def hello():
+    print("world")
+\`\`\`
+
+[外部链接](https://example.com) 会新窗口打开，[内部锚点](#一级标题) 同页跳转。
 ```
 
-字段兼容性：`Title`、`Summary`、`Authors`、`Date`（大写）也支持，小写字段优先。
+### 功能特性
+
+- **代码高亮**：代码块根据语言自动高亮（Pygments），支持亮色/暗色主题
+- **文章目录**：右侧自动生成目录（TOC），支持滚动高亮和阅读进度条
+- **锚点跳转**：标题自动生成锚点 ID，支持中文标题
+- **返回顶部**：右下角返回顶部按钮，滚动后自动出现
+- **外部链接**：外部链接自动在新窗口打开，内部锚点同页跳转
+- **响应式**：移动端目录可收起，桌面端常驻显示
+
+### 字段兼容性
+
+`Title`、`Summary`、`Authors`、`Date`（大写）也支持，小写字段优先。
 
 ## URL 路由
 
@@ -153,3 +187,4 @@ ruff format .
 - 路由处理函数保持简洁，内容逻辑放在 `blog/content/` 中
 - 内容通过本地文件系统读取，无需缓存失效逻辑
 - 使用 `pytest` 进行测试，`ruff` 进行 lint 和格式化
+- 标题使用 `##` 开始的二级标题，会自动出现在文章目录中
