@@ -1,3 +1,10 @@
+---
+Title:  本博客使用的技术
+Summary: 本博客使用的开发技术细节，以及说明
+Authors: Django Wong
+Date:    2026-06-30
+---
+
 # Flask-Blog
 
 一个基于 Flask 和本地 Markdown 文件的现代化博客系统。无需数据库、OSS 或 Redis —— 内容以 Markdown 文件形式保存在 `content/` 目录中，通过 Git 进行版本管理。

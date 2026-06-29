@@ -143,3 +143,25 @@ More body.
     assert post.headings[0] == Heading(level=2, text="First", slug="first")
     assert post.headings[0].level == 2
     assert post.headings[1] == Heading(level=2, text="Second", slug="second")
+
+
+def test_escaped_backticks_render_as_code_block():
+    """反斜杠转义的反引号围栏应渲染为语法高亮代码块。"""
+    raw = r"""---
+title: Test
+summary: Test
+date: 2024-01-01
+---
+
+\`\`\`python
+def hello():
+    print("world")
+\`\`\`
+"""
+
+    post = render_markdown("test", raw, "post")
+
+    assert "<pre>" in post.html
+    assert "highlight" in post.html
+    assert "def" in post.html and "hello" in post.html
+    assert '\\`' not in post.html

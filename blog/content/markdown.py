@@ -98,11 +98,28 @@ class HighlightRenderer(RendererHTML):
         return "<pre><code>" + highlighted + "</code></pre>\n"
 
 
+def _unescape_fences(text: str) -> str:
+    """将 markdown 中转义的反引号围栏还原为可被解析的代码围栏标记。
+
+    markdown-it 的 escape 规则会消耗 ``\\` `` 中的反斜杠，导致 `` \\`\\`\\`python `` 无法被识别为代码围栏。
+    此函数在渲染前将 `` \\`\\`\\` `` 替换为 `` ``` ``，使围栏规则正常工作。
+    """
+    import re
+    # 匹配行首的 \`\`\` 或 \`\`\`，后面跟语言标识符和换行
+    # 替换为普通的 ``` 围栏标记
+    text = re.sub(r'^\\`\\`\\`(\w*)\n', r'```\1\n', text, flags=re.MULTILINE)
+    # 匹配行首的 \`\`\`\`\`\`（关闭围栏）
+    text = re.sub(r'^\\`\\`\\`\s*$', '```', text, flags=re.MULTILINE)
+    return text
+
+
 def render_markdown(slug: str, raw: str, kind: MarkdownKind) -> Post | Topic:
     parsed = frontmatter.loads(raw)
     metadata = parsed.metadata
-    html = _markdown().render(parsed.content)
-    headings = extract_headings(parsed.content)
+    # 预处理：将转义的反引号 \`\`\` 还原为代码围栏标记
+    content = _unescape_fences(parsed.content)
+    html = _markdown().render(content)
+    headings = extract_headings(content)
 
     title = _metadata_value(metadata, "title", "Title") or slug
     summary = _metadata_value(metadata, "summary", "Summary") or ""
