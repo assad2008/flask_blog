@@ -1,85 +1,155 @@
-# flask_blog
+# flask-blog
 
-一个使用 Flask 和本地 Markdown 文件构建的博客系统。内容保存在 `content/posts/` 和 `content/topics/` 中，并通过 Git 管理。
+一个基于 Flask 和本地 Markdown 文件的现代化博客系统。无需数据库、OSS 或 Redis —— 内容以 Markdown 文件形式保存在 `content/` 目录中，通过 Git 进行版本管理。
 
 ## 技术栈
 
-- Python 3.12+
-- Flask 3.x
-- Jinja2
-- 本地 Markdown 文件
-- python-frontmatter
-- markdown-it-py
-- pytest
-- ruff
+| 组件 | 版本 |
+|------|------|
+| Python | 3.12+ |
+| Flask | 3.x |
+| Jinja2 | 模板引擎 |
+| python-frontmatter | Front matter 解析 |
+| markdown-it-py | Markdown 渲染 |
+| Pygments | 代码高亮 |
+| Waitress | Windows 生产服务器 |
+| Gunicorn | Linux 生产服务器 |
+| pytest | 测试框架 |
+| ruff | Lint & 格式化 |
 
-## 安装
+## 项目结构
+
+```text
+flask_blog/
+├── app.py                    # 开发服务器入口
+├── pyproject.toml            # 项目配置与依赖
+├── blog/
+│   ├── __init__.py           # 应用工厂 create_app()
+│   ├── config.py             # Settings 数据类 (环境变量加载)
+│   ├── content/
+│   │   ├── __init__.py
+│   │   ├── types.py          # Post、Topic、Page 数据类
+│   │   ├── markdown.py       # Markdown 解析与 front matter 提取
+│   │   ├── repository.py     # ContentRepository 文件系统读取
+│   │   └── pagination.py     # 纯分页函数
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── index.py          # /、/page/、/archives
+│   │   ├── posts.py          # /posts/<slug>
+│   │   └── topics.py         # /topic/<slug>
+│   └── templates/
+│       └── light/            # 默认主题模板
+├── content/
+│   ├── posts/                # 文章 Markdown 文件
+│   └── topics/               # 独立页面 Markdown 文件
+└── tests/                    # pytest 测试套件
+```
+
+## 快速开始
+
+### 环境准备
+
+Python 3.12+ 且虚拟环境在 `.venv`：
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate   # Windows
+source .venv/bin/activate # Linux/macOS
+```
+
+### 安装
 
 ```bash
 pip install -e ".[dev,server]"
 ```
 
-## 启动开发服务器
+### 启动开发服务器
 
 ```bash
+# 方式一：Flask CLI
 flask --app blog:create_app --debug run
-```
 
-也可以运行：
-
-```bash
+# 方式二：直接运行
 python app.py
 ```
 
-## 生产运行
+## 生产部署
 
-Linux：
+**Linux (推荐)：**
 
 ```bash
 gunicorn "blog:create_app()" --bind 0.0.0.0:8080
 ```
 
-Windows 或简单部署：
+**Windows：**
 
 ```bash
 waitress-serve --listen=0.0.0.0:8080 --call blog:create_app
 ```
 
-## 内容目录
+## 配置
 
-```text
-content/posts/   文章 Markdown
-content/topics/  独立页面 Markdown
-```
+通过环境变量进行配置，所有变量都有默认值：
 
-文章文件示例：
+| 环境变量 | 默认值 | 说明 |
+|----------|--------|------|
+| `BLOG_CONTENT_DIR` | `./content` | 内容目录路径 |
+| `BLOG_POSTS_PER_PAGE` | `20` | 每页文章数 |
+| `BLOG_THEME` | `light` | 主题名称 |
+| `BLOG_SECRET_KEY` | `dev-secret-key` | Flask Secret Key（生产环境务必修改） |
+
+## 内容格式
+
+文章和页面均为带 front matter 的 Markdown 文件：
 
 ```markdown
 ---
-title: Example title
-summary: Example summary
+title: 文章标题
+summary: 文章摘要
 authors:
-  - Author name
+  - 作者名
 date: 2026-06-28
 ---
 
-Markdown content...
+Markdown 正文内容...
 ```
 
-兼容旧字段：`Title`、`Summary`、`Authors`、`Date`。
+字段兼容性：`Title`、`Summary`、`Authors`、`Date`（大写）也支持，小写字段优先。
 
-## URL
+## URL 路由
 
-- `/`
-- `/page/<page>.html`
-- `/archives.html`
-- `/posts/<slug>.html`
-- `/topic/<slug>.html`
+| 路径 | 说明 |
+|------|------|
+| `/` | 首页（文章列表） |
+| `/page/<page>.html` | 分页文章列表 |
+| `/archives.html` | 文章归档 |
+| `/posts/<slug>.html` | 单篇文章 |
+| `/topic/<slug>.html` | 独立页面 |
 
-## 测试和格式化
+## 测试与代码质量
 
 ```bash
+# 运行全部测试
 pytest
+
+# 运行单个测试文件
+pytest tests/test_repository.py
+
+# 运行单个测试
+pytest tests/test_repository.py::test_list_posts_reads_markdown_and_sorts_by_date_desc
+
+# 代码检查
 ruff check .
+
+# 代码格式化
 ruff format .
 ```
+
+## 开发者指南
+
+详细的架构说明、修改注意事项和 CLI 参考见 [CLAUDE.md](CLAUDE.md)。
+
+主要内容编写建议：
+- 路由处理函数保持简洁，内容逻辑放在 `blog/content/` 中
+- 内容通过本地文件系统读取，无需缓存失效逻辑
+- 使用 `pytest` 进行测试，`ruff` 进行 lint 和格式化
