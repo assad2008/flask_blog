@@ -188,7 +188,7 @@ ruff format .
 
 ## 开发者指南
 
-详细的架构说明、修改注意事项和 CLI 参考见 [CLAUDE.md](CLAUDE.md)。
+详细的架构说明、修改注意事项和 CLI 参考见 [CLAUDE.md](CLAUDE.html)。
 
 主要内容编写建议：
 - 路由处理函数保持简洁，内容逻辑放在 `blog/content/` 中
