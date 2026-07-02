@@ -135,11 +135,9 @@ date: 2026-06-28
 
 更多内容...
 
-\`\`\`python
-# 代码块会自动语法高亮
-def hello():
-    print("world")
-\`\`\`
+  # 代码块会自动语法高亮
+  def hello():
+      print("world")
 
 [外部链接](https://example.com) 会新窗口打开，[内部锚点](#一级标题) 同页跳转。
 ```
