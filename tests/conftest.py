@@ -5,7 +5,10 @@ from blog.config import Settings
 
 
 @pytest.fixture
-def app(tmp_path):
+def app(tmp_path, monkeypatch):
+    # 测试中不创建文件日志，避免占用临时目录文件句柄
+    monkeypatch.setattr("blog.routes.webhook.init_webhook_logger", lambda *_a, **_k: None)
+
     posts_dir = tmp_path / "posts"
     topics_dir = tmp_path / "topics"
     posts_dir.mkdir()
@@ -42,6 +45,7 @@ About page.
         webhook_secret="",
         webhook_repo_dir=tmp_path,
         webhook_ref="",
+        log_dir=tmp_path / "logs",
     )
     flask_app = create_app(settings=settings)
     flask_app.config.update(TESTING=True)

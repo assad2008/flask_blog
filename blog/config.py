@@ -24,19 +24,20 @@ class Settings:
     webhook_repo_dir: Path
     # 仅监听该 ref 的 push 事件（如 refs/heads/main）；为空表示所有 push 都触发
     webhook_ref: str
+    # webhook 日志目录，默认为项目根目录下的 logs/
+    log_dir: Path
 
     @classmethod
     def from_env(cls) -> Settings:
         base_dir = BASE_DIR
-        content_dir = Path(os.environ.get(
-            "BLOG_CONTENT_DIR", base_dir / "content"))
+        content_dir = Path(os.environ.get("BLOG_CONTENT_DIR", base_dir / "content"))
         posts_per_page = int(os.environ.get("BLOG_POSTS_PER_PAGE", "20"))
         theme = os.environ.get("BLOG_THEME", "light")
         secret_key = os.environ.get("BLOG_SECRET_KEY", "dev-secret-key")
         webhook_secret = os.environ.get("BLOG_WEBHOOK_SECRET", "")
-        webhook_repo_dir = Path(os.environ.get(
-            "BLOG_WEBHOOK_REPO_DIR", base_dir))
+        webhook_repo_dir = Path(os.environ.get("BLOG_WEBHOOK_REPO_DIR", base_dir))
         webhook_ref = os.environ.get("BLOG_WEBHOOK_REF", "")
+        log_dir = Path(os.environ.get("BLOG_LOG_DIR", base_dir / "logs"))
         return cls(
             content_dir=content_dir,
             posts_per_page=posts_per_page,
@@ -46,4 +47,5 @@ class Settings:
             webhook_secret=webhook_secret,
             webhook_repo_dir=webhook_repo_dir,
             webhook_ref=webhook_ref,
+            log_dir=log_dir,
         )

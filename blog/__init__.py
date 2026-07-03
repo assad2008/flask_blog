@@ -17,6 +17,12 @@ def create_app(settings: Settings | None = None) -> Flask:
         THEME=settings.theme,
     )
 
+    # 测试环境下不初始化文件日志，避免占用临时目录文件句柄
+    if not app.config.get("TESTING"):
+        from blog.routes.webhook import init_webhook_logger
+
+        init_webhook_logger(settings.log_dir)
+
     from blog.routes.index import index_bp
     from blog.routes.posts import posts_bp
     from blog.routes.topics import topics_bp
