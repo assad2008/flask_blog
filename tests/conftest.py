@@ -38,6 +38,10 @@ About page.
         posts_per_page=1,
         theme="light",
         secret_key="test-secret",
+        base_dir=tmp_path,
+        webhook_secret="",
+        webhook_repo_dir=tmp_path,
+        webhook_ref="",
     )
     flask_app = create_app(settings=settings)
     flask_app.config.update(TESTING=True)

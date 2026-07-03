@@ -16,16 +16,34 @@ class Settings:
     posts_per_page: int
     theme: str
     secret_key: str
+    # 项目根目录，用于定位 git 仓库等资源
+    base_dir: Path
+    # GitHub webhook 密钥，用于校验请求签名；为空时禁用 webhook 接口
+    webhook_secret: str
+    # 执行 git pull 的仓库目录，默认为项目根目录
+    webhook_repo_dir: Path
+    # 仅监听该 ref 的 push 事件（如 refs/heads/main）；为空表示所有 push 都触发
+    webhook_ref: str
 
     @classmethod
     def from_env(cls) -> Settings:
-        content_dir = Path(os.environ.get("BLOG_CONTENT_DIR", BASE_DIR / "content"))
+        base_dir = BASE_DIR
+        content_dir = Path(os.environ.get(
+            "BLOG_CONTENT_DIR", base_dir / "content"))
         posts_per_page = int(os.environ.get("BLOG_POSTS_PER_PAGE", "20"))
         theme = os.environ.get("BLOG_THEME", "light")
         secret_key = os.environ.get("BLOG_SECRET_KEY", "dev-secret-key")
+        webhook_secret = os.environ.get("BLOG_WEBHOOK_SECRET", "")
+        webhook_repo_dir = Path(os.environ.get(
+            "BLOG_WEBHOOK_REPO_DIR", base_dir))
+        webhook_ref = os.environ.get("BLOG_WEBHOOK_REF", "")
         return cls(
             content_dir=content_dir,
             posts_per_page=posts_per_page,
             theme=theme,
             secret_key=secret_key,
+            base_dir=base_dir,
+            webhook_secret=webhook_secret,
+            webhook_repo_dir=webhook_repo_dir,
+            webhook_ref=webhook_ref,
         )
