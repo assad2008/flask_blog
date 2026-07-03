@@ -8,8 +8,6 @@ Date:    2026-07-02
 
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with code in this repository.
-
 ## 项目概览
 
 这是一个现代化的 Flask 博客应用，使用本地 Markdown 文件存储内容。`content/posts/` 下的 Markdown 文件为文章；`content/topics/` 下的 Markdown 文件为独立页面。无需数据库、OSS 或 Redis。
