@@ -73,6 +73,12 @@
     transition:all var(--transition);
   }
   .btn-ghost:hover{color:var(--accent);border-color:var(--accent)}
+  .btn-ghost-blue{color:#3b82f6;border-color:#3b82f6}
+  .btn-ghost-blue:hover{background:rgba(59,130,246,.1);color:#2563eb}
+  .btn-ghost-green{color:#22c55e;border-color:#22c55e}
+  .btn-ghost-green:hover{background:rgba(34,197,94,.1);color:#16a34a}
+  .btn-ghost-muted{color:var(--text-tertiary);border-color:var(--border)}
+  .btn-ghost-muted:hover{color:var(--text-secondary);border-color:var(--text-tertiary)}
 
   .form-hint{font-size:.78rem;color:var(--text-tertiary);font-family:var(--font-mono)}
 
@@ -449,10 +455,10 @@
         <span class="word-count"><b id="wordCount">0</b> 字</span>
         <form method="post" action="{{ url_for('postart.postart') }}" class="logout-form">
           <input type="hidden" name="action" value="logout">
-          <button type="submit" class="btn-ghost" title="退出登录">退出</button>
+          <button type="submit" class="btn-ghost btn-ghost-muted" title="退出登录">退出</button>
         </form>
-        <button type="button" class="btn-ghost" id="importBtn" title="抓取网页正文到编辑区">抓取网页</button>
-        <button type="button" class="btn-ghost" id="genBtn" title="由大模型生成标题/slug/简介">生成</button>
+        <button type="button" class="btn-ghost btn-ghost-blue" id="importBtn" title="抓取网页正文到编辑区">抓取网页</button>
+        <button type="button" class="btn-ghost btn-ghost-green" id="genBtn" title="由大模型生成标题/slug/简介">生成标题</button>
         <button type="submit" form="publishForm" class="btn-primary" id="publishBtn">确认发布</button>
       </div>
     </header>
