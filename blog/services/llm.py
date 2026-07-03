@@ -226,8 +226,10 @@ def _fallback_slug_from_title(title: str) -> str:
 
 def _post_json(url: str, api_key: str, payload: dict) -> dict:
     """向 OpenAI 兼容接口发起 POST，返回解析后的 JSON 响应。"""
-    # 关闭思考模式（DeepSeek V3 / 通义千问等兼容）
+    # 关闭思考/推理模式（兼容 DeepSeek / OpenRouter / 通义千问等）
     payload["thinking"] = {"type": "disabled"}
+    payload["enable_thinking"] = False
+    payload["disable_reasoning"] = True
     data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
     req = urllib.request.Request(
         url,
@@ -236,6 +238,7 @@ def _post_json(url: str, api_key: str, payload: dict) -> dict:
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
+            "X-DashScope-WorkRunnable": "false",
         },
     )
     try:
