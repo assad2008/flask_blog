@@ -26,6 +26,16 @@ class Settings:
     webhook_ref: str
     # webhook 日志目录，默认为项目根目录下的 logs/
     log_dir: Path
+    # /postart 发布页面访问密码；为空时禁用该入口（返回 404）
+    postart_password: str
+    # 新文章默认作者，留空则不写 authors 字段
+    postart_author: str
+    # OpenAI 兼容接口基址，如 https://api.openai.com/v1；留空则跳过 LLM 用兜底
+    llm_base_url: str
+    # LLM 服务密钥
+    llm_api_key: str
+    # LLM 模型名，如 gpt-4o-mini / deepseek-chat
+    llm_model: str
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -38,6 +48,11 @@ class Settings:
         webhook_repo_dir = Path(os.environ.get("BLOG_WEBHOOK_REPO_DIR", base_dir))
         webhook_ref = os.environ.get("BLOG_WEBHOOK_REF", "")
         log_dir = Path(os.environ.get("BLOG_LOG_DIR", base_dir / "logs"))
+        postart_password = os.environ.get("BLOG_POSTART_PASSWORD", "")
+        postart_author = os.environ.get("BLOG_POSTART_AUTHOR", "")
+        llm_base_url = os.environ.get("BLOG_LLM_BASE_URL", "")
+        llm_api_key = os.environ.get("BLOG_LLM_API_KEY", "")
+        llm_model = os.environ.get("BLOG_LLM_MODEL", "")
         return cls(
             content_dir=content_dir,
             posts_per_page=posts_per_page,
@@ -48,4 +63,9 @@ class Settings:
             webhook_repo_dir=webhook_repo_dir,
             webhook_ref=webhook_ref,
             log_dir=log_dir,
+            postart_password=postart_password,
+            postart_author=postart_author,
+            llm_base_url=llm_base_url,
+            llm_api_key=llm_api_key,
+            llm_model=llm_model,
         )

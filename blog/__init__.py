@@ -24,11 +24,13 @@ def create_app(settings: Settings | None = None) -> Flask:
         init_webhook_logger(settings.log_dir)
 
     from blog.routes.index import index_bp
+    from blog.routes.postart import postart_bp
     from blog.routes.posts import posts_bp
     from blog.routes.topics import topics_bp
     from blog.routes.webhook import webhook_bp
 
     app.register_blueprint(index_bp)
+    app.register_blueprint(postart_bp)
     app.register_blueprint(posts_bp)
     app.register_blueprint(topics_bp)
     app.register_blueprint(webhook_bp)

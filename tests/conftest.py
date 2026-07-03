@@ -46,6 +46,11 @@ About page.
         webhook_repo_dir=tmp_path,
         webhook_ref="",
         log_dir=tmp_path / "logs",
+        postart_password="test-pass",
+        postart_author="Test Author",
+        llm_base_url="",
+        llm_api_key="",
+        llm_model="",
     )
     flask_app = create_app(settings=settings)
     flask_app.config.update(TESTING=True)

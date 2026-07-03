@@ -1,0 +1,54 @@
+"""内容写入层：将发布页提交的文章写成带 front matter 的 Markdown 文件。
+
+与只读的 ``ContentRepository`` 分离，把写入相关副作用集中在此处，便于测试。
+"""
+
+from __future__ import annotations
+
+from datetime import date
+from pathlib import Path
+
+import frontmatter
+
+
+def resolve_unique_slug(slug: str, posts_dir: Path) -> str:
+    """解决 slug 冲突：若 ``<slug>.md`` 已存在，依次追加 ``-2``、``-3`` 后缀。"""
+    candidate = slug
+    counter = 2
+    while (posts_dir / f"{candidate}.md").exists():
+        candidate = f"{slug}-{counter}"
+        counter += 1
+    return candidate
+
+
+def write_markdown_post(
+    posts_dir: Path,
+    slug: str,
+    *,
+    title: str,
+    summary: str,
+    authors: list[str],
+    date_str: str,
+    body: str,
+) -> Path:
+    """将文章写入 ``posts_dir/<slug>.md``，包含 front matter。
+
+    - ``authors`` 为空时不写 authors 字段；
+    - ``date_str`` 形如 ``YYYY-MM-DD``。
+    """
+    post = frontmatter.Post(body)
+    post["title"] = title
+    post["summary"] = summary
+    if authors:
+        post["authors"] = authors
+    post["date"] = date_str
+
+    posts_dir.mkdir(parents=True, exist_ok=True)
+    path = posts_dir / f"{slug}.md"
+    path.write_text(frontmatter.dumps(post), encoding="utf-8")
+    return path
+
+
+def today_iso() -> str:
+    """返回当天日期的 ISO 字符串（``YYYY-MM-DD``）。"""
+    return date.today().isoformat()

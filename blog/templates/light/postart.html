@@ -1,0 +1,711 @@
+{% extends "light/base.html" %}
+{% block title %}发布文章 — 随笔记录{% endblock %}
+{% block extra_styles %}
+<style>
+  /* ---------- 发布页通用 ---------- */
+  .editor-card{
+    background:var(--bg-secondary);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:2rem 2.25rem;
+    box-shadow:var(--shadow-card);
+    max-width:760px;
+    margin:0 auto;
+  }
+  .editor-card > * + *{margin-top:1rem}
+
+  .form-row{display:flex;flex-direction:column;gap:.4rem}
+  .form-row label{
+    font-family:var(--font-mono);font-size:.78rem;font-weight:600;
+    color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;
+  }
+  .form-row input[type="text"],
+  .form-row input[type="password"],
+  .form-row textarea{
+    font-family:var(--font-sans);font-size:.95rem;color:var(--text-primary);
+    background:var(--bg-primary);border:1px solid var(--border);
+    border-radius:var(--radius);padding:.7rem .9rem;
+    transition:border-color var(--transition),box-shadow var(--transition);
+    width:100%;
+  }
+  .form-row input:focus,
+  .form-row textarea:focus{
+    outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-glow);
+  }
+  .form-row textarea{
+    font-family:var(--font-mono);font-size:.86rem;line-height:1.7;
+    min-height:360px;resize:vertical;tab-size:4;
+  }
+  .captcha-row{
+    display:flex;align-items:center;gap:.75rem;
+  }
+  .captcha-row input{flex:1}
+  .captcha-question{
+    font-family:var(--font-mono);font-size:1rem;font-weight:600;
+    color:var(--accent);background:var(--accent-soft);
+    padding:.55rem .9rem;border-radius:var(--radius);
+    border:1px solid var(--border-accent);white-space:nowrap;
+    user-select:none;
+  }
+
+  .form-actions{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:1rem;margin-top:1.5rem;
+  }
+  .btn-primary{
+    font-family:var(--font-mono);font-size:.88rem;font-weight:600;
+    color:#fff;text-decoration:none;cursor:pointer;
+    padding:.7rem 1.6rem;border:none;border-radius:var(--radius);
+    background:var(--gradient-accent);
+    box-shadow:0 2px 8px var(--accent-glow);
+    transition:all var(--transition);
+    display:inline-flex;align-items:center;gap:.45rem;
+  }
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px var(--accent-glow)}
+  .btn-primary:active{transform:translateY(0)}
+  .btn-primary:disabled{opacity:.7;cursor:not-allowed;transform:none}
+  .btn-ghost{
+    font-family:var(--font-mono);font-size:.82rem;font-weight:500;
+    color:var(--text-secondary);text-decoration:none;cursor:pointer;
+    background:none;border:1px solid var(--border);
+    padding:.55rem 1rem;border-radius:var(--radius);
+    transition:all var(--transition);
+  }
+  .btn-ghost:hover{color:var(--accent);border-color:var(--accent)}
+
+  .form-hint{font-size:.78rem;color:var(--text-tertiary);font-family:var(--font-mono)}
+
+  /* ---------- 提示横幅 ---------- */
+  .notice{
+    padding:.75rem 1rem;border-radius:var(--radius);font-size:.85rem;
+    border:1px solid var(--border);margin-bottom:1.25rem;
+  }
+  .notice-error{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3);color:#DC2626}
+  @media (prefers-color-scheme: dark){
+    .notice-error{background:rgba(239,68,68,.12);color:#F87171}
+  }
+  .notice-warn{background:var(--accent-soft);border-color:var(--border-accent);color:var(--accent)}
+  .notice-ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:#16A34A}
+  @media (prefers-color-scheme: dark){
+    .notice-ok{background:rgba(34,197,94,.12);color:#4ADE80}
+  }
+
+  /* ---------- 成功态 ---------- */
+  .success-block{text-align:center;padding:1rem 0}
+  .success-block .success-mark{
+    width:56px;height:56px;border-radius:50%;
+    background:var(--gradient-accent);margin:0 auto 1rem;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 16px var(--accent-glow);
+  }
+  .success-block .success-mark svg{
+    width:28px;height:28px;stroke:#fff;fill:none;stroke-width:3;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+  .success-block h1{
+    font-family:var(--font-mono);font-size:1.5rem;font-weight:700;
+    color:var(--text-primary);margin-bottom:.5rem;
+  }
+  .success-block .post-link{
+    display:inline-block;margin-top:.5rem;
+    font-family:var(--font-mono);font-size:.9rem;font-weight:600;
+    color:#fff;text-decoration:none;
+    padding:.6rem 1.4rem;border-radius:var(--radius);
+    background:var(--accent);transition:all var(--transition);
+  }
+  .success-block .post-link:hover{background:var(--accent-hover);transform:translateY(-1px)}
+  .meta-preview{
+    background:var(--bg-code);border:1px solid var(--border-light);
+    border-radius:var(--radius);padding:1rem 1.25rem;margin-top:1rem;
+    text-align:left;font-size:.85rem;
+  }
+  .meta-preview .meta-row{
+    display:flex;gap:.5rem;padding:.25rem 0;
+    border-bottom:1px dashed var(--border-light);
+  }
+  .meta-preview .meta-row:last-child{border-bottom:none}
+  .meta-preview .meta-key{
+    font-family:var(--font-mono);color:var(--text-tertiary);
+    min-width:5rem;text-transform:uppercase;font-size:.72rem;letter-spacing:.05em;
+  }
+  .meta-preview .meta-val{color:var(--text-primary);word-break:break-all}
+
+  @media (max-width:640px){
+    .editor-card{padding:1.3rem 1.25rem}
+    .form-row textarea{min-height:280px}
+    .captcha-row{flex-direction:column;align-items:stretch}
+  }
+
+  /* ============ 全屏分屏编辑器（publish 模式）============ */
+  .editor-overlay{
+    position:fixed;inset:0;z-index:10000;
+    display:flex;flex-direction:column;
+    background:var(--bg-primary);
+  }
+  /* 顶部栏：返回 + 标题 + 字数 + 退出 + 发布 */
+  .editor-topbar{
+    flex-shrink:0;display:flex;align-items:center;gap:1rem;
+    padding:.7rem 1.25rem;
+    background:var(--bg-glass);
+    backdrop-filter:blur(16px) saturate(180%);
+    -webkit-backdrop-filter:blur(16px) saturate(180%);
+    border-bottom:1px solid var(--border-light);
+  }
+  .editor-back{
+    font-family:var(--font-mono);font-size:1.1rem;font-weight:700;
+    color:var(--text-secondary);text-decoration:none;
+    width:38px;height:38px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:var(--radius-sm);transition:all var(--transition);
+  }
+  .editor-back:hover{color:var(--accent);background:var(--accent-soft)}
+  .editor-title{
+    flex:1;min-width:0;
+    font-family:var(--font-sans);font-size:1.3rem;font-weight:600;
+    color:var(--text-primary);background:transparent;border:none;outline:none;
+    letter-spacing:-.01em;
+  }
+  .editor-title::placeholder{color:var(--text-tertiary);font-weight:400}
+  .editor-meta{
+    display:flex;align-items:center;gap:.85rem;flex-shrink:0;
+  }
+  .word-count{
+    font-family:var(--font-mono);font-size:.8rem;color:var(--text-tertiary);
+    white-space:nowrap;letter-spacing:.02em;
+  }
+  .word-count b{color:var(--accent);font-weight:600}
+  .editor-meta .btn-primary{padding:.5rem 1.25rem;font-size:.84rem}
+  .editor-meta .btn-ghost{padding:.45rem .9rem;font-size:.8rem}
+  .logout-form{display:inline}
+
+  /* 提示横幅（LLM 未配置 / 校验错误）*/
+  .editor-notice{
+    flex-shrink:0;padding:.55rem 1.25rem;font-size:.8rem;
+    text-align:center;border-bottom:1px solid var(--border-light);
+  }
+
+  /* 左右分栏 */
+  .editor-split{flex:1;display:flex;overflow:hidden;position:relative}
+  .editor-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+  .editor-write{border-right:1px solid var(--border-light)}
+  .editor-write textarea{
+    flex:1;width:100%;resize:none;border:none;outline:none;
+    padding:2.25rem 3rem;
+    font-family:var(--font-mono);font-size:.9rem;line-height:1.85;
+    color:var(--text-primary);background:var(--bg-primary);
+    tab-size:4;
+  }
+  .editor-write textarea::placeholder{color:var(--text-tertiary)}
+  .editor-preview{
+    background:var(--bg-secondary);overflow-y:auto;
+  }
+  .editor-preview-inner{
+    max-width:800px;margin:0 auto;padding:2.25rem 3rem;
+  }
+  /* 宽屏下两侧再多留一点空白 */
+  @media (min-width:1280px){
+    .editor-write textarea{padding-left:4.5rem;padding-right:4.5rem}
+    .editor-preview-inner{padding-left:4.5rem;padding-right:4.5rem}
+  }
+  /* 复用 .article-body 排版，去掉卡片外框 */
+  .editor-prose{
+    background:none!important;border:none!important;
+    border-radius:0!important;box-shadow:none!important;padding:0!important;
+  }
+  .editor-preview-empty{
+    color:var(--text-tertiary);font-style:italic;
+    font-family:var(--font-mono);font-size:.85rem;
+  }
+
+  /* ============ AI 生成候选列表（居中模态）============ */
+  .gen-modal{
+    position:absolute;inset:0;z-index:40;
+    display:flex;align-items:center;justify-content:center;
+    padding:1.5rem;
+  }
+  /* display:flex 会覆盖 [hidden] 的 display:none，需显式补回 */
+  .gen-modal[hidden]{display:none!important}
+  .gen-backdrop{
+    position:absolute;inset:0;background:rgba(0,0,0,.38);
+    backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+    animation:gen-fade .18s ease;
+  }
+  @keyframes gen-fade{from{opacity:0}to{opacity:1}}
+  .gen-result{
+    position:relative;z-index:1;width:min(640px,100%);
+    max-height:80vh;display:flex;flex-direction:column;
+    background:var(--bg-secondary);
+    border:1px solid var(--border-accent);
+    border-radius:var(--radius-xl);
+    box-shadow:var(--shadow-lg);
+    overflow:hidden;
+    animation:gen-in .2s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes gen-in{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+  .gen-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.85rem 1.1rem;border-bottom:1px solid var(--border-light);
+    flex-shrink:0;
+  }
+  .gen-head-title{
+    font-family:var(--font-mono);font-size:.8rem;font-weight:600;
+    color:var(--accent);text-transform:uppercase;letter-spacing:.06em;
+  }
+  .gen-head-title b{color:var(--text-primary);margin-left:.2rem}
+  .gen-head-actions{display:flex;align-items:center;gap:.15rem}
+  .gen-link{
+    background:none;border:none;cursor:pointer;
+    font-family:var(--font-mono);font-size:.74rem;font-weight:600;
+    color:var(--text-secondary);padding:.3rem .55rem;border-radius:var(--radius-sm);
+    transition:all var(--transition);
+  }
+  .gen-link:hover{color:var(--accent);background:var(--accent-soft)}
+  .gen-link:disabled{opacity:.6;cursor:not-allowed}
+  .gen-close{
+    background:none;border:none;cursor:pointer;
+    font-size:1.4rem;line-height:1;color:var(--text-tertiary);
+    padding:0 .25rem;transition:color var(--transition);
+  }
+  .gen-close:hover{color:var(--accent)}
+  .gen-list{overflow-y:auto;padding:.75rem 1.1rem 1.1rem;flex:1}
+  .gen-item{
+    padding:.75rem .9rem;border-radius:var(--radius);
+    border:1px solid var(--border-light);margin-top:.6rem;
+    background:var(--bg-primary);transition:border-color var(--transition);
+  }
+  .gen-item:first-child{margin-top:0}
+  .gen-item:hover{border-color:var(--border-accent)}
+  .gen-item-title-row{display:flex;align-items:flex-start;gap:.75rem}
+  .gen-item-title{
+    flex:1;font-size:1rem;font-weight:600;color:var(--text-primary);
+    line-height:1.4;cursor:pointer;
+  }
+  .gen-item-title:hover{color:var(--accent)}
+  .gen-apply{
+    flex-shrink:0;cursor:pointer;
+    font-family:var(--font-mono);font-size:.72rem;font-weight:600;
+    color:var(--accent);background:var(--accent-soft);
+    border:1px solid var(--border-accent);
+    padding:.35rem .7rem;border-radius:var(--radius-sm);
+    transition:all var(--transition);white-space:nowrap;
+  }
+  .gen-apply:hover{background:var(--accent);color:#fff}
+  .gen-item-meta{
+    margin-top:.45rem;font-size:.78rem;color:var(--text-tertiary);
+    font-family:var(--font-mono);line-height:1.55;word-break:break-all;
+  }
+  .gen-item-meta .gen-summary{
+    color:var(--text-secondary);font-family:var(--font-sans);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .gen-item-error{color:#DC2626;font-size:.84rem}
+  .gen-empty{
+    text-align:center;padding:2.5rem .5rem;color:var(--text-tertiary);
+    font-family:var(--font-mono);font-size:.82rem;
+  }
+
+  @media (max-width:900px){
+    .gen-modal{padding:1rem}
+    .gen-result{width:100%;max-height:78vh}
+  }
+
+  /* 移动端：编辑/预览标签切换 */
+  .editor-tabs{display:none;flex-shrink:0;border-bottom:1px solid var(--border-light)}
+  .editor-tabs button{
+    flex:1;padding:.6rem;background:none;border:none;cursor:pointer;
+    font-family:var(--font-mono);font-size:.8rem;font-weight:600;
+    color:var(--text-tertiary);transition:all var(--transition);
+    border-bottom:2px solid transparent;
+  }
+  .editor-tabs button.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+  @media (max-width:900px){
+    .editor-topbar{padding:.55rem .9rem;gap:.6rem}
+    .editor-title{font-size:1.1rem}
+    .editor-meta{gap:.55rem}
+    .word-count{display:none}
+    .editor-tabs{display:flex}
+    /* 默认只显示编辑区；通过 .show-preview 切换 */
+    .editor-write{display:none}
+    .editor-preview{display:none}
+    .editor-overlay.show-edit .editor-write{display:flex;flex:1;border-right:none}
+    .editor-overlay.show-preview .editor-preview{display:block;flex:1}
+    .editor-write textarea{padding:1.1rem 1rem;font-size:.85rem}
+    .editor-preview-inner{padding:1.1rem 1rem}
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ===================== 登录态 ===================== #}
+{% if mode == "login" %}
+  <div class="editor-card">
+    {% if error %}<div class="notice notice-error">{{ error }}</div>{% endif %}
+    <form method="post" action="{{ url_for('postart.postart') }}" autocomplete="off">
+      <input type="hidden" name="action" value="login">
+      <div class="form-row">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" required autofocus
+               placeholder="输入发布密码" autocomplete="current-password">
+      </div>
+      <div class="form-row">
+        <label for="captcha">验证码</label>
+        <div class="captcha-row">
+          <span class="captcha-question" id="captchaQuestion">{{ captcha }} = ?</span>
+          <input type="text" id="captcha" name="captcha" required inputmode="numeric"
+                 placeholder="计算结果" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-actions">
+        <span class="form-hint">仅授权访问</span>
+        <button type="submit" class="btn-primary">登录 →</button>
+      </div>
+    </form>
+  </div>
+
+{# ===================== 发布表单（全屏分屏编辑器）===================== #}
+{% elif mode == "publish" %}
+  {# 字段通过 form 属性关联到隐藏的 publishForm，避免与 logout 表单嵌套 #}
+  <form id="publishForm" method="post" action="{{ url_for('postart.postart') }}" hidden>
+    <input type="hidden" name="action" value="publish">
+    {# 用户「生成」并应用候选后，slug 与简介回填至此，发布时复用、不再调 AI #}
+    <input type="hidden" name="gen_slug" id="genSlugInput" value="">
+    <input type="hidden" name="gen_summary" id="genSummaryInput" value="">
+  </form>
+  <div class="editor-overlay show-edit" id="editorOverlay">
+    <header class="editor-topbar">
+      <a href="{{ url_for('index.index') }}" class="editor-back" title="返回首页" aria-label="返回">←</a>
+      <input type="text" name="title" id="title" form="publishForm" class="editor-title"
+             value="{{ title or '' }}" placeholder="输入文章标题…" autocomplete="off">
+      <div class="editor-meta">
+        <span class="word-count"><b id="wordCount">0</b> 字</span>
+        <form method="post" action="{{ url_for('postart.postart') }}" class="logout-form">
+          <input type="hidden" name="action" value="logout">
+          <button type="submit" class="btn-ghost" title="退出登录">退出</button>
+        </form>
+        <button type="button" class="btn-ghost" id="genBtn" title="由大模型生成标题/slug/简介">生成</button>
+        <button type="submit" form="publishForm" class="btn-primary" id="publishBtn">确认发布</button>
+      </div>
+    </header>
+
+    {% if error %}<div class="editor-notice notice-error">{{ error }}</div>{% endif %}
+    {% if not llm_ready %}
+      <div class="editor-notice notice-warn">未配置 LLM，将以兜底方式生成 slug 且简介留空，请在 .env 配置 BLOG_LLM_* 后重启。</div>
+    {% endif %}
+
+    {# AI 生成候选列表（居中模态，可多次生成，从中选择标题） #}
+    <div class="gen-modal" id="genResult" hidden>
+      <div class="gen-backdrop" id="genBackdrop"></div>
+      <div class="gen-result">
+        <div class="gen-head">
+          <span class="gen-head-title">AI 生成结果 <b id="genCount">0</b></span>
+          <div class="gen-head-actions">
+            <button type="button" class="gen-link" id="genMore">再生成</button>
+            <button type="button" class="gen-link" id="genClear">清空</button>
+            <button type="button" class="gen-close" id="genClose" aria-label="关闭">×</button>
+          </div>
+        </div>
+        <div class="gen-list" id="genList"></div>
+      </div>
+    </div>
+
+    {# 移动端标签切换：编辑 / 预览 #}
+    <nav class="editor-tabs" id="editorTabs">
+      <button type="button" data-tab="edit" class="active">编辑</button>
+      <button type="button" data-tab="preview">预览</button>
+    </nav>
+
+    <div class="editor-split">
+      <section class="editor-pane editor-write">
+        <textarea name="body" id="body" form="publishForm"
+                  placeholder="在此处开始编写 Markdown…" spellcheck="false">{{ body or '' }}</textarea>
+      </section>
+      <section class="editor-pane editor-preview" id="previewPane">
+        <div class="editor-preview-inner">
+          <div class="article-body editor-prose" id="htmlPreview"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+{# ===================== 发布成功 ===================== #}
+{% elif mode == "success" %}
+  <div class="editor-card">
+    <div class="success-block">
+      <div class="success-mark">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h1>发布成功</h1>
+      <p style="color:var(--text-secondary);font-size:.9rem;">文章已保存到 content/posts/</p>
+      {# git 提交/推送状态提示 #}
+      {% if not git_committed %}
+        <div class="notice notice-error" style="margin-top:1rem">
+          Git 提交失败：{{ git_detail or '未知错误' }}
+        </div>
+      {% elif not git_pushed %}
+        <div class="notice notice-error" style="margin-top:1rem">
+          已提交到本地，推送失败：{{ git_detail or '未知错误' }}
+        </div>
+      {% else %}
+        <div class="notice notice-ok" style="margin-top:1rem">已提交并推送到远程</div>
+      {% endif %}
+      <a class="post-link" href="/posts/{{ slug }}.html" target="_blank" rel="noopener">查看文章 →</a>
+
+      <div class="meta-preview">
+        <div class="meta-row">
+          <span class="meta-key">slug</span>
+          <span class="meta-val">{{ slug }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">title</span>
+          <span class="meta-val">{{ title }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">summary</span>
+          <span class="meta-val">
+            {% if summary %}{{ summary }}{% else %}<em style="color:var(--text-tertiary)">（未生成）</em>{% endif %}
+          </span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">来源</span>
+          <span class="meta-val">
+            {% if llm_used %}大模型生成{% else %}<em style="color:#DC2626">兜底（LLM 不可用）</em>{% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions" style="justify-content:center;margin-top:1.5rem">
+      <a href="{{ url_for('postart.postart') }}" class="btn-primary">继续发布下一篇</a>
+    </div>
+  </div>
+{% endif %}
+
+{% if mode == "publish" %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  (function () {
+    const editor = document.getElementById("body");
+    const preview = document.getElementById("htmlPreview");
+    const wordCount = document.getElementById("wordCount");
+    const titleInput = document.getElementById("title");
+    const publishBtn = document.getElementById("publishBtn");
+    const publishForm = document.getElementById("publishForm");
+    const overlay = document.getElementById("editorOverlay");
+    const tabs = document.getElementById("editorTabs");
+    if (!editor || !preview) return;
+
+    // 配置 marked：GFM + 换行
+    if (window.marked) {
+      marked.setOptions({ breaks: true, gfm: true });
+    }
+
+    // 实时预览：解析 Markdown 注入预览区，并更新字数
+    function updatePreview() {
+      const text = editor.value;
+      if (window.marked) {
+        preview.innerHTML = text.trim()
+          ? marked.parse(text)
+          : '<p class="editor-preview-empty">预览区域…</p>';
+      } else {
+        preview.innerHTML = '<p class="editor-preview-empty">marked.js 加载失败，预览不可用</p>';
+      }
+      // 字数：去除所有空白字符
+      const noSpace = text.replace(/\s+/g, "");
+      if (wordCount) wordCount.textContent = noSpace.length;
+    }
+
+    editor.addEventListener("input", updatePreview);
+
+    // Tab 键缩进：在光标处插入 4 空格，方便写代码块
+    editor.addEventListener("keydown", function (e) {
+      if (e.key !== "Tab") return;
+      e.preventDefault();
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      this.value = this.value.slice(0, start) + "    " + this.value.slice(end);
+      this.selectionStart = this.selectionEnd = start + 4;
+      updatePreview();
+    });
+
+    // 初始化预览（保留已回填的内容）
+    updatePreview();
+
+    // 左右滚动同步：编辑区与预览区按比例联动
+    const previewPane = document.getElementById("previewPane");
+    if (previewPane) {
+      // 差值阈值，避免互相触发形成循环
+      const THRESHOLD = 1;
+      function syncScroll(source, target) {
+        const sMax = source.scrollHeight - source.clientHeight;
+        const tMax = target.scrollHeight - target.clientHeight;
+        if (sMax <= 0 || tMax <= 0) return;
+        const ratio = source.scrollTop / sMax;
+        const target_top = ratio * tMax;
+        if (Math.abs(target.scrollTop - target_top) > THRESHOLD) {
+          target.scrollTop = target_top;
+        }
+      }
+      editor.addEventListener("scroll", () => syncScroll(editor, previewPane));
+      previewPane.addEventListener("scroll", () => syncScroll(previewPane, editor));
+    }
+
+    // 移动端标签切换：编辑 / 预览
+    if (tabs) {
+      tabs.addEventListener("click", function (e) {
+        const btn = e.target.closest("button[data-tab]");
+        if (!btn) return;
+        const tab = btn.dataset.tab;
+        tabs.querySelectorAll("button").forEach(b => b.classList.toggle("active", b === btn));
+        overlay.classList.toggle("show-edit", tab === "edit");
+        overlay.classList.toggle("show-preview", tab === "preview");
+        // 切到预览时刷新一次，确保内容最新
+        if (tab === "preview") updatePreview();
+      });
+    }
+
+    // 临时提示横幅（客户端校验用）
+    function showClientNotice(msg) {
+      const old = document.getElementById("clientNotice");
+      if (old) old.remove();
+      const div = document.createElement("div");
+      div.id = "clientNotice";
+      div.className = "editor-notice notice-error";
+      div.textContent = msg;
+      const topbar = document.querySelector(".editor-topbar");
+      if (topbar && topbar.parentNode) {
+        topbar.parentNode.insertBefore(div, topbar.nextSibling);
+      }
+      setTimeout(() => div.remove(), 3500);
+    }
+
+    // 提交发布：未生成时拦截并提示，否则禁用按钮提示发布中
+    if (publishForm && publishBtn) {
+      publishForm.addEventListener("submit", function (e) {
+        const genSlug = document.getElementById("genSlugInput");
+        if (genSlug && !genSlug.value.trim()) {
+          e.preventDefault();
+          showClientNotice("请先点击「生成」按钮生成标题、slug 和简介");
+          return;
+        }
+        publishBtn.disabled = true;
+        publishBtn.textContent = "发布中…";
+      });
+    }
+
+    // ============ AI 生成（标题/slug/简介，可多次生成累积候选）============
+    const genBtn = document.getElementById("genBtn");
+    const genMore = document.getElementById("genMore");
+    const genClear = document.getElementById("genClear");
+    const genResult = document.getElementById("genResult");
+    const genList = document.getElementById("genList");
+    const genCount = document.getElementById("genCount");
+    const genClose = document.getElementById("genClose");
+    let candidates = []; // 已生成的候选列表
+
+    function renderCandidates() {
+      genCount.textContent = candidates.length;
+      if (candidates.length === 0) {
+        genList.innerHTML = '<div class="gen-empty">点击「再生成」获取标题建议</div>';
+        return;
+      }
+      genList.innerHTML = candidates
+        .map((c, i) => {
+          if (c.error) {
+            return '<div class="gen-item"><div class="gen-item-error">' + c.error + "</div></div>";
+          }
+          const safe = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+          return (
+            '<div class="gen-item">' +
+            '<div class="gen-item-title-row">' +
+            '<span class="gen-item-title" data-idx="' + i + '">' + safe(c.title) + "</span>" +
+            '<button type="button" class="gen-apply" data-idx="' + i + '">应用</button>' +
+            "</div>" +
+            '<div class="gen-item-meta">' +
+            safe(c.slug) +
+            (c.summary ? '<br><span class="gen-summary">' + safe(c.summary) + "</span>" : "") +
+            "</div>" +
+            "</div>"
+          );
+        })
+        .join("");
+    }
+
+    async function doGenerate(triggerBtn) {
+      const bodyVal = editor.value.trim();
+      if (!bodyVal) {
+        candidates.push({ error: "正文为空，请先写正文再生成" });
+        renderCandidates();
+        genResult.hidden = false;
+        return;
+      }
+      const oldText = triggerBtn.textContent;
+      triggerBtn.disabled = true;
+      triggerBtn.textContent = "生成中…";
+      try {
+        const params = new URLSearchParams();
+        params.append("action", "generate");
+        params.append("title", titleInput ? titleInput.value : "");
+        params.append("body", bodyVal);
+        const resp = await fetch("{{ url_for('postart.postart') }}", {
+          method: "POST",
+          body: params,
+        });
+        const data = await resp.json();
+        if (data.ok) {
+          candidates.push({
+            title: data.title || "（未返回标题）",
+            slug: data.slug || "",
+            summary: data.summary || "",
+          });
+        } else {
+          candidates.push({ error: data.error || "生成失败" });
+        }
+        renderCandidates();
+        genResult.hidden = false;
+      } catch (err) {
+        candidates.push({ error: "请求失败：" + err.message });
+        renderCandidates();
+        genResult.hidden = false;
+      } finally {
+        triggerBtn.disabled = false;
+        triggerBtn.textContent = oldText;
+      }
+    }
+
+    if (genBtn) genBtn.addEventListener("click", () => doGenerate(genBtn));
+    if (genMore) genMore.addEventListener("click", () => doGenerate(genMore));
+
+    if (genClear) {
+      genClear.addEventListener("click", function () {
+        candidates = [];
+        renderCandidates();
+      });
+    }
+    if (genClose) genClose.addEventListener("click", () => { genResult.hidden = true; });
+    const genBackdrop = document.getElementById("genBackdrop");
+    if (genBackdrop) {
+      genBackdrop.addEventListener("click", () => { genResult.hidden = true; });
+    }
+
+    // 点击候选标题或「应用」按钮，把该候选的标题/slug/简介回填
+    genList.addEventListener("click", function (e) {
+      const target = e.target.closest("[data-idx]");
+      if (!target) return;
+      const idx = parseInt(target.dataset.idx, 10);
+      const c = candidates[idx];
+      if (!c || c.error || !titleInput) return;
+      titleInput.value = c.title;
+      titleInput.focus();
+      // 回填隐藏字段，发布时直接复用、不再调用 AI
+      const slugInput = document.getElementById("genSlugInput");
+      const summaryInput = document.getElementById("genSummaryInput");
+      if (slugInput) slugInput.value = c.slug || "";
+      if (summaryInput) summaryInput.value = c.summary || "";
+    });
+  })();
+</script>
+{% endif %}
+{% endblock %}

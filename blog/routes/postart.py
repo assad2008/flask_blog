@@ -1,0 +1,247 @@
+"""文章发布页面：在单一 ``/postart`` 路由内完成登录与发布。
+
+- 未登录时显示登录表单（密码 + 数学验证码）；
+- 登录通过后显示发布表单（标题 + 正文）；
+- 提交发布时调用 LLM 生成 slug 与简介，写入 ``content/posts/<slug>.md``。
+
+所有写文件的副作用集中在 ``blog/content/writer.py``，
+LLM 调用集中在 ``blog/services/llm.py``，路由只负责编排。
+"""
+
+from __future__ import annotations
+
+import hmac
+import random
+from pathlib import Path
+
+from flask import (
+    Blueprint,
+    abort,
+    current_app,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
+
+from blog.config import Settings
+from blog.content.writer import resolve_unique_slug, today_iso, write_markdown_post
+from blog.services.git import commit_paths
+from blog.services.llm import (
+    LLMError,
+    extract_metadata,
+    sanitize_slug,
+)
+
+postart_bp = Blueprint("postart", __name__)
+
+# session 中存放登录状态与验证码答案的键名
+_SESSION_AUTHED = "postart_authed"
+_SESSION_CAPTCHA = "postart_captcha_answer"
+
+
+def _settings() -> Settings:
+    return current_app.config["SETTINGS"]
+
+
+def _is_authed() -> bool:
+    return bool(session.get(_SESSION_AUTHED))
+
+
+def _llm_ready(settings: Settings) -> bool:
+    """LLM 三项配置是否齐全（缺一则走兜底）。"""
+    return bool(settings.llm_base_url and settings.llm_api_key and settings.llm_model)
+
+
+def _new_captcha() -> tuple[str, str]:
+    """生成一道简单数学验证码，返回 (题目文本, 答案字符串)。"""
+    a = random.randint(1, 9)
+    b = random.randint(1, 9)
+    if random.choice(["+", "-"]) == "+":
+        return f"{a} + {b}", str(a + b)
+    # 减法保证非负
+    x, y = (a, b) if a >= b else (b, a)
+    return f"{x} - {y}", str(x - y)
+
+
+def _parse_authors(raw: str) -> list[str]:
+    """将 .env 中的默认作者按逗号拆分为列表。"""
+    return [name.strip() for name in raw.split(",") if name.strip()]
+
+
+@postart_bp.route("/postart", methods=["GET", "POST"])
+def postart():
+    settings = _settings()
+    # 未配置密码时禁用发布入口，避免暴露未授权入口（与 webhook 一致）
+    if not settings.postart_password:
+        abort(404)
+
+    if request.method == "POST":
+        action = request.form.get("action", "")
+        if action == "login":
+            return _handle_login(settings)
+        if action == "logout":
+            session.clear()
+            return redirect(url_for("postart.postart"))
+        if action == "publish":
+            # 发布前必须已登录
+            if not _is_authed():
+                abort(403)
+            return _handle_publish(settings)
+        if action == "generate":
+            # AI 生成标题/slug/简介（AJAX，仅返回 JSON）
+            if not _is_authed():
+                abort(403)
+            return _handle_generate(settings)
+        # 未知 action 视为非法请求
+        abort(400)
+
+    # GET：按登录状态渲染登录表单或发布表单
+    if not _is_authed():
+        question, answer = _new_captcha()
+        session[_SESSION_CAPTCHA] = answer
+        return render_template("light/postart.html", mode="login", captcha=question)
+    return render_template(
+        "light/postart.html",
+        mode="publish",
+        llm_ready=_llm_ready(settings),
+    )
+
+
+def _handle_login(settings: Settings):
+    """处理登录表单提交：校验密码与验证码。"""
+    password = request.form.get("password", "")
+    captcha_answer = request.form.get("captcha", "")
+    expected_captcha = session.get(_SESSION_CAPTCHA, "")
+
+    # 使用恒定时间比较防止时序攻击
+    password_ok = hmac.compare_digest(password, settings.postart_password)
+    captcha_ok = hmac.compare_digest(captcha_answer, expected_captcha)
+
+    if not password_ok or not captcha_ok:
+        # 校验失败：重新生成验证码后返回登录表单
+        question, answer = _new_captcha()
+        session[_SESSION_CAPTCHA] = answer
+        return (
+            render_template(
+                "light/postart.html",
+                mode="login",
+                captcha=question,
+                error="密码或验证码错误",
+            ),
+            401,
+        )
+
+    # 登录成功：标记会话并清理验证码
+    session[_SESSION_AUTHED] = True
+    session.pop(_SESSION_CAPTCHA, None)
+    return redirect(url_for("postart.postart"))
+
+
+def _handle_publish(settings: Settings):
+    """处理发布表单提交：校验内容、生成元数据、写入文件。"""
+    title = request.form.get("title", "").strip()
+    body = request.form.get("body", "").strip()
+
+    # 标题与正文均不可为空
+    if not title or not body:
+        return (
+            render_template(
+                "light/postart.html",
+                mode="publish",
+                llm_ready=_llm_ready(settings),
+                error="标题和正文都不能为空",
+                title=title,
+                body=body,
+            ),
+            400,
+        )
+
+    # 必须「生成」后才允许发布：未携带 gen_slug 视为未生成，拦截并提示
+    gen_slug = request.form.get("gen_slug", "").strip()
+    gen_summary = request.form.get("gen_summary", "").strip()
+    if not gen_slug:
+        return (
+            render_template(
+                "light/postart.html",
+                mode="publish",
+                llm_ready=_llm_ready(settings),
+                error="请先点击「生成」按钮生成标题、slug 和简介",
+                title=title,
+                body=body,
+            ),
+            400,
+        )
+
+    # 直接复用已生成的 slug 与简介，不再调用 AI
+    slug = sanitize_slug(gen_slug)
+    summary = gen_summary
+    llm_used = True
+
+    posts_dir: Path = settings.content_dir / "posts"
+    # 解决文件名冲突
+    slug = resolve_unique_slug(slug, posts_dir)
+
+    write_markdown_post(
+        posts_dir,
+        slug,
+        title=title,
+        summary=summary,
+        authors=_parse_authors(settings.postart_author),
+        date_str=today_iso(),
+        body=body,
+    )
+
+    # 提交并推送到 git（推送失败不影响发布结果，仅在成功页提示）
+    post_path = posts_dir / f"{slug}.md"
+    git_committed, git_pushed, git_detail = commit_paths(
+        settings.base_dir, [post_path], f"发布文章: {title}"
+    )
+
+    return render_template(
+        "light/postart.html",
+        mode="success",
+        slug=slug,
+        title=title,
+        summary=summary,
+        llm_used=llm_used,
+        git_committed=git_committed,
+        git_pushed=git_pushed,
+        git_detail=git_detail,
+    )
+
+
+def _handle_generate(settings: Settings):
+    """AI 生成标题/slug/简介（AJAX 接口，返回 JSON）。
+
+    发布页“生成”按钮调用：基于正文（及可选标题）由大模型生成
+    标题、slug、简介，供用户选择后再发布。
+    """
+    body = request.form.get("body", "").strip()
+    title = request.form.get("title", "").strip()
+    if not body:
+        return jsonify({"ok": False, "error": "正文不能为空，请先写正文"}), 400
+
+    try:
+        metadata = extract_metadata(
+            title,
+            body,
+            base_url=settings.llm_base_url,
+            api_key=settings.llm_api_key,
+            model=settings.llm_model,
+            # 生成候选时调高温度，多次生成可获得不同标题供选择
+            temperature=0.9,
+        )
+    except LLMError as exc:
+        return jsonify({"ok": False, "error": f"生成失败：{exc}"})
+
+    return jsonify(
+        {
+            "ok": True,
+            "title": metadata.title,
+            "slug": metadata.slug,
+            "summary": metadata.summary,
+        }
+    )
