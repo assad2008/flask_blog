@@ -318,7 +318,8 @@
   }
   .import-modal[hidden]{display:none!important}
   .import-box{
-    position:relative;z-index:1;width:min(560px,100%);
+    position:relative;z-index:1;width:min(880px,95vw);
+    max-height:92vh;display:flex;flex-direction:column;
     background:var(--bg-secondary);border:1px solid var(--border-accent);
     border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
     padding:1.1rem;
@@ -337,6 +338,43 @@
   }
   .import-actions{display:flex;justify-content:flex-end;gap:.6rem;margin-top:.9rem}
   @media (max-width:640px){.import-row{flex-direction:column;align-items:stretch}}
+
+  /* ============ 抓取日志（终端风格）============ */
+  .import-log{
+    margin-top:.85rem;background:#1a1a2e;
+    border:1px solid rgba(160,255,160,.25);
+    border-radius:var(--radius);padding:.65rem .8rem;
+    max-height:240px;overflow-y:auto;
+    font-family:var(--font-mono);font-size:.76rem;line-height:1.7;
+    color:#a0ffa0;display:none;
+  }
+  @media (prefers-color-scheme: light){
+    .import-log{background:#1e1e1e;color:#4ec94e;border-color:rgba(78,201,78,.3)}
+  }
+  .import-log .log-line{white-space:pre-wrap;word-break:break-all}
+  .import-log .log-time{color:#888;margin-right:.35rem}
+  .import-log .log-elapsed{color:#f0a060;margin-right:.4rem}
+  .import-log .log-line.log-error{color:#ff7070}
+  .import-log .log-line.log-success{color:#a0ffa0}
+  @media (prefers-color-scheme: light){
+    .import-log .log-line.log-error{color:#e04040}
+    .import-log .log-line.log-success{color:#3aa03a}
+  }
+
+  /* ============ 解析结果预览 ============ */
+  .import-preview{margin-top:.75rem;overflow:hidden;display:none;flex-shrink:0}
+  .import-preview-head{
+    font-family:var(--font-mono);font-size:.74rem;font-weight:600;
+    color:var(--accent);text-transform:uppercase;letter-spacing:.05em;
+    margin-bottom:.4rem;
+  }
+  .import-preview-body{
+    max-height:260px;overflow-y:auto;
+    background:var(--bg-primary);border:1px solid var(--border);
+    border-radius:var(--radius);padding:.65rem .8rem;
+    font-family:var(--font-mono);font-size:.76rem;line-height:1.65;
+    color:var(--text-secondary);
+  }
 
   /* 移动端：编辑/预览标签切换 */
   .editor-tabs{display:none;flex-shrink:0;border-bottom:1px solid var(--border-light)}
@@ -449,9 +487,12 @@
         <div class="import-row">
           <input type="url" id="importUrlInput" placeholder="https://example.com/article" autocomplete="off">
           <button type="button" class="btn-primary" id="importSubmit">抓取</button>
-        </div>
-        <div class="import-actions">
           <button type="button" class="btn-ghost" id="importCancel">取消</button>
+        </div>
+        <div class="import-log" id="importLog"></div>
+        <div class="import-preview" id="importPreview">
+          <div class="import-preview-head">解析结果预览</div>
+          <pre class="import-preview-body" id="importPreviewBody"></pre>
         </div>
       </div>
     </div>
@@ -633,15 +674,48 @@
     const importCancel = document.getElementById("importCancel");
     const importSubmit = document.getElementById("importSubmit");
     const importUrlInput = document.getElementById("importUrlInput");
+    const importLog = document.getElementById("importLog");
+    const importPreview = document.getElementById("importPreview");
+    const importPreviewBody = document.getElementById("importPreviewBody");
+    let importAbortController = null; // 用于取消正在进行的抓取
 
     function openImportModal() {
       if (!importModal || !importUrlInput) return;
       importModal.hidden = false;
+      // 重置日志和预览
+      if (importLog) {
+        importLog.innerHTML = "";
+        importLog.style.display = "none";
+      }
+      if (importPreview) importPreview.style.display = "none";
+      if (importPreviewBody) importPreviewBody.textContent = "";
       importUrlInput.focus();
     }
 
     function closeImportModal() {
+      // 关闭弹窗时取消正在进行的抓取
+      if (importAbortController) {
+        importAbortController.abort();
+        importAbortController = null;
+      }
       if (importModal) importModal.hidden = true;
+    }
+
+    // 向前端日志区追加一行终端风格的日志
+    function appendImportLog(msg, elapsed, cssClass) {
+      const log = importLog;
+      if (!log) return;
+      log.style.display = "block";
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString("zh-CN", { hour12: false });
+      const line = document.createElement("div");
+      line.className = "log-line" + (cssClass ? " " + cssClass : "");
+      line.innerHTML =
+        '<span class="log-time">[' + timeStr + "]</span>" +
+        '<span class="log-elapsed">+' + elapsed.toFixed(1) + "s</span> " +
+        msg;
+      log.appendChild(line);
+      log.scrollTop = log.scrollHeight;
     }
 
     async function doImportUrl() {
@@ -655,9 +729,27 @@
         return;
       }
 
-      const oldText = importSubmit.textContent;
+      // 取消上一次未完成的抓取
+      if (importAbortController) {
+        importAbortController.abort();
+      }
+      importAbortController = new AbortController();
+
+      // 清空日志和预览
+      if (importLog) {
+        importLog.innerHTML = "";
+        importLog.style.display = "none";
+      }
+      if (importPreview) importPreview.style.display = "none";
+      if (importPreviewBody) importPreviewBody.textContent = "";
+
       importSubmit.disabled = true;
+      const oldText = importSubmit.textContent;
       importSubmit.textContent = "抓取中…";
+      let importCompleted = false;
+
+      const fetchStart = Date.now();
+
       try {
         const params = new URLSearchParams();
         params.append("action", "import_url");
@@ -665,21 +757,61 @@
         const resp = await fetch("{{ url_for('postart.postart') }}", {
           method: "POST",
           body: params,
+          signal: importAbortController.signal,
         });
-        const data = await resp.json();
-        if (!data.ok) {
-          showClientNotice(data.error || "网页抓取失败");
-          return;
+
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          // 按行解析 SSE 事件
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.type === "log") {
+                appendImportLog(data.message, data.elapsed);
+              } else if (data.type === "preview") {
+                // 显示解析后的候选文本预览
+                if (importPreview && importPreviewBody) {
+                  importPreview.style.display = "block";
+                  importPreviewBody.textContent = data.text || "";
+                }
+              } else if (data.type === "done") {
+                if (data.ok) {
+                  importCompleted = true;
+                  appendImportLog("内容提取成功，耗时 " + data.elapsed.toFixed(1) + " 秒", data.elapsed, "log-success");
+                  editor.value = data.body || "";
+                  editor.dispatchEvent(new Event("input", { bubbles: true }));
+                  importSubmit.textContent = "重新抓取";
+                  showClientNotice("网页正文已填入内容区域，请手动关闭弹窗");
+                } else {
+                  appendImportLog(data.error || "网页抓取失败", data.elapsed, "log-error");
+                }
+              }
+            } catch (_e) {
+              // 忽略解析失败的行（心跳注释）
+            }
+          }
         }
-        editor.value = data.body || "";
-        editor.dispatchEvent(new Event("input", { bubbles: true }));
-        closeImportModal();
-        showClientNotice("网页正文已填入内容区域，请检查后再生成标题/slug/简介");
       } catch (err) {
-        showClientNotice("请求失败：" + err.message);
+        if (err.name === "AbortError") {
+          appendImportLog("抓取已取消", ((Date.now() - fetchStart) / 1000).toFixed(1));
+        } else {
+          appendImportLog("请求失败：" + err.message, ((Date.now() - fetchStart) / 1000).toFixed(1), "log-error");
+        }
       } finally {
         importSubmit.disabled = false;
-        importSubmit.textContent = oldText;
+        if (!importCompleted) importSubmit.textContent = oldText;
+        importAbortController = null;
       }
     }
 

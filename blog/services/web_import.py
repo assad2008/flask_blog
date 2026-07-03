@@ -6,8 +6,10 @@ import re
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections.abc import Callable
 from html import unescape
 from html.parser import HTMLParser
+from typing import Any
 
 from blog.services.llm import LLMError, extract_article_markdown
 
@@ -37,13 +39,41 @@ class WebImportError(Exception):
     """网页抓取或正文导入失败。"""
 
 
-def fetch_article_markdown(url: str, *, base_url: str, api_key: str, model: str) -> str:
-    """抓取网页并返回由 LLM 提取的 Markdown 正文。"""
+def fetch_article_markdown(
+    url: str,
+    *,
+    base_url: str,
+    api_key: str,
+    model: str,
+    on_progress: Callable[[dict[str, Any]], None] | None = None,
+) -> str:
+    """抓取网页并返回由 LLM 提取的 Markdown 正文。
+
+    ``on_progress`` 回调用于向前端流式输出进度信息，接收 dict 事件：
+    ``{"type": "log", "message": "…"}`` 或 ``{"type": "preview", "text": "…"}``。
+    """
+
+    def _log(msg: str, **extra: Any) -> None:
+        if on_progress:
+            on_progress({"type": "log", "message": msg, **extra})
+
+    _log("正在验证网址…")
     normalized_url = _validate_url(url)
+
+    _log("正在访问网站…")
     html = _fetch_html(normalized_url)
+
+    _log("正在解析信息…")
     candidate_text = _html_to_candidate_markdown(html, source_url=normalized_url)
     if not candidate_text.strip():
         raise WebImportError("未提取到可供分析的网页正文")
+
+    # 把解析后的候选文本发给前端做预览（截断前 5000 字符）
+    if on_progress:
+        on_progress({"type": "preview", "text": candidate_text[:5000]})
+
+    input_chars = min(len(candidate_text), _MAX_CANDIDATE_CHARS)
+    _log(f"正在使用大模型({model})提取内容，提交 {input_chars} 字符…")
 
     try:
         article = extract_article_markdown(
@@ -60,7 +90,29 @@ def fetch_article_markdown(url: str, *, base_url: str, api_key: str, model: str)
     body = article.body.strip()
     if not body:
         raise WebImportError("未提取到正文")
+
+    # 从 HTML 中提取文章标题，附加转载声明
+    page_title = _extract_html_title(html)
+    source_label = page_title or normalized_url
+    body += f"\n\n> 本文转自 [{source_label}]({normalized_url})"
+
+    word_count = _count_words(body)
+    _log(f"内容提取成功，字数：{word_count}")
     return body
+
+
+def _count_words(text: str) -> int:
+    """统计文本字数（不含空白字符的字符总数）。"""
+    return len(re.sub(r"\s+", "", text))
+
+
+def _extract_html_title(html: str) -> str:
+    """从 HTML 中提取 ``<title>`` 标签内的文本。"""
+    match = re.search(r"<title[^>]*>(.*?)</title>", html, re.I | re.S)
+    if not match:
+        return ""
+    title = re.sub(r"\s+", " ", match.group(1).strip())
+    return title
 
 
 def _validate_url(url: str) -> str:

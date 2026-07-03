@@ -224,6 +224,8 @@ def _fallback_slug_from_title(title: str) -> str:
 
 def _post_json(url: str, api_key: str, payload: dict) -> dict:
     """向 OpenAI 兼容接口发起 POST，返回解析后的 JSON 响应。"""
+    # 关闭思考模式（DeepSeek V3 / 通义千问等兼容）
+    payload["thinking"] = {"type": "disabled"}
     data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
     req = urllib.request.Request(
         url,
@@ -235,7 +237,7 @@ def _post_json(url: str, api_key: str, payload: dict) -> dict:
         },
     )
     try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
+        with urllib.request.urlopen(req, timeout=600) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         raise LLMError(f"LLM HTTP {exc.code}: {exc.reason}") from exc

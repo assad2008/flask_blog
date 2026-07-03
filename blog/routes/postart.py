@@ -11,11 +11,16 @@ LLM 调用集中在 ``blog/services/llm.py``，路由只负责编排。
 from __future__ import annotations
 
 import hmac
+import json as _sse_json
+import queue as _sse_queue
 import random
+import threading as _sse_threading
+import time as _sse_time
 from pathlib import Path
 
 from flask import (
     Blueprint,
+    Response,
     abort,
     current_app,
     jsonify,
@@ -23,6 +28,7 @@ from flask import (
     render_template,
     request,
     session,
+    stream_with_context,
     url_for,
 )
 
@@ -254,19 +260,108 @@ def _handle_generate(settings: Settings):
 
 
 def _handle_import_url(settings: Settings):
-    """抓取网页正文，交给 LLM 提取为未改写的 Markdown 正文。"""
-    if not _llm_ready(settings):
-        return jsonify({"ok": False, "error": "未配置 LLM，无法分析网页正文"})
+    """抓取网页正文并以 SSE 流式输出进度日志，前端实时渲染终端风格日志。"""
 
     url = request.form.get("url", "").strip()
-    try:
-        body = fetch_article_markdown(
-            url,
-            base_url=settings.llm_base_url,
-            api_key=settings.llm_api_key,
-            model=settings.llm_model,
-        )
-    except WebImportError as exc:
-        return jsonify({"ok": False, "error": str(exc)})
 
-    return jsonify({"ok": True, "body": body})
+    def generate():
+        q: _sse_queue.Queue = _sse_queue.Queue()
+        start_time = _sse_time.time()
+
+        # LLM 未配置时直接返回错误事件
+        if not _llm_ready(settings):
+            yield (
+                "data: "
+                + _sse_json.dumps(
+                    {
+                        "type": "done",
+                        "ok": False,
+                        "error": "未配置 LLM，无法分析网页正文",
+                        "elapsed": 0,
+                    },
+                    ensure_ascii=False,
+                )
+                + "\n\n"
+            )
+            return
+
+        def on_progress(data: dict) -> None:
+            elapsed = round(_sse_time.time() - start_time, 1)
+            data["elapsed"] = elapsed
+            q.put(data)
+
+        def worker():
+            try:
+                body = fetch_article_markdown(
+                    url,
+                    base_url=settings.llm_base_url,
+                    api_key=settings.llm_api_key,
+                    model=settings.llm_model,
+                    on_progress=on_progress,
+                )
+                total_elapsed = round(_sse_time.time() - start_time, 1)
+                q.put(
+                    {
+                        "type": "done",
+                        "ok": True,
+                        "body": body,
+                        "elapsed": total_elapsed,
+                    }
+                )
+            except WebImportError as exc:
+                total_elapsed = round(_sse_time.time() - start_time, 1)
+                q.put(
+                    {
+                        "type": "log",
+                        "message": f"失败：{exc}",
+                        "elapsed": total_elapsed,
+                    }
+                )
+                q.put(
+                    {
+                        "type": "done",
+                        "ok": False,
+                        "error": str(exc),
+                        "elapsed": total_elapsed,
+                    }
+                )
+            except Exception as exc:
+                total_elapsed = round(_sse_time.time() - start_time, 1)
+                msg = f"未知错误：{exc}"
+                q.put({"type": "log", "message": msg, "elapsed": total_elapsed})
+                q.put(
+                    {
+                        "type": "done",
+                        "ok": False,
+                        "error": msg,
+                        "elapsed": total_elapsed,
+                    }
+                )
+
+        t = _sse_threading.Thread(target=worker, daemon=True)
+        t.start()
+
+        try:
+            while True:
+                try:
+                    item = q.get(timeout=0.5)
+                    yield "data: " + _sse_json.dumps(item, ensure_ascii=False) + "\n\n"
+                    if item["type"] == "done":
+                        break
+                except _sse_queue.Empty:
+                    # 心跳注释，防止代理/反向代理因长时间无数据而断开
+                    yield ": heartbeat\n\n"
+        except GeneratorExit:
+            pass
+        finally:
+            t.join(timeout=5)
+
+    return Response(
+        stream_with_context(generate()),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+        },
+    )
