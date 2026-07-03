@@ -101,7 +101,8 @@ class HighlightRenderer(RendererHTML):
 def _unescape_fences(text: str) -> str:
     """将 markdown 中转义的反引号围栏还原为可被解析的代码围栏标记。
 
-    markdown-it 的 escape 规则会消耗 ``\\` `` 中的反斜杠，导致 `` \\`\\`\\`python `` 无法被识别为代码围栏。
+    markdown-it 的 escape 规则会消耗 ``\\` `` 中的反斜杠，导致
+    `` \\`\\`\\`python `` 无法被识别为代码围栏。
     此函数在渲染前将 `` \\`\\`\\` `` 替换为 `` ``` ``，使围栏规则正常工作。
     """
     import re

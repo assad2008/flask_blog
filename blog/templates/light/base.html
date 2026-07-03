@@ -779,27 +779,112 @@
     }
 
     /* ---------- Responsive ---------- */
+    /* Mobile readable responsive overrides: keep desktop styles unchanged. */
     @media (max-width:640px){
-      .container{padding:0 1rem}
-      .site-header .container{height:50px}
-      .site-brand{font-size:.92rem}
-      .site-nav a{font-size:.78rem;padding:.35rem .6rem}
-      .page-header h1{font-size:1.5rem}
-      .post-card{padding:1.2rem 1.25rem}
-      .post-card h2{font-size:1.1rem}
-      .article-header h1{font-size:1.5rem}
-      .article-body{padding:1.3rem 1.25rem;font-size:.93rem}
-      .article-body pre{
-        padding:1rem .85rem;font-size:.78rem;
-        margin-left:-.4rem;margin-right:-.4rem;border-radius:0;
+      html{font-size:16px}
+      body{overflow-x:hidden}
+      .container{padding:0 clamp(.85rem,4vw,1rem)}
+      .site-header{overflow:hidden}
+      .site-header .container{
+        height:auto;min-height:52px;gap:.55rem;padding-top:.35rem;padding-bottom:.35rem;
       }
-      .archive-list li{flex-direction:column;gap:.1rem;padding:.5rem .75rem}
-      .error-page .error-code{font-size:4rem}
-      .post-card::before{left:12px;right:12px}
+      .site-brand{font-size:.9rem;white-space:nowrap;flex-shrink:0}
+      .site-nav{
+        gap:.15rem;overflow-x:auto;overscroll-behavior-x:contain;
+        scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:manipulation;
+        max-width:calc(100vw - 8.5rem);padding:.1rem 0;
+      }
+      .site-nav::-webkit-scrollbar{display:none}
+      .site-nav a{
+        min-height:38px;display:inline-flex;align-items:center;justify-content:center;
+        font-size:.78rem;padding:.35rem .58rem;white-space:nowrap;flex:0 0 auto;
+      }
+      .site-main{padding:1.9rem 0 3.5rem;overflow-x:hidden}
+      .page-header{margin-bottom:1.6rem;padding-bottom:1rem}
+      .page-header::after{width:40px;margin-top:.9rem}
+      .page-header h1{font-size:clamp(1.35rem,7vw,1.55rem);line-height:1.28}
+      .page-subtitle{font-size:.76rem;line-height:1.7}
 
-      /* 移动端 header 50px + 1px border = 51px */
-      .toc-sidebar{top:51px}
-      .toc-backdrop{top:51px}
+      .post-list{gap:1rem}
+      .post-card{padding:1.1rem 1rem;border-radius:var(--radius)}
+      .post-card:hover{transform:none}
+      .post-card::before{left:12px;right:12px}
+      .post-card h2{font-size:1.08rem;line-height:1.45;margin-bottom:.45rem}
+      .post-card .summary{font-size:.9rem;line-height:1.72;margin-bottom:.75rem}
+      .post-card .read-more{min-height:38px;padding:.2rem 0;touch-action:manipulation}
+
+      .article-header{margin-bottom:1.35rem}
+      .article-header h1{font-size:clamp(1.35rem,7vw,1.62rem);line-height:1.35}
+      .article-meta{font-size:.82rem;gap:.55rem}
+      .article-body{
+        padding:1.15rem 1rem;font-size:.96rem;line-height:1.82;border-radius:var(--radius);
+        overflow-wrap:anywhere;word-break:break-word;
+      }
+      .article-body > * + *{margin-top:1rem}
+      .article-body h2{font-size:1.15rem;line-height:1.45;margin-top:2rem;padding-bottom:.45rem}
+      .article-body h3{font-size:1.03rem;line-height:1.5;margin-top:1.55rem}
+      .article-body ul,.article-body ol{padding-left:1.15rem}
+      .article-body blockquote{padding:.75rem 1rem;margin:1.25rem 0}
+      .article-body pre,
+      .highlight{
+        max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;
+        padding:1rem .85rem;font-size:.78rem;margin-left:-.35rem;margin-right:-.35rem;
+        border-radius:var(--radius-sm);
+      }
+      .article-body pre code,
+      .highlight code{white-space:pre;word-break:normal;overflow-wrap:normal}
+      .article-body table{
+        display:block;width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;
+        white-space:nowrap;font-size:.82rem;
+      }
+      .article-body th,.article-body td{padding:.55rem .7rem}
+      .article-body img{max-width:100%;height:auto;margin:1.1rem auto}
+      .article-body iframe,
+      .article-body video{max-width:100%;height:auto}
+
+      .pagination{justify-content:space-between;gap:.5rem;margin-top:2rem;padding:.8rem 0}
+      .pagination a{
+        min-height:42px;padding:.5rem .75rem;font-size:.76rem;justify-content:center;touch-action:manipulation;
+      }
+      .pagination span{font-size:.76rem;padding:.4rem .35rem;text-align:center}
+
+      .archive-list{gap:.35rem}
+      .archive-list li{flex-direction:column;align-items:flex-start;gap:.15rem;padding:.65rem .75rem}
+      .archive-list time{min-width:0;font-size:.75rem}
+      .archive-list a{line-height:1.55;overflow-wrap:anywhere}
+
+      .error-page{padding:3rem 0}
+      .error-page .error-code{font-size:4rem}
+      .error-page h1{font-size:1.25rem}
+      .error-page a{display:inline-flex;align-items:center;min-height:44px}
+      .empty-state{padding:3rem .5rem}
+      .empty-state .empty-icon{font-size:1.5rem;overflow-wrap:anywhere}
+
+      .site-footer{padding:1.5rem 0 calc(1.5rem + env(safe-area-inset-bottom))}
+      .site-footer .footer-row{justify-content:center;text-align:center;gap:.75rem}
+      .site-footer .footer-publish{min-height:38px;padding:.4rem .8rem;touch-action:manipulation}
+      .back-to-top{right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom));width:42px;height:42px}
+
+      /* 移动端 header 约 52px，目录抽屉跟随顶部栏 */
+      .toc-sidebar{
+        top:52px;left:0;width:min(86vw, 320px);max-width:320px;
+        transform:translateX(-105%);
+      }
+      .toc-backdrop{top:52px}
+      .toc-toggle{
+        top:calc(64px + env(safe-area-inset-top));left:clamp(.85rem,4vw,1rem);
+        width:44px;height:44px;touch-action:manipulation;
+      }
+      .toc-close{display:flex;min-width:36px;min-height:36px;touch-action:manipulation}
+      .toc-item a{min-height:40px;display:flex;align-items:center}
+    }
+
+    @media (min-width:641px) and (max-width:1023px){
+      .container{max-width:760px;padding:0 1.25rem}
+      .site-main{padding:2.5rem 0 4rem}
+      .toc-sidebar{left:0;width:min(40vw, 320px);max-width:320px}
+      .toc-toggle{left:1.25rem;touch-action:manipulation}
+      .toc-close{display:flex}
     }
 
     /* Larger screens — subtle layout enhancement */

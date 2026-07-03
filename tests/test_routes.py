@@ -46,3 +46,24 @@ def test_page_route_returns_200(client):
 
     assert response.status_code == 200
     assert b"Hello" in response.data
+
+
+def test_base_template_exposes_mobile_responsive_contract(client):
+    response = client.get("/")
+
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert "Mobile readable responsive overrides" in html
+    assert "@media (max-width:640px)" in html
+    assert "overflow-wrap:anywhere" in html
+    assert "min(86vw, 320px)" in html
+    assert "touch-action:manipulation" in html
+
+
+def test_mobile_responsive_contract_is_shared_by_content_pages(client):
+    for path in ("/posts/hello.html", "/archives.html", "/topic/about.html"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        assert "Mobile readable responsive overrides" in html
