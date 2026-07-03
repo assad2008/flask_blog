@@ -1,6 +1,6 @@
 ---
 title: 关于
-summary: 关于我 - 王江
+summary: 关于我
 date: 2026-06-28
 ---
 
@@ -124,4 +124,5 @@ date: 2026-06-28
 - GitHub：[assad2008](https://github.com/assad2008)
 - Twitter：[assad2008](https://twitter.com/assad2008)
 - LinkedIn：[assad2008](https://www.linkedin.com/in/assad2008)
-- 邮箱：me@wangjiang.me
+- X：[assad2008](https://x.com/assad2008)
+- E-Mail：me@wangjiang.me
