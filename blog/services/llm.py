@@ -21,7 +21,7 @@ from datetime import date
 _MAX_BODY_CHARS = 4000
 
 # 网页导入候选正文最大长度
-_MAX_ARTICLE_CHARS = 20000
+_MAX_ARTICLE_CHARS = 100000
 
 # slug 允许的字符集：小写字母、数字、连字符
 _SLUG_ALLOWED = re.compile(r"[^a-z0-9-]")

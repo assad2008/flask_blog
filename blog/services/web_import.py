@@ -13,8 +13,8 @@ from typing import Any
 
 from blog.services.llm import LLMError, extract_article_markdown
 
-_MAX_HTML_BYTES = 1500000
-_MAX_CANDIDATE_CHARS = 20000
+_MAX_HTML_BYTES = 10_000_000
+_MAX_CANDIDATE_CHARS = 100000
 _TIMEOUT_SECONDS = 20
 _ALLOWED_SCHEMES = {"http", "https"}
 _BLOCK_TAGS = {"p", "div", "section", "article"}
@@ -73,7 +73,13 @@ def fetch_article_markdown(
     if on_progress:
         on_progress({"type": "preview", "text": candidate_text[:5000]})
 
-    input_chars = min(len(candidate_text), _MAX_CANDIDATE_CHARS)
+    raw_chars = len(candidate_text)
+    input_chars = min(raw_chars, _MAX_CANDIDATE_CHARS)
+    if raw_chars > _MAX_CANDIDATE_CHARS:
+        _log(
+            f"网页内容过长（{raw_chars} > 限制 {_MAX_CANDIDATE_CHARS} 字符），"
+            f"已截断前 {_MAX_CANDIDATE_CHARS} 字符提交大模型"
+        )
     _log(f"正在使用大模型({model})提取内容，提交 {input_chars} 字符…")
 
     try:
@@ -155,7 +161,9 @@ def _fetch_html(url: str) -> str:
         raise WebImportError(f"网页抓取失败：{exc.reason}") from exc
 
     if len(data) > _MAX_HTML_BYTES:
-        raise WebImportError("网页内容过大，已拒绝导入")
+        raise WebImportError(
+            f"网页内容过大（{len(data)} > 限制 {_MAX_HTML_BYTES} 字节），已拒绝导入"
+        )
     return data.decode(_detect_charset(content_type), errors="replace")
 
 
@@ -173,7 +181,7 @@ def _html_to_candidate_markdown(html: str, *, source_url: str = "") -> str:
     parser = _CandidateMarkdownParser(source_url=source_url)
     parser.feed(html)
     parser.close()
-    return _normalize_blank_lines(parser.markdown())[:_MAX_CANDIDATE_CHARS]
+    return _normalize_blank_lines(parser.markdown())
 
 
 def _normalize_blank_lines(text: str) -> str:
