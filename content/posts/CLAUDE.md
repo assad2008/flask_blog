@@ -1,6 +1,6 @@
 ---
 Title:  本博客项目CLAUDE.md文件
-Summary: 本博客使用的开发使用的CLAUDE.md
+Summary: 本博客使用的开发使用的CLAUDE.md文件
 Authors: Django Wong
 Date:    2026-07-02
 ---
