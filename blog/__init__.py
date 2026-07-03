@@ -35,6 +35,13 @@ def create_app(settings: Settings | None = None) -> Flask:
     app.register_blueprint(topics_bp)
     app.register_blueprint(webhook_bp)
     register_error_handlers(app)
+
+    # 向所有模板注入发布入口开关：仅当配置了发布密码时才在底部显示入口
+    # 读取 app.config（而非闭包变量），便于运行时替换 Settings 生效
+    @app.context_processor
+    def inject_postart_enabled():
+        return {"postart_enabled": bool(app.config["SETTINGS"].postart_password)}
+
     return app
 
 

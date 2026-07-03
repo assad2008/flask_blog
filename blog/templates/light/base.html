@@ -630,10 +630,30 @@
       border-top:1px solid var(--border-light);padding:2rem 0;text-align:center;
       font-size:.78rem;color:var(--text-tertiary);font-family:var(--font-mono);
     }
+    .site-footer .footer-row{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:1rem;flex-wrap:wrap;
+    }
     .site-footer .footer-dot{
       display:inline-block;width:4px;height:4px;
       background:var(--accent);border-radius:50%;
       margin:0 .4rem;vertical-align:middle;
+    }
+    .site-footer .footer-publish{
+      font-family:var(--font-mono);font-size:.76rem;font-weight:600;
+      color:var(--text-tertiary);text-decoration:none;
+      padding:.35rem .7rem;border:1px solid var(--border);
+      border-radius:99px;transition:all var(--transition);
+      display:inline-flex;align-items:center;gap:.3rem;
+    }
+    .site-footer .footer-publish::before{
+      content:"+";font-size:.9rem;line-height:1;color:var(--accent);
+    }
+    .site-footer .footer-publish:hover{
+      color:var(--accent);border-color:var(--accent);background:var(--accent-soft);
+    }
+    @media (max-width:640px){
+      .site-footer .footer-row{justify-content:center;text-align:center}
     }
 
     /* ---------- Scrollbar ---------- */
@@ -809,8 +829,11 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      随笔记录<span class="footer-dot"></span>互联网开发 · 前端 · 后端 · AI
+    <div class="container footer-row">
+      <span>随笔记录<span class="footer-dot"></span>互联网开发 · 前端 · 后端 · AI</span>
+      {% if postart_enabled %}
+      <a class="footer-publish" href="{{ url_for('postart.postart') }}">发布文章</a>
+      {% endif %}
     </div>
   </footer>
 
