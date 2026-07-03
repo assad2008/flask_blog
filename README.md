@@ -210,7 +210,8 @@ content/topics/about.md -> /topic/about.html
 
 1. 输入发布密码并通过简单数学验证码登录。
 2. 填写标题和正文。
-3. 点击“生成”生成标题、slug 和简介。
+- 可点击”抓取网页”输入文章 URL，将网页正文提取为 Markdown 并填入正文区域；该功能需要完整配置 `BLOG_LLM_*`。
+3. 点击”生成”生成标题、slug 和简介。
 4. 确认后发布，系统会写入 `content/posts/<slug>.md`。
 5. 发布后会尝试执行 `git add`、`git commit` 和 `git push`。
 
@@ -219,6 +220,7 @@ content/topics/about.md -> /topic/about.html
 - 未配置 `BLOG_POSTART_PASSWORD` 时，`/postart` 返回 404。
 - LLM 配置不完整时，生成接口不可用；发布页会按当前配置状态提示。
 - 发布后的推送是 best-effort：推送失败不会删除已经写入的本地文章文件。
+- 网页抓取只用于辅助提取正文，标题、slug 和简介仍由你手动点击"生成"后确认。
 - 生产环境请使用强密码和安全的 `BLOG_SECRET_KEY`。
 
 ## GitHub webhook

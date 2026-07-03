@@ -20,6 +20,9 @@ from datetime import date
 # 正文过长时截断到该长度，控制 LLM 调用成本
 _MAX_BODY_CHARS = 4000
 
+# 网页导入候选正文最大长度
+_MAX_ARTICLE_CHARS = 20000
+
 # slug 允许的字符集：小写字母、数字、连字符
 _SLUG_ALLOWED = re.compile(r"[^a-z0-9-]")
 
@@ -35,6 +38,13 @@ class PostMetadata:
     title: str
     slug: str
     summary: str
+
+
+@dataclass(frozen=True)
+class ArticleMarkdown:
+    """网页导入功能提取出的 Markdown 正文。"""
+
+    body: str
 
 
 # ---------------------------------------------------------------------------
@@ -65,6 +75,77 @@ summary 要求：
 
 文章正文：
 {body}"""
+
+# ---------------------------------------------------------------------------
+# 网页正文提取的系统提示与用户提示模板
+# ---------------------------------------------------------------------------
+_ARTICLE_SYSTEM_PROMPT = "你是一个严格的网页正文抽取器，只负责识别正文边界并输出 Markdown。"
+
+_ARTICLE_USER_TEMPLATE = """\
+请从下面的网页候选内容中提取真正的文章正文，并输出 Markdown。
+
+硬性要求：
+- 不要改写任何正文句子。
+- 不要总结。
+- 不要翻译。
+- 不要润色。
+- 不要添加原文没有的观点、解释或段落。
+- 只删除导航、广告、推荐阅读、评论区、版权声明、登录提示等非正文噪音。
+- 尽量保留原文的标题层级、段落、列表、引用、代码块和链接结构。
+- 不要生成 title、slug 或 summary。
+
+请严格只返回如下 JSON，不要包含解释或 markdown 代码围栏：
+{{"body": "Markdown 正文"}}
+
+来源 URL：{source_url}
+
+网页候选内容：
+{candidate_text}"""
+
+
+def extract_article_markdown(
+    source_url: str,
+    candidate_text: str,
+    *,
+    base_url: str,
+    api_key: str,
+    model: str,
+    temperature: float = 0.0,
+) -> ArticleMarkdown:
+    """调用 LLM 从网页候选内容中提取未改写的 Markdown 正文。"""
+    if not base_url or not api_key or not model:
+        raise LLMError("LLM not configured (base_url/api_key/model missing)")
+    if not candidate_text.strip():
+        raise LLMError("empty candidate article content")
+
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": _ARTICLE_SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": _ARTICLE_USER_TEMPLATE.format(
+                    source_url=source_url,
+                    candidate_text=candidate_text[:_MAX_ARTICLE_CHARS],
+                ),
+            },
+        ],
+        "temperature": temperature,
+    }
+
+    try:
+        raw = _post_json(f"{base_url.rstrip('/')}/chat/completions", api_key, payload)
+        content = raw["choices"][0]["message"]["content"]
+        parsed = _parse_llm_json(content)
+    except LLMError:
+        raise
+    except Exception as exc:  # noqa: BLE001 - 统一转换为调用方可展示的错误
+        raise LLMError(f"LLM request failed: {exc}") from exc
+
+    body = str(parsed.get("body") or "").strip()
+    if not body:
+        raise LLMError("LLM returned empty article body")
+    return ArticleMarkdown(body=body)
 
 
 def extract_metadata(

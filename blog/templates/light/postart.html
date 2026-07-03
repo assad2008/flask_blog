@@ -310,6 +310,34 @@
     .gen-result{width:100%;max-height:78vh}
   }
 
+  /* ============ 网页抓取导入（居中模态）============ */
+  .import-modal{
+    position:absolute;inset:0;z-index:35;
+    display:flex;align-items:center;justify-content:center;
+    padding:1.5rem;
+  }
+  .import-modal[hidden]{display:none!important}
+  .import-box{
+    position:relative;z-index:1;width:min(560px,100%);
+    background:var(--bg-secondary);border:1px solid var(--border-accent);
+    border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
+    padding:1.1rem;
+  }
+  .import-box h2{
+    font-family:var(--font-mono);font-size:.9rem;font-weight:700;
+    color:var(--accent);text-transform:uppercase;letter-spacing:.06em;
+    margin-bottom:.75rem;
+  }
+  .import-box p{font-size:.82rem;color:var(--text-secondary);margin-bottom:.85rem}
+  .import-row{display:flex;gap:.65rem;align-items:center}
+  .import-row input{
+    flex:1;min-width:0;font-family:var(--font-sans);font-size:.9rem;
+    color:var(--text-primary);background:var(--bg-primary);border:1px solid var(--border);
+    border-radius:var(--radius);padding:.65rem .8rem;
+  }
+  .import-actions{display:flex;justify-content:flex-end;gap:.6rem;margin-top:.9rem}
+  @media (max-width:640px){.import-row{flex-direction:column;align-items:stretch}}
+
   /* 移动端：编辑/预览标签切换 */
   .editor-tabs{display:none;flex-shrink:0;border-bottom:1px solid var(--border-light)}
   .editor-tabs button{
@@ -385,6 +413,7 @@
           <input type="hidden" name="action" value="logout">
           <button type="submit" class="btn-ghost" title="退出登录">退出</button>
         </form>
+        <button type="button" class="btn-ghost" id="importBtn" title="抓取网页正文到编辑区">抓取网页</button>
         <button type="button" class="btn-ghost" id="genBtn" title="由大模型生成标题/slug/简介">生成</button>
         <button type="submit" form="publishForm" class="btn-primary" id="publishBtn">确认发布</button>
       </div>
@@ -408,6 +437,22 @@
           </div>
         </div>
         <div class="gen-list" id="genList"></div>
+      </div>
+    </div>
+
+    {# 网页抓取：输入 URL 后调用后端提取 Markdown 正文并填入编辑区 #}
+    <div class="import-modal" id="importModal" hidden>
+      <div class="gen-backdrop" id="importBackdrop"></div>
+      <div class="import-box">
+        <h2>抓取网页正文</h2>
+        <p>输入文章 URL，系统会抓取网页并使用大模型提取未改写的 Markdown 正文。标题、slug 和简介仍需之后点击"生成"。</p>
+        <div class="import-row">
+          <input type="url" id="importUrlInput" placeholder="https://example.com/article" autocomplete="off">
+          <button type="button" class="btn-primary" id="importSubmit">抓取</button>
+        </div>
+        <div class="import-actions">
+          <button type="button" class="btn-ghost" id="importCancel">取消</button>
+        </div>
       </div>
     </div>
 
@@ -579,6 +624,76 @@
         topbar.parentNode.insertBefore(div, topbar.nextSibling);
       }
       setTimeout(() => div.remove(), 3500);
+    }
+
+    // ============ 网页抓取：把外部文章正文导入编辑区 ============
+    const importBtn = document.getElementById("importBtn");
+    const importModal = document.getElementById("importModal");
+    const importBackdrop = document.getElementById("importBackdrop");
+    const importCancel = document.getElementById("importCancel");
+    const importSubmit = document.getElementById("importSubmit");
+    const importUrlInput = document.getElementById("importUrlInput");
+
+    function openImportModal() {
+      if (!importModal || !importUrlInput) return;
+      importModal.hidden = false;
+      importUrlInput.focus();
+    }
+
+    function closeImportModal() {
+      if (importModal) importModal.hidden = true;
+    }
+
+    async function doImportUrl() {
+      if (!importUrlInput || !importSubmit) return;
+      const url = importUrlInput.value.trim();
+      if (!url) {
+        showClientNotice("请输入要抓取的网页 URL");
+        return;
+      }
+      if (editor.value.trim() && !window.confirm("当前正文区域已有内容，确定要用抓取结果覆盖吗？")) {
+        return;
+      }
+
+      const oldText = importSubmit.textContent;
+      importSubmit.disabled = true;
+      importSubmit.textContent = "抓取中…";
+      try {
+        const params = new URLSearchParams();
+        params.append("action", "import_url");
+        params.append("url", url);
+        const resp = await fetch("{{ url_for('postart.postart') }}", {
+          method: "POST",
+          body: params,
+        });
+        const data = await resp.json();
+        if (!data.ok) {
+          showClientNotice(data.error || "网页抓取失败");
+          return;
+        }
+        editor.value = data.body || "";
+        editor.dispatchEvent(new Event("input", { bubbles: true }));
+        closeImportModal();
+        showClientNotice("网页正文已填入内容区域，请检查后再生成标题/slug/简介");
+      } catch (err) {
+        showClientNotice("请求失败：" + err.message);
+      } finally {
+        importSubmit.disabled = false;
+        importSubmit.textContent = oldText;
+      }
+    }
+
+    if (importBtn) importBtn.addEventListener("click", openImportModal);
+    if (importBackdrop) importBackdrop.addEventListener("click", closeImportModal);
+    if (importCancel) importCancel.addEventListener("click", closeImportModal);
+    if (importSubmit) importSubmit.addEventListener("click", doImportUrl);
+    if (importUrlInput) {
+      importUrlInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          doImportUrl();
+        }
+      });
     }
 
     // 提交发布：未生成时拦截并提示，否则禁用按钮提示发布中

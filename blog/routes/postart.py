@@ -34,6 +34,7 @@ from blog.services.llm import (
     extract_metadata,
     sanitize_slug,
 )
+from blog.services.web_import import WebImportError, fetch_article_markdown
 
 postart_bp = Blueprint("postart", __name__)
 
@@ -95,6 +96,11 @@ def postart():
             if not _is_authed():
                 abort(403)
             return _handle_generate(settings)
+        if action == "import_url":
+            # 抓取网页正文并填入编辑区（AJAX，仅返回 JSON）
+            if not _is_authed():
+                abort(403)
+            return _handle_import_url(settings)
         # 未知 action 视为非法请求
         abort(400)
 
@@ -245,3 +251,22 @@ def _handle_generate(settings: Settings):
             "summary": metadata.summary,
         }
     )
+
+
+def _handle_import_url(settings: Settings):
+    """抓取网页正文，交给 LLM 提取为未改写的 Markdown 正文。"""
+    if not _llm_ready(settings):
+        return jsonify({"ok": False, "error": "未配置 LLM，无法分析网页正文"})
+
+    url = request.form.get("url", "").strip()
+    try:
+        body = fetch_article_markdown(
+            url,
+            base_url=settings.llm_base_url,
+            api_key=settings.llm_api_key,
+            model=settings.llm_model,
+        )
+    except WebImportError as exc:
+        return jsonify({"ok": False, "error": str(exc)})
+
+    return jsonify({"ok": True, "body": body})
