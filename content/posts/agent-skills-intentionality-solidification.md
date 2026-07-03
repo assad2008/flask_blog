@@ -1,0 +1,262 @@
+---
+authors:
+- Assad
+date: '2026-07-03'
+summary: 文章深入解读了 Anthropic 推出的 Agent Skills 开放标准，指出其核心是将工作流程、偏好等操作性知识打包为可复用文件夹，实现从单次
+  Prompt 注入到意向模式固化的范式转移。Agent Skills 不仅是渐进式加载的提示词工程突破，更解决了上下文负担与重复指导的难题，在消费端和生产端均大幅降低
+  AI 使用门槛，预示了人工智能从依赖模型能力转向依赖人类工程注入的演进方向。
+title: AI 意向固化：Agent Skills 如何终结重复提示词时代
+---
+
+## 简介
+
+2025年12月18日，Anthropic 正式推出了 Agent Skills 的开放标准：https://docs.anthropic.com/agent-skills. prompt-native workflow package.
+
+智能体拥有智能和能力，但不一定具备有效处理实际工作的专业知识（通用知识很强，专项操作能力很弱）。这促使Claude创建了Agent Skills（Procedural Knowledge）。Skills是有组织文件的集合，将领域专业知识——工作流程、最佳实践、脚本——打包成智能体可以访问和应用的格式（以文件夹为最小分发单元）。Skill 是一项重大的 Agent 工程突破：它用一种结构化的、标准化的模式来组织经验，并用渐进式加载机制来降低上下文负担。本质上是一种 prompt engineering + 文件系统的组合。
+
+阻碍人们使用 AI 的主要障碍，并非模型的能力不足，也非 Agent 的智能水平不够，由于处理任务时往往涉及大量杂乱的上下文，要让 AI 高效工作，就不可避免地需要向它提供这些信息。与其一点点地指导 AI，许多人觉得不如自己动手来得快。假设业界的 AI 能力有 80 分，而你的任务实际上只需要 20 分的能力就足够了。但因为你懒，或者使用姿势不对，最后反而逼得 AI 不得不去猜测、去凭经验、去漫无目的地查询海量信息。结果，你需要一个 120 分的 AI 才能满足需求。
+
+- 消费端。Skill 本质上就是一份打包好的“工具说明书”。它的优势主要在于，你不用每次都显式地重复说明，而且通过“渐进式加载”还能节省一些 Token。
+-
+生产端。支持 Skill 的 Agent 都内置了一个最重要的元 Skill：skill-creator，它能帮你自动生成 Skill。只要你有一点点耐心，能够完整地带着 AI 完成一次全过程——哪怕就一次，就一次！——那么在结束时，你就可以让 AI 为这个场景生成一个 Skill。从此以后，你就解放了。
+
+- 提示词演进脉络：普通提示词 ==> 结构化提示词 ==> Skill
+- agent架构演进： single-agent(四五种行为范式)==> multi-agent(四种拓扑模式) ==> Skill（SAS/一个agent加载不同skill，在宏观上保持统一的记忆和状态，局部专业化）
+
+## 从哲学中的“意向性”开始
+
+[Skill 不是 Prompt——从意向性到工程注入的范式转移](https://mp.weixin.qq.com/s/uypgfS53B_2fzhvQqMcfhA)
+
+赛尔（John Searle）将意向性区分为两类：
+
+- 原初意向性（Original Intentionality）：指一种内在的、与生俱来的指向性或“关于性”（aboutness）。它是生物心智自然产生的功能，不需要依赖外部观察者的解释就能获得意义。
+- 衍生意向性（Derived Intentionality）：指一种被赋予的、借来的指向性。物体本身没有任何意义，它的意义完全来自于拥有“原初意向性”的心智（也就是人）对其进行的解释或定义。 人类拥有的是前者。我们的信念、欲望、恐惧、目标，根植于生物体、进化压力和生存需求，是不可外包的。AI 拥有的，只可能是后者。而衍生意向性的本质，不是“涌现”，而是注入。这不是修辞，也不是隐喻，而是一个工程事实。AI 的信念、目标、偏好、工作方式，并不是它“自己想出来的”，而是人类通过：
+- 训练语料
+- 对话上下文
+- 文档
+- 代码
+- 工具调用约定 一点点灌进去的。停止注入，意向就消失。模型不会感到无聊，不会密谋反叛，也不会“暗中计划”。它只会停止计算，退化为一堆静态参数。
+
+Prompt Engineering 曾短暂成为一项“技能”，对于理解语言、理解人性、理解模型行为的人来说，通过套话、诱导、结构化表达，可以在一定程度上“控制”模型输出。本质上，这是用人类的高阶意向性理解能力，去操纵一个尚不具备欺骗能力的统计系统。问题在于： 这种方式门槛极高，并且每次都要从零开始。单次注入不难，难的是持续注入：换一个对话窗口，AI 就失忆； 换一个任务场景，偏好全部作废；每次都要重新解释“不要这样”“请那样”。谁能让注入一次、反复生效，谁就掌握了真正的杠杆。注入门槛 × 持续性 = 产品与生态的分水岭。
+
+上下文窗口是意向容器，工具链是意向注入脚手架。Skill 的本质：意向模式的固化。Prompt 是单次意图表达。A Skill is a markdown file that teaches Claude how to do something specific. 当你每次抱怨”别给我TODO、别自作聪明优化”，其背后都是一个潜在的Skill。Skill是操作性知识的固化，为了消除重复，是对操作者行为习惯的持续萃取。PS：之前总是对比agent/mcp
+
+一个完整的 Skill，至少包含四类信息：
+
+- 信念：什么是“好”的结果
+- 标准：如何判断对错
+- 流程：你通常如何一步步完成
+- 偏好：格式、风格、禁忌 这些合在一起，不是答案，而是工作方式本身。Prompt 是一句话，Skill 是一部分你自己。Skill不能单独看，要和Prompt、MCP、Command、Hook一起看。编码中的快捷操作，多了、稳定了，就变成工作流；工作流固化下来，就是Skill；Skill足够复杂、能自动处理一连串任务时，就变成Agent。Skill足够复杂、能自动处理一连串任务时，就变成Agent。
+
+从目前来看，skill已经初步具备了，稳定可验证，复用可迁移的特性，作为作者：你把自己的工作方式注入给 AI，作为使用者：你调用别人已经注入过的方式。AI 的边界，不再由模型决定，而由人类愿意注入什么、又是否愿意承担后果来决定。PS：skill 一定是V1/V2/V3持续演化的。
+
+## 与已有组件对比
+
+skill的诞生是Anthropic 对于claude code在演进的过程中，淘汰了All-in-one的加载所有tools，采用了定义skills来渐进式加载提示词以减少上下文压力和幻觉现象的手段。
+
+- 与agent对比，当我们一般说agent时，一般会提到loop（当然，workflow agent不是个loop），agent一般对目标负责（虽然很多时候能力不够导致效果不佳），部分场景是long-running/Long-horizon的，有时要维护状态（比如反问），业界最近在提Ralph Loop。从这个视角看，skill粒度是小于agent的，不大可能long-running 和有状态。此外，skill 只是一个静态的规范，与agent相同点是运行时仍需要llm驱动。
+- 与mcp对比，在Claude Code中，Skills是提供Knowledge的（用 Markdown 教 AI 做事），而不是用于提供工具的。如果你想在Claude Code的system tools之外，额外给它配置一些其他的工具，那么似乎还是只能依赖MCP。实际上，Skills能做的事更多，你可以在里面配置流程、编码规范、业务知识、代码示例、各种规则等等，以及对于现有工具的调用指导，你都可以在Skills中描述。但是，引入新的工具还是得通过MCP。
+- MCP解决了工具集成的问题后，又出现了另一个问题。很多任务需要特定的执行顺序、规则和约束，但把这些步骤全部写成代码又不太现实。如何在尽可能的准确的前提下，能让用户能用文字（而非代码）指导模型按照特定的流程和规则执行任务？这就是Skills产生的原因，提供一个方式，让用户可以用文字定义指令、脚本和资源，形成可复用的任务流程。Agent将决策权完全下放给了 Agent 和 Prompt，能够解决原有写程序不能解决的问题——比如处理不确定性、动态调整策略、理解自然语言意图等。
+- MCP解决与既有系统的接驳问题，还有curl、bash等其它接驳方式，skill 使用命令行脚本或curl远程调用，在这个基础上，Skills还能支持更复杂的流程定义——通过SKILL.md文档告知LLM如何组合多个接口调用，所以长流程任务的成功率会更高。从这个视角mcp 与skill 是竞争关系。PS: skill是工具与提示词结合的典范。
+- 工具和 Skill 的区别在于工具是框架提供的，而 Skill 仅是文本，前者框架完成就已经固定（需要严格的、机器可读的Schema Definition），后者 AI 可以自己理解（LLM In-Context Learning能力已经很强）、创建、修改。甚至有观点认为Skill最大的价值是Agent可以自己生成Skill
+
+## Claude Skills
+
+### 是什么
+
+利用文件和文件夹构建专业智能体的新方式：Skill就是一个标准化的文件夹，用来打包Agent完成特定任务所需的知识、工作流和工具。可以把它理解成给模型的说明书或标准作业程序（SOP，或者之前比较火的概念：SPEC的增强版）。
+
+- SKILL.md, 核心文件，必须存在。告诉Claude在什么情况下、以及如何使用这个Skill。
+- YAML Frontmatter (元数据区)：里面用YAML写元数据（name和description）
+- Markdown Body (指令区)：用Markdown 详细说明了执行该任务的工作流程 (Workflow)、最佳实践、注意事项，以及如何调用 scripts 和 references 目录下的资源。
+
+![](https://qiankunli.github.io/public/upload/machine/skill_md.png)
+
+- scripts/：存放可执行的Python、Shell脚本。
+- references/：存放参考文档。比如API文档、数据库Schema、公司政策等，这些是给Claude看的知识库。
+- assets/：存放资源文件。比如PPT模板、公司Logo、React项目脚手架等，这些是Claude在执行任务时直接使用的文件，而不是阅读的。
+
+它把完成一个特定任务所需的一切都打包好了，本质上就是一种代码和资源的组织方式，一种约定优于配置的理念。当你的Agent能力越来越多时，怎么管理？一个几千行的System Prompt？一个包含几十个工具函数的大杂烩文件？这些都很难维护。而Skills提供了一种解耦的、模块化的方案（可组合性、可扩展性和可移植性）。你团队里的Agent不再是依赖一个巨大的、难以维护的system_prompt.txt，而是一个由几十个标准化的Skill文件夹组成的能力库，每个Skill都可以独立版本控制、测试和迭代。
+
+“Agent Skills” 更是一种架构思想和工程实践，其核心思路在所有主流 LLM 平台上都是通用的：
+
+- 发现（Discovery）：Agent 如何知道“技能”的存在
+- 加载（Loading）：Agent 如何在需要时获取技能的详细信息（即“渐进式披露”）
+- 执行（Execution）：Agent 如何运行代码或调用 API
+
+### 发现与加载
+
+渐进式披露(Progressive Disclosure)，让Agent可以访问大量技能，但不会一次性“灌输式”教学，而是“按需加载”。“渐进式”的方式。
+
+- 技能发现。会话开始时从SKILL.md文件的元数据区域加载名称与描述，用于发现技能。具体来说就是把name和description注入系统Prompt。
+- 技能理解。当LLM识别需要使用某个Skill时，会加载该技能的完整SKILL.md（一次 Read tool call），以了解真正的技能指南。
+- 资源按需加载。在使用技能时，如果发现有额外的动态资源需要读取（文档、模板、脚本等），则按需加载对应资源。
+
+渐进式披露三层结构： 先元数据，再正文，再资源。
+
+在 OpenAI 兼容协议中，根本不存在 “Skill” 这个字段或角色。 Skills 是一个纯粹的应用层抽象，它最终被 Cursor（或类似的 AI IDE）”编译”成三种协议原语的组合：
+
+- System/Developer Message — 把 Skill 的指令文本注入到 system prompt 中
+- Tools Definition — 把 Skill 需要用到的工具（如 Shell、Read 等）注册为 tools数组
+- Multi-turn Tool Calling Loop — LLM 根据注入的指令，自主决策发起 tool_calls，宿主执行后把结果喂回去
+
+### 一些实践
+
+工程落地-定义技能元工具 (skill meta tools)：list_skill/get_skill/run_skill，在 system prompt 里强调这 3 个 tools
+
+```
+- 你具备很多与外部世界互动的能力，但需要通过 list_skill 来了解自己的能力；然后通过 get_skill 了解某项特定能力；最后可以通过 run_skill 来实施具体的能力；
+- 通过 list_skill、get_skill 了解到的能力，如果要执行，一定要走 run_skill 方法来执行
+```
+
+skill 很多怎么办 ?
+
+人脑认知希克定律与决策复杂性：大概意思是人类作出一个决策的反应时间与备选方案数量呈对数级增长；
+认知负荷理论：人的工作记忆容量有限，当认知负荷超过工作记忆容量，学习和决策能力的表现会急剧下降——呈现阈值效应，而非渐进式衰退；非线形渐变：随skills规模增大，任务选择的准确率非线形下降，而是呈现阈值效应，skill库达到某个阈值，准确率会急剧下降；基于相似性的决策干扰：当多个线索、选型、信息太相似时，容易混淆，决策能力呈指数衰减；任务选择准确率的退化，主要受skill间语义相似性驱动，而非单纯的skill技能库规模扩大所影响；添加语义相似性skill比添加等量普通skill，更严重降低准确率；分层处理与分块理论：通过分层组织处理复杂性，按照记忆容量设置层级结构，逐步缩小选择范围，使庞大的选择集更易于管理；通过分层实现缓解：当扁平化选择在skill规模超过阈值后失效，分层组织skills可以将复杂难处理的单一决策，转化为一系列可处理的子决策；
+
+skill 太复杂怎么办？[Skill 编排、Workflow 设计与 Spec Coding 的深度实践](https://mp.weixin.qq.com/s/nClVag8tyw7wuG-V1rhmfQ)阿里提出了 Workflow 概念，每一个 Workflow 是包含若干个单一职责的 Skill 的编排，通过 Workflow 将一个复杂的任务拆解成若干个步骤，每一步需要非常明确的告诉 AI 使用哪一个具体的 Skill。PS： 另一种形式的skill 分层，不过给上层skill 一个专属概念。
+
+## 驱动skill的agent
+
+skill 不只是静态文件，涉及到agent 范式的调整：
+
+- multi-agent ==> 单agent+skills（SAS），从始至终，与用户交互的只有一个 Agent。从x个专业Agent+编排引擎的分布式架构，转向1个全能Agent+工具链+域知识库的集中式架构。sop 在multi-agent时代隐式的体现为agent划分、workflow等固定代码，转变为可迭代的md（文档即代码）==> 自迭代有了可能。
+- 从multi-agent 的一次执行变为一个agent的多次执行（AI全程持有所有信息）。这意味着从需求讨论到最终生成实现计划，所有的对话、决策和中间产物都保留在同一个会话的上下文中（大模型上下文长度 + 指令遵循能力双提升的福利）。
+
+这需要一些配套措施
+
+- sub-agent 长耗时任务外包
+- 渐进披露，规避Context爆炸。
+- 压缩。注意压缩不是删除，是有损但可追溯。
+
+SAS 与single-agent的不同：SAS System Prompt是恒定的，核心的系统指令，比如人设身份、基础要求保持不变，确保模型认知的统一。而User Prompt是动态注入，Skills的内容是以“用户输入”或“工具返回结果”的形式，通过User Prompt渐进式地披露给模型。
+
+为了在长对话中兼顾连续性与效率，需在流程的关键节点引入了”微压缩”机制。压缩策略：
+
+- 工具调用日志，折叠为调用类型+文件路径+关键发现。
+- 大段文件内容，提取摘要，文件名+核心内容。
+- 用户对话，完整保留所有原始内容。
+- agent决策，完整保留所有推理过程和结论。
+- 产出文档，折叠为文档路径。 PS： 反问的实现也相对更简单。如果一个问题，都是预期10个工具可以解决，那单agent+skills 就走的通。
+
+要实现一个 Skills 系统，还是在 LLM 那三个字段（systemPrompt、tools、messages）上做工程抽象。只需要解决两个问题：
+
+- 感知：怎么让 LLM 感知到 skills 的存在？扫描 skills 目录，将 skill meta list 塞到 systemPrompt 里
+-
+执行：怎么将渐进式的 body 内容塞进去？实现一个统一的 Skill Tool，负责回传 skill body
+
+```
+ // 2. 一个统一的 Skill Tool
+ const SkillTool = {
+     name: "Skill",
+     description: "按名称加载一个 Skill 的完整指令内容，并让模型继续按照该 Skill 执行任务。",
+     input_schema: {
+         type: "object",
+         properties: {
+         skill: {
+             type: "string",
+             description: "要加载的 Skill 名称，例如 review-pr、explain-code。",
+         }
+         },
+         required: ["skill"],
+     },
+
+     // 返回 skill 的 body
+     async call(input: { skill: string; args?: string }) {
+         const skill = skillRegistry[input.skill]
+
+         return skill.body;
+     },
+ }
+```
+
+```
+# 调用模型 ==> 执行工具 → 捕获结果 → 附加到上下文 → 再次调用模型
+while not finisehd:
+    response = call_llm(context)
+    if response.tool_calls()
+        tool_result = act(response.tool_calls)
+        context.add(tool_result)
+```
+
+加上上下文预算和记忆分层
+
+```
+# 输入接入 -> 上下文构建 -> 预算治理 -> 模型决策 -> 工具执行 -> 状态持久化 -> 压缩/记忆更新 -> 下一轮
+while not finished:
+    # 0. 接收外部输入 / follow-up / interrupt
+    ingest_new_messages()
+
+    # 1. 组装本轮上下文
+    context = build_context(
+        system_prompt,
+        recent_messages,          # 短期窗口
+        retrieved_memories,       # 长期记忆检索
+        tool_state,               # 工具结果摘要 / 状态快照
+        execution_state,          # 当前计划、阶段、pending action
+    )
+
+    # 2. 预算检查：太长就压缩
+    if over_context_budget(context):
+        recent_messages = compress_recent_messages(recent_messages)
+        tool_state = summarize_tool_results(tool_state)
+        context = rebuild_context(...)
+
+    # 3. 调模型
+    response = call_model(context)
+
+    # 4. 处理输出
+    if response.has_tool_calls():
+        tool_results = execute_tools(response.tool_calls)
+
+        # 5. 原始结果先落盘 / 落存储
+        persist_raw_tool_results(tool_results)
+
+        # 6. 只把“必要结果”附加回短上下文
+        recent_messages.append(minify_tool_results(tool_results))
+
+        # 7. 必要时写入长期记忆 / 更新状态
+        update_memory_and_state(tool_results, response)
+
+        continue
+
+    else:
+        output_to_user(response)
+        update_memory_and_state(None, response)
+        break
+```
+
+## 自驱动skill
+
+Hermes-Agent：Skill 仍然不是“自驱动的”，而是人类写好并塞给 AI 的“经验手册” — 让 Agent 遇到问题先去翻书查答案。但现实的问题是：Agent 的任务与环境是多变的，不可能所有的问题都有预设的标准解法。这时候就需要 Agent 能够在解决难题后，自己“写手册” — 在复杂试错中提炼出最佳实践，并将其固化为全新的 Skill。PS：毕竟 收集 Agent 轨迹、通过奖励模型标注并反向强化大模型不好搞。
+
+- 前台自觉：在完成复杂任务、发现复杂工作流时，模型应主动考虑创建成 skill（调用 Skill_manage 工具）。
+- 后台巡检：即便模型在这轮没主动沉淀，主控流程仍会根据（多次任务的 ）工具调用的计数器，当其到达阀值（默认10）触发后台复盘（异步兜底）。此时将会触发后台复盘：传入全部（包含第一个任务）的对话与工具调用历史，由 review_agent 来决定是否提炼出 Skill；完成后将计数器复位。
+
+当模型判断到“问题在于 Skill 本身而不是其他环境问题”，就启动 Skill 修复 — 调用 skill_manager(action =’patch’）工具：打补丁的动作本质上就是字符串替换，比如对 SKILL.md 中有问题的部分进行重写（当然也可能修改其他 Skill 相关文件）。
+
+[如何更科学、方向可控的实现 Skill 的“自进化”?](https://mp.weixin.qq.com/s/2Cq0QR3vcKlMHkI0XyYYrw) 未知。
+
+## 与workflow 对比
+
+它们其实都在做同一件事：承载业务 SOP，并让 AI 按照这套 SOP 去执行任务。
+
+- Workflow先把任务拆成若干个明确节点，再为每个节点配置对应的模型、插件、代码逻辑或接口能力。每个节点的输入和输出都是确定的，整体执行流程非常可控，我们能看见整个链路运行逻辑、也可以追踪运行日志。并且，还能对每个节点做精细控制，如果运行过程中出现问题，我们能够清晰的定位出是哪一个节点出了问题。
+- Agent 这类 Skills 体系并不是没有 Workflow，它只是把 Workflow 藏进 skill 里了，skill 只不过是 Workflow 的另一种表达方式。 Workflow、Skills、Agent Runtime，本质上都只是 AI 应用的承载层。
+
+它们解决的是：一件事应该按什么步骤做、什么时候调用模型、什么时候调用工具、结果应该写到哪里、异常应该怎么处理。这些能力很重要，但它们还不是 AI 应用最难的部分。真正难的是：企业到底有没有一套可被 AI 调用的知识/SOP系统，企业有没有能力，把业务 KnowHow 变成可执行、可观测、可迭代的 AI 系统？真正值钱的不是平台，而是企业把流程、知识、数据、评价体系持续沉淀下来的能力。
+
+## 未来
+
+Lessons from building Claude Code: How we use skills：
+
+- 不要写废话。Skill 本质上是在沉淀组织里的「隐性知识」。所以，Skill 里不要重复它已经知道的常识。真正有价值的是其实是那些模型根本不知道的信息。Anthropic 内部经常强调，Skill 真正要写的是 Gotchas，也就是常踩的坑。
+- Skill 其实是 Context Engineering。Skill 不是一个 markdown 文件，而是一个文件夹。当调用某个 Skill 的时候，模型首先读取的是 SKILL.md。如果我们把所有的信息都塞进这个文件里，那很快就会上下文爆炸。SKILL.md 更像一个导航页。它的职责是告诉模型，遇到 Stripe 错误的时候，去 references 里找对应说明。
+- 尽量用脚本。Instructions 提供的是经验和判断，Scripts 提供的是能力和执行。如果只有 Script，模型知道怎么查，但未必知道为什么查。如果只有 Instructions，模型知道应该查。但每次都得重新实现。两者缺一不可。
+- Description 更像一个路由规则。模型并不是通过功能去寻找 Skill 的，Claude Code 启动的时候，会先扫描所有 Skill 的名称和 Description。然后根据用户当前的问题，判断应该加载哪个 Skill。所以 Description 里最重要的信息，不是这个 Skill 能干什么，而是什么情况下应该加载它。Description 其实承担着整个 Skill 的路由工作。
+
+黄东旭：软件的未来会发生什么？比如像 GStack 和 Superpower 这样的工具，其实它们就是几百个没有代码的 Markdown 文档，放在 Claude Code 上运行。用户看到的不再是底层模型，而是技术栈代表的思考框架。比如 YC 的 CEO 就是把自己多年的创投经验，变成了一系列自动执行的套件。它们最大的意义在于，把 Claude Code 这种 Coding Agent 当作底层操作系统在用。所以，Skill 核心问题在于太简单、太粗糙了。今天我们交换 Skill 的方式，就跟当年这些交换奇奇怪怪的 recipe 的方式是一样的。但是未来像 AWS 或者 Photoshop 等庞杂的软件，是不可能通过“一张纸”去交付的。所以我觉得未来在 Skill 之后一定会有更好的抽象。这个抽象能表达更复杂的协同、通过自然语言人机协同生成、有一定的结构且能被 Debug，最核心的目标是：蒸馏人类专家的知识。有了这样的抽象，软件开发的门槛将真正被击穿。比如我今天是个厨师，以前受限于开发门槛没法做做菜的 APP；但今天只要跟 Agent 聊上三天三夜，把我的 Know-How 蒸馏出来变成一个“Cooking Stack”，就可以变现了。
+
+PS：既然 Coding 已经退化成了执行载体，为什么我们还在热烈讨论它？为什么看起来是 Anthropic 赢了？这不是因为发现了新的科学规律，而是因为这就是目前的战略路径。如果 Google 赢了，世界可能是纯多模态的；但今天是 Anthropic 赢了，所有的资金和算力都在疯狂加强模型的编程能力。于是，世界变成了一个“以编程为通用手段来改变一切”的形态，未来的所有通用 Agent 都将构建在编程能力这个基石之上。
+
+> 本文转自 [next prompt工程——skill - 李乾坤的博客](https://qiankunli.github.io/2026/02/07/skill.html)
