@@ -783,16 +783,16 @@
     @media (max-width:640px){
       html{font-size:16px}
       body{overflow-x:hidden}
-      .container{padding:0 clamp(.85rem,4vw,1rem)}
+      .container{padding:0 clamp(.85rem,4vw,1rem);max-width:100%;min-width:0}
       .site-header{overflow:hidden}
-      .site-header .container{
+      .site-header .container{min-width:0;
         height:auto;min-height:52px;gap:.55rem;padding-top:.35rem;padding-bottom:.35rem;
       }
-      .site-brand{font-size:.9rem;white-space:nowrap;flex-shrink:0}
-      .site-nav{
+      .site-brand{font-size:.9rem;white-space:nowrap;flex-shrink:0;min-width:0}
+      .site-nav{min-width:0;flex:1;
         gap:.15rem;overflow-x:auto;overscroll-behavior-x:contain;
         scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:manipulation;
-        max-width:calc(100vw - 8.5rem);padding:.1rem 0;
+        max-width:100%;padding:.1rem 0;
       }
       .site-nav::-webkit-scrollbar{display:none}
       .site-nav a{
@@ -805,16 +805,17 @@
       .page-header h1{font-size:clamp(1.35rem,7vw,1.55rem);line-height:1.28}
       .page-subtitle{font-size:.76rem;line-height:1.7}
 
-      .post-list{gap:1rem}
-      .post-card{padding:1.1rem 1rem;border-radius:var(--radius)}
+      .post-list{gap:1rem;max-width:100%;min-width:0}
+      .post-card{max-width:100%;min-width:0;padding:1.1rem 1rem;border-radius:var(--radius);overflow:hidden}
       .post-card:hover{transform:none}
       .post-card::before{left:12px;right:12px}
-      .post-card h2{font-size:1.08rem;line-height:1.45;margin-bottom:.45rem}
-      .post-card .summary{font-size:.9rem;line-height:1.72;margin-bottom:.75rem}
+      .post-card h2{font-size:1.08rem;line-height:1.45;margin-bottom:.45rem;overflow-wrap:anywhere}
+      .post-card .summary{font-size:.9rem;line-height:1.72;margin-bottom:.75rem;overflow-wrap:anywhere}
       .post-card .read-more{min-height:38px;padding:.2rem 0;touch-action:manipulation}
 
-      .article-header{margin-bottom:1.35rem}
-      .article-header h1{font-size:clamp(1.35rem,7vw,1.62rem);line-height:1.35}
+      article,.article-header,.article-body{max-width:100%;min-width:0}
+      .article-header{margin-bottom:1.35rem;overflow-wrap:anywhere}
+      .article-header h1{font-size:clamp(1.35rem,7vw,1.62rem);line-height:1.35;overflow-wrap:anywhere}
       .article-meta{font-size:.82rem;gap:.55rem}
       .article-body{
         padding:1.15rem 1rem;font-size:.96rem;line-height:1.82;border-radius:var(--radius);

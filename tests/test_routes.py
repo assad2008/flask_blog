@@ -60,6 +60,17 @@ def test_base_template_exposes_mobile_responsive_contract(client):
     assert "touch-action:manipulation" in html
 
 
+def test_mobile_responsive_contract_prevents_right_overflow(client):
+    response = client.get("/posts/hello.html")
+
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert ".site-header .container{min-width:0" in html
+    assert ".site-nav{min-width:0;flex:1" in html
+    assert ".post-card{max-width:100%;min-width:0" in html
+    assert "article,.article-header,.article-body{max-width:100%;min-width:0" in html
+
+
 def test_mobile_responsive_contract_is_shared_by_content_pages(client):
     for path in ("/posts/hello.html", "/archives.html", "/topic/about.html"):
         response = client.get(path)
