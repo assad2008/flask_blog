@@ -13,7 +13,7 @@ from typing import Any
 
 from blog.services.llm import LLMError, extract_article_markdown
 
-_MAX_HTML_BYTES = 1_500_000
+_MAX_HTML_BYTES = 1500000
 _MAX_CANDIDATE_CHARS = 20000
 _TIMEOUT_SECONDS = 20
 _ALLOWED_SCHEMES = {"http", "https"}
@@ -64,7 +64,8 @@ def fetch_article_markdown(
     html = _fetch_html(normalized_url)
 
     _log("正在解析信息…")
-    candidate_text = _html_to_candidate_markdown(html, source_url=normalized_url)
+    candidate_text = _html_to_candidate_markdown(
+        html, source_url=normalized_url)
     if not candidate_text.strip():
         raise WebImportError("未提取到可供分析的网页正文")
 
