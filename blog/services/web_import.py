@@ -87,6 +87,15 @@ def fetch_article_markdown(
     except LLMError as exc:
         raise WebImportError(str(exc)) from exc
 
+    # 记录大模型 token 用量
+    if article.usage:
+        u = article.usage
+        _log(
+            f"大模型调用完成，tokens：提示 {u.get('prompt_tokens', 0)} "
+            f"+ 补全 {u.get('completion_tokens', 0)} "
+            f"= 总计 {u.get('total_tokens', 0)}"
+        )
+
     body = article.body.strip()
     if not body:
         raise WebImportError("未提取到正文")

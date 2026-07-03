@@ -45,6 +45,7 @@ class ArticleMarkdown:
     """网页导入功能提取出的 Markdown 正文。"""
 
     body: str
+    usage: dict | None = None  # 包含 prompt_tokens / completion_tokens / total_tokens
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +146,8 @@ def extract_article_markdown(
     body = str(parsed.get("body") or "").strip()
     if not body:
         raise LLMError("LLM returned empty article body")
-    return ArticleMarkdown(body=body)
+    usage = raw.get("usage")
+    return ArticleMarkdown(body=body, usage=usage)
 
 
 def extract_metadata(
