@@ -179,6 +179,7 @@
       color:var(--text-primary);
       background:var(--bg-primary);
       min-height:100dvh;display:flex;flex-direction:column;
+      padding-top:59px; /* 为固定顶部导航栏腾出空间 */
       overflow-x:hidden;max-width:100%;
       -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
       transition:background var(--transition-slow),color var(--transition-slow);
@@ -209,8 +210,9 @@
     .container{width:100%;max-width:920px;margin:0 auto;padding:0 1.5rem;min-width:0}
 
     /* ---------- Header ---------- */
+    /* fixed 固定于页面顶部；body 用 padding-top 防止内容被遮挡 */
     .site-header{
-      position:sticky;top:0;z-index:100;
+      position:fixed;top:0;left:0;right:0;z-index:1000;
       backdrop-filter:blur(16px) saturate(180%);
       -webkit-backdrop-filter:blur(16px) saturate(180%);
       background:var(--bg-glass);
@@ -815,7 +817,7 @@
     @media (max-width:768px){
       html{font-size:16px}
       .container{padding:0 clamp(.85rem,4vw,1rem);max-width:100%}
-      .site-header{overflow:hidden}
+      body{padding-top:53px}
       .site-header .container{min-width:0;
         height:auto;min-height:52px;gap:.55rem;padding-top:.35rem;padding-bottom:.35rem;
       }
