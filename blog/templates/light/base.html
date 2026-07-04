@@ -283,11 +283,6 @@
       position:relative;overflow:hidden;min-width:0;max-width:100%;
       box-shadow:var(--shadow-card);
     }
-    .post-card::before{
-      content:"";position:absolute;top:0;left:20px;right:20px;height:1px;
-      background:var(--gradient-accent);opacity:.72;
-      transition:opacity var(--transition);
-    }
     .post-card::after{
       content:"";position:absolute;left:0;top:16px;bottom:16px;width:2px;
       background:var(--gradient-accent);border-radius:0 2px 2px 0;
@@ -299,7 +294,6 @@
       box-shadow:var(--shadow-card-hover);
       transform:translateY(-1px);
     }
-    .post-card:hover::before{opacity:1}
     .post-card:hover::after{opacity:.9;transform:scaleY(1)}
 
     .post-card time{
@@ -823,6 +817,7 @@
       }
       .site-brand{font-size:.9rem;white-space:nowrap;flex-shrink:0;min-width:0}
       .site-nav{min-width:0;flex:1;
+        justify-content:flex-end; /* 移动端导航链接靠右对齐 */
         gap:.15rem;overflow-x:auto;overscroll-behavior-x:contain;
         scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:manipulation;
         max-width:100%;padding:.1rem 0;
@@ -842,7 +837,6 @@
       .post-list{gap:1rem;width:100%;max-width:100%;min-width:0;overflow:hidden}
       .post-card{max-width:100%;min-width:0;padding:1.05rem 1rem;border-radius:var(--radius);overflow:hidden}
       .post-card:hover{transform:none}
-      .post-card::before{left:12px;right:12px}
       .post-card::after{left:1px;width:2px;top:14px;bottom:14px}
       .post-card h2{font-size:1.08rem;line-height:1.45;margin-bottom:.45rem;overflow-wrap:anywhere;word-break:break-word}
       .post-card .summary{font-size:.9rem;line-height:1.72;margin-bottom:.75rem;overflow-wrap:anywhere;word-break:break-word}
