@@ -7,9 +7,10 @@ from datetime import date
 @dataclass(frozen=True)
 class Heading:
     """文章目录中的一级标题。"""
-    level: int          # 2-6（对应 <h2>~<h6>）
-    text: str           # 纯文本标题
-    slug: str           # 锚点 id
+
+    level: int  # 2-6（对应 <h2>~<h6>）
+    text: str  # 纯文本标题
+    slug: str  # 锚点 id
 
 
 @dataclass(frozen=True)

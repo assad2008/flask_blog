@@ -106,11 +106,12 @@ def _unescape_fences(text: str) -> str:
     此函数在渲染前将 `` \\`\\`\\` `` 替换为 `` ``` ``，使围栏规则正常工作。
     """
     import re
+
     # 匹配行首的 \`\`\` 或 \`\`\`，后面跟语言标识符和换行
     # 替换为普通的 ``` 围栏标记
-    text = re.sub(r'^\\`\\`\\`(\w*)\n', r'```\1\n', text, flags=re.MULTILINE)
+    text = re.sub(r"^\\`\\`\\`(\w*)\n", r"```\1\n", text, flags=re.MULTILINE)
     # 匹配行首的 \`\`\`\`\`\`（关闭围栏）
-    text = re.sub(r'^\\`\\`\\`\s*$', '```', text, flags=re.MULTILINE)
+    text = re.sub(r"^\\`\\`\\`\s*$", "```", text, flags=re.MULTILINE)
     return text
 
 

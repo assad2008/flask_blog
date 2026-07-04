@@ -64,8 +64,7 @@ def fetch_article_markdown(
     html = _fetch_html(normalized_url)
 
     _log("正在解析信息…")
-    candidate_text = _html_to_candidate_markdown(
-        html, source_url=normalized_url)
+    candidate_text = _html_to_candidate_markdown(html, source_url=normalized_url)
     if not candidate_text.strip():
         raise WebImportError("未提取到可供分析的网页正文")
 
