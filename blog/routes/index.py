@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 from flask import Blueprint, current_app, render_template
 
 from blog.content import ContentRepository, paginate_posts
@@ -24,4 +26,16 @@ def index(page: int = 1):
 def archives():
     repository: ContentRepository = current_app.config["CONTENT_REPOSITORY"]
     posts = repository.list_posts()
-    return render_template("light/archives.html", posts=posts)
+
+    # 按年份分组
+    year_groups: dict[int, list] = defaultdict(list)
+    for post in posts:
+        if post.date:
+            year_groups[post.date.year].append(post)
+
+    years = [
+        {"year": year, "posts": year_posts, "count": len(year_posts)}
+        for year, year_posts in sorted(year_groups.items(), reverse=True)
+    ]
+
+    return render_template("light/archives.html", posts=posts, years=years)

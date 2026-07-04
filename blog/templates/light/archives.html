@@ -5,22 +5,24 @@
 {% block content %}
   <div class="page-header">
     <h1>归档</h1>
-    <p class="page-subtitle">全部 {{ posts|length }} 篇文章</p>
+    <p class="page-subtitle">全部 <strong>{{ posts|length }}</strong> 篇文章</p>
   </div>
 
-  {% if posts %}
-    <ul class="archive-list">
-      {% for post in posts %}
-        <li>
-          {% if post.date %}
-            <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%Y-%m-%d') }}</time>
-          {% else %}
-            <time>----</time>
-          {% endif %}
-          <a href="/posts/{{ post.slug }}.html">{{ post.title }}</a>
-        </li>
-      {% endfor %}
-    </ul>
+  {% if years %}
+    {% for group in years %}
+      <div class="archive-year">
+        <span class="year-num">{{ group.year }}</span>
+        <span class="year-count">{{ group.count }} 篇</span>
+      </div>
+      <ul class="archive-list">
+        {% for post in group.posts %}
+          <li>
+            <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%m-%d') }}</time>
+            <a href="/posts/{{ post.slug }}.html">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
   {% else %}
     <div class="empty-state">
       <div class="empty-icon">~/posts $ find . -name '*.md'</div>
