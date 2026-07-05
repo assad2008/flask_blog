@@ -3,7 +3,8 @@ from __future__ import annotations
 import re
 import unicodedata
 from datetime import date, datetime
-from typing import Literal
+from functools import lru_cache
+from typing import Literal, NamedTuple
 
 import frontmatter
 from markdown_it import MarkdownIt
@@ -115,23 +116,40 @@ def _unescape_fences(text: str) -> str:
     return text
 
 
-def extract_post_meta(slug: str, raw: str) -> Post:
-    """仅提取文章元数据（title/summary/authors/date），不渲染 Markdown 正文。
-    用于列表页等只需元数据的场景，跳过高成本的 HTML 渲染和代码高亮。"""
-    parsed = frontmatter.loads(raw)
-    metadata = parsed.metadata
+class _PostMeta(NamedTuple):
+    """从 front matter 提取出的文章元数据，供 post/topic 复用。"""
 
+    title: str
+    summary: str
+    authors: tuple[str, ...]
+    date: date | None
+
+
+def _extract_meta(parsed: frontmatter.Post, slug: str) -> _PostMeta:
+    """从已解析的 front matter 中提取 title/summary/authors/date。
+
+    同时兼容小写与旧版大写字段；title/summary 缺失时回退为 slug/空串。
+    此函数被 ``extract_post_meta`` 与 ``render_markdown`` 共用，避免逻辑重复。
+    """
+    metadata = parsed.metadata
     title = _metadata_value(metadata, "title", "Title") or slug
     summary = _metadata_value(metadata, "summary", "Summary") or ""
     authors = _metadata_authors(_metadata_value(metadata, "authors", "Authors"))
     published_date = _metadata_date(_metadata_value(metadata, "date", "Date"))
+    return _PostMeta(str(title), str(summary), authors, published_date)
 
+
+def extract_post_meta(slug: str, raw: str) -> Post:
+    """仅提取文章元数据（title/summary/authors/date），不渲染 Markdown 正文。
+    用于列表页等只需元数据的场景，跳过高成本的 HTML 渲染和代码高亮。"""
+    parsed = frontmatter.loads(raw)
+    meta = _extract_meta(parsed, slug)
     return Post(
         slug=slug,
-        title=str(title),
-        summary=str(summary),
-        authors=authors,
-        date=published_date,
+        title=meta.title,
+        summary=meta.summary,
+        authors=meta.authors,
+        date=meta.date,
         html="",
         headings=(),
     )
@@ -139,40 +157,42 @@ def extract_post_meta(slug: str, raw: str) -> Post:
 
 def render_markdown(slug: str, raw: str, kind: MarkdownKind) -> Post | Topic:
     parsed = frontmatter.loads(raw)
-    metadata = parsed.metadata
     # 预处理：将转义的反引号 \`\`\` 还原为代码围栏标记
     content = _unescape_fences(parsed.content)
     html = _markdown().render(content)
     headings = extract_headings(content)
-
-    title = _metadata_value(metadata, "title", "Title") or slug
-    summary = _metadata_value(metadata, "summary", "Summary") or ""
-    authors = _metadata_authors(_metadata_value(metadata, "authors", "Authors"))
-    published_date = _metadata_date(_metadata_value(metadata, "date", "Date"))
+    meta = _extract_meta(parsed, slug)
 
     if kind == "post":
         return Post(
             slug=slug,
-            title=str(title),
-            summary=str(summary),
-            authors=authors,
-            date=published_date,
+            title=meta.title,
+            summary=meta.summary,
+            authors=meta.authors,
+            date=meta.date,
             html=html,
             headings=headings,
         )
 
     return Topic(
         slug=slug,
-        title=str(title),
-        summary=str(summary),
-        authors=authors,
-        date=published_date,
+        title=meta.title,
+        summary=meta.summary,
+        authors=meta.authors,
+        date=meta.date,
         html=html,
         headings=headings,
     )
 
 
+@lru_cache(maxsize=1)
 def _markdown() -> MarkdownIt:
+    """构建并缓存 MarkdownIt 实例（模块级单例）。
+
+    MarkdownIt 是无状态的解析器配置对象，重复构建会重复注册插件、
+    编译正则等，开销可观。用 ``lru_cache(maxsize=1)`` 缓存首个实例，
+    整个进程内复用，显著加速详情页渲染。
+    """
     md = MarkdownIt(
         "commonmark",
         options_update={"html": True, "linkify": True, "typographer": True},

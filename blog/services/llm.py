@@ -13,6 +13,7 @@ import json
 import re
 import secrets
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from datetime import date
@@ -25,6 +26,21 @@ _MAX_ARTICLE_CHARS = 100000
 
 # slug 允许的字符集：小写字母、数字、连字符
 _SLUG_ALLOWED = re.compile(r"[^a-z0-9-]")
+
+# 支持「思考/推理」开关的供应商：DeepSeek、通义千问（DashScope）、OpenRouter 等。
+# 标准的 OpenAI 兼容接口会被未知参数严格校验而可能返回 400，
+# 因此仅在 base_url 命中下列关键词时才下发关闭推理的参数。
+_THINKING_HOSTS = ("deepseek", "dashscope", "openrouter")
+# DashScope 专用 header 的匹配关键词
+_DASHSCOPE_HOST = "dashscope"
+
+
+def _host_of(base_url: str) -> str:
+    """从 base_url 提取小写主机名，解析失败返回空串。"""
+    try:
+        return (urllib.parse.urlparse(base_url).hostname or "").lower()
+    except Exception:
+        return ""
 
 
 class LLMError(Exception):
@@ -226,20 +242,26 @@ def _fallback_slug_from_title(title: str) -> str:
 
 def _post_json(url: str, api_key: str, payload: dict) -> dict:
     """向 OpenAI 兼容接口发起 POST，返回解析后的 JSON 响应。"""
-    # 关闭思考/推理模式（兼容 DeepSeek / OpenRouter / 通义千问等）
-    payload["thinking"] = {"type": "disabled"}
-    payload["enable_thinking"] = False
-    payload["disable_reasoning"] = True
+    # 仅对支持「思考/推理」的供应商下发关闭推理的参数，
+    # 避免对严格的 OpenAI 兼容接口因未知参数而返回 400。
+    host = _host_of(url)
+    if any(name in host for name in _THINKING_HOSTS):
+        payload["thinking"] = {"type": "disabled"}
+        payload["enable_thinking"] = False
+        payload["disable_reasoning"] = True
     data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+    }
+    # DashScope 专用 header，仅对 DashScope 接口下发
+    if _DASHSCOPE_HOST in host:
+        headers["X-DashScope-WorkRunnable"] = "false"
     req = urllib.request.Request(
         url,
         data=data,
         method="POST",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}",
-            "X-DashScope-WorkRunnable": "false",
-        },
+        headers=headers,
     )
     try:
         with urllib.request.urlopen(req, timeout=600) as resp:

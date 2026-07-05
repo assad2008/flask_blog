@@ -14,12 +14,13 @@ class ContentRepository:
         self.topics_dir = self.content_dir / "topics"
 
     def list_posts(self) -> list[Post]:
-        posts = [self._read_post_meta(path) for path in sorted(self.posts_dir.glob("*.md"))]
-        return sorted(
-            posts,
-            key=lambda post: (post.date is not None, post.date or date.min),
-            reverse=True,
-        )
+        posts = [self._read_post_meta(path) for path in self.posts_dir.glob("*.md")]
+        # glob 返回顺序不确定，需自行排序：
+        # 1) 先按 slug 升序，作为同日期的稳定 tie-break；
+        # 2) 再按日期降序（无日期排末尾），利用 Python 稳定排序保留 1) 的顺序。
+        posts.sort(key=lambda p: p.slug)
+        posts.sort(key=lambda p: (p.date is not None, p.date or date.min), reverse=True)
+        return posts
 
     def _read_post_meta(self, path: Path) -> Post:
         """仅读取文章元数据，不渲染 Markdown 正文。用于列表页面。"""

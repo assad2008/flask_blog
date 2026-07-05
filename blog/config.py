@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -8,6 +9,22 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
+
+
+def _env_int(name: str, default: int) -> int:
+    """安全读取整型环境变量：解析失败时回退到默认值并打印告警。"""
+    raw = os.environ.get(name)
+    if raw is None or raw.strip() == "":
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        # 配置加载阶段尚未初始化日志，直接输出到 stderr 兜底提示
+        print(
+            f"warning: {name}={raw!r} 不是有效整数，回退使用默认值 {default}",
+            file=sys.stderr,
+        )
+        return default
 
 
 @dataclass(frozen=True)
@@ -41,7 +58,7 @@ class Settings:
     def from_env(cls) -> Settings:
         base_dir = BASE_DIR
         content_dir = Path(os.environ.get("BLOG_CONTENT_DIR", base_dir / "content"))
-        posts_per_page = int(os.environ.get("BLOG_POSTS_PER_PAGE", "20"))
+        posts_per_page = _env_int("BLOG_POSTS_PER_PAGE", 20)
         theme = os.environ.get("BLOG_THEME", "light")
         secret_key = os.environ.get("BLOG_SECRET_KEY", "dev-secret-key")
         webhook_secret = os.environ.get("BLOG_WEBHOOK_SECRET", "")
