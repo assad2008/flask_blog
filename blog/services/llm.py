@@ -345,7 +345,7 @@ def _fallback_slug_from_title(title: str) -> str:
 
 
 def _log_llm_call(url: str, payload: dict, result: dict) -> None:
-    """记录 LLM 请求到日志：模型名、URL、token 用量、提示词（截 50 字）。"""
+    """记录 LLM 请求到日志：模型名、URL、token 明细、提示词（截 50 字）。"""
     model = payload.get("model", "?")
     messages = payload.get("messages", [])
     # 提取用户消息中的提示词文本，多条消息合并
@@ -362,13 +362,17 @@ def _log_llm_call(url: str, payload: dict, result: dict) -> None:
     prompt_tokens = usage.get("prompt_tokens", 0)
     completion_tokens = usage.get("completion_tokens", 0)
     total_tokens = usage.get("total_tokens", 0)
+    # 缓存命中 token 数（部分供应商在 prompt_tokens_details 中回传）
+    prompt_details = usage.get("prompt_tokens_details") or usage.get("prompt_token_details") or {}
+    cached_tokens = prompt_details.get("cached_tokens", 0)
     logger.info(
-        "model=%s | url=%s | tokens=%d/%d/%d | prompt=%s",
+        "model=%s | url=%s | 输入=%d | 输出=%d | 消耗=%d | 缓存=%d | prompt=%s",
         model,
         url,
         prompt_tokens,
         completion_tokens,
         total_tokens,
+        cached_tokens,
         prompt_text,
     )
 
