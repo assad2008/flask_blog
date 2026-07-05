@@ -14,13 +14,19 @@ class ContentRepository:
         self.topics_dir = self.content_dir / "topics"
 
     def list_posts(self) -> list[Post]:
-        posts = [self._read_post_meta(path) for path in self.posts_dir.glob("*.md")]
-        # glob 返回顺序不确定，需自行排序：
-        # 1) 先按 slug 升序，作为同日期的稳定 tie-break；
-        # 2) 再按日期降序（无日期排末尾），利用 Python 稳定排序保留 1) 的顺序。
-        posts.sort(key=lambda p: p.slug)
-        posts.sort(key=lambda p: (p.date is not None, p.date or date.min), reverse=True)
-        return posts
+        # 收集 post 与文件创建时间，用于同日期的二级排序
+        entries = []
+        for path in self.posts_dir.glob("*.md"):
+            post = self._read_post_meta(path)
+            ctime = path.stat().st_ctime
+            entries.append((post, ctime))
+
+        # 按日期降序（无日期排末尾），同日期按文件创建时间降序
+        entries.sort(
+            key=lambda x: ((x[0].date is not None, x[0].date or date.min), x[1]),
+            reverse=True,
+        )
+        return [post for post, _ in entries]
 
     def get_post_raw(self, slug: str) -> str | None:
         """返回文章原始 Markdown 文本（含 front matter），用于编辑场景。"""
