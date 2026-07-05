@@ -2739,6 +2739,7 @@ body::before {
         <a href="{{ url_for('index.index') }}" {% if request.path == "/" %}class="active"{% endif %}>首页</a>
         <a href="{{ url_for('index.archives') }}" {% if request.path == "/archives.html" %}class="active"{% endif %}>归档</a>
         <a href="{{ url_for('topics.detail', slug='about') }}" {% if request.path == "/topic/about.html" %}class="active"{% endif %}>关于</a>
+        <a href="https://github.com/assad2008/flask_blog" target="_blank" rel="noopener">GitHub</a>
       </nav>
     </div>
   </header>
