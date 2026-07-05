@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 import secrets
 import urllib.error
@@ -17,6 +18,37 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from datetime import date
+from logging.handlers import TimedRotatingFileHandler
+from pathlib import Path
+
+# LLM 专用 logger；handler 在应用工厂创建时按天滚动配置
+logger = logging.getLogger("blog.llm")
+
+
+def init_llm_logger(log_dir: Path) -> None:
+    """配置按天滚动的 LLM 请求文件日志。
+
+    日志文件为 ``llm.log``，每天午夜滚动，历史文件为 ``llm.log.YYYY-MM-DD``，保留 30 天。
+    多次调用安全（已配置 handler 时跳过）。
+    """
+    log_dir.mkdir(parents=True, exist_ok=True)
+    if logger.handlers:
+        return
+    handler = TimedRotatingFileHandler(
+        log_dir / "llm.log",
+        when="midnight",
+        backupCount=30,
+        encoding="utf-8",
+    )
+    handler.setFormatter(
+        logging.Formatter(
+            "%(asctime)s %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+    )
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
 
 # 正文过长时截断到该长度，控制 LLM 调用成本
 _MAX_BODY_CHARS = 4000
@@ -312,6 +344,35 @@ def _fallback_slug_from_title(title: str) -> str:
     return f"post-{date.today().isoformat()}-{secrets.token_hex(3)}"
 
 
+def _log_llm_call(url: str, payload: dict, result: dict) -> None:
+    """记录 LLM 请求到日志：模型名、URL、token 用量、提示词（截 50 字）。"""
+    model = payload.get("model", "?")
+    messages = payload.get("messages", [])
+    # 提取用户消息中的提示词文本，多条消息合并
+    prompt_parts = []
+    for msg in messages:
+        if isinstance(msg, dict):
+            content = msg.get("content", "")
+            if isinstance(content, str):
+                prompt_parts.append(content)
+    prompt_text = " | ".join(prompt_parts)
+    if len(prompt_text) > 50:
+        prompt_text = prompt_text[:50] + "..."
+    usage = result.get("usage", {})
+    prompt_tokens = usage.get("prompt_tokens", 0)
+    completion_tokens = usage.get("completion_tokens", 0)
+    total_tokens = usage.get("total_tokens", 0)
+    logger.info(
+        "model=%s | url=%s | tokens=%d/%d/%d | prompt=%s",
+        model,
+        url,
+        prompt_tokens,
+        completion_tokens,
+        total_tokens,
+        prompt_text,
+    )
+
+
 def _post_json(url: str, api_key: str, payload: dict) -> dict:
     """向 OpenAI 兼容接口发起 POST，返回解析后的 JSON 响应。"""
     # 仅对支持「思考/推理」的供应商下发关闭推理的参数，
@@ -337,7 +398,9 @@ def _post_json(url: str, api_key: str, payload: dict) -> dict:
     )
     try:
         with urllib.request.urlopen(req, timeout=600) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+            result = json.loads(resp.read().decode("utf-8"))
+            _log_llm_call(url, payload, result)
+            return result
     except urllib.error.HTTPError as exc:
         raise LLMError(f"LLM HTTP {exc.code}: {exc.reason}") from exc
     except urllib.error.URLError as exc:

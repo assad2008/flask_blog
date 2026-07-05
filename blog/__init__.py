@@ -20,8 +20,10 @@ def create_app(settings: Settings | None = None) -> Flask:
     # 测试环境下不初始化文件日志，避免占用临时目录文件句柄
     if not app.config.get("TESTING"):
         from blog.routes.webhook import init_webhook_logger
+        from blog.services.llm import init_llm_logger
 
         init_webhook_logger(settings.log_dir)
+        init_llm_logger(settings.log_dir)
 
     from blog.routes.index import index_bp
     from blog.routes.postart import postart_bp
