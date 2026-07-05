@@ -566,22 +566,44 @@
       transition:opacity .25s ease,visibility .25s ease;
     }
     .image-lightbox.open{opacity:1;visibility:visible}
-    .image-lightbox img{
-      max-width:90vw;max-height:90vh;object-fit:contain;
-      border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5);
-      cursor:default;transform:scale(.92);
-      transition:transform .25s ease;
+    .lightbox-img-wrap{
+      display:flex;align-items:center;justify-content:center;
+      overflow:auto;max-width:100vw;max-height:100vh;
+      scrollbar-width:none;-ms-overflow-style:none;
     }
-    .image-lightbox.open img{transform:scale(1)}
+    .lightbox-img-wrap::-webkit-scrollbar{display:none}
+    .image-lightbox img{
+      display:block;max-width:90vw;max-height:90vh;object-fit:contain;
+      border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5);
+      cursor:zoom-in;transform-origin:center center;
+      transition:transform .18s ease;
+      user-select:none;-webkit-user-drag:none;
+    }
+    .image-lightbox.open img{animation:lb-fade-in .25s ease}
+    @keyframes lb-fade-in{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
     .lightbox-close{
-      position:absolute;top:1.2rem;right:1.5rem;
+      position:fixed;top:1.2rem;right:1.5rem;z-index:2;
       width:44px;height:44px;display:flex;align-items:center;justify-content:center;
       background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
       border-radius:50%;color:#fff;font-size:1.4rem;cursor:pointer;
-      transition:background .2s ease;z-index:1;
+      transition:background .2s ease;
     }
     .lightbox-close:hover{background:rgba(255,255,255,.25)}
     .lightbox-close svg{width:20px;height:20px;stroke:#fff;stroke-width:2}
+    .lightbox-zoom-info{
+      position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:2;
+      font-family:var(--font-mono);font-size:.82rem;color:#fff;
+      background:rgba(0,0,0,.55);padding:.35rem .85rem;border-radius:99px;
+      pointer-events:none;opacity:0;transition:opacity .2s ease;
+    }
+    .lightbox-zoom-info.show{opacity:1}
+    .lightbox-hint{
+      position:fixed;bottom:3.2rem;left:50%;transform:translateX(-50%);z-index:2;
+      font-size:.85rem;color:rgba(255,255,255,.7);
+      white-space:nowrap;pointer-events:none;
+      opacity:0;transition:opacity .3s ease;
+    }
+    .lightbox-hint.show{opacity:1}
 
     /* ---------- 确认弹窗 ---------- */
     .confirm-overlay{
@@ -1159,10 +1181,15 @@
 
       /* ---------- 图片全屏查看 ---------- */
       (function initImageLightbox() {
-        // 惰性创建 lightbox DOM（首次点击图片时才创建）
         let lightbox = null;
         let lightboxImg = null;
         let lightboxCloseBtn = null;
+        let lightboxInfo = null;
+        let lightboxHint = null;
+        let zoomLevel = 1;
+        let panX = 0, panY = 0;
+        let isDragging = false;
+        let dragStartX = 0, dragStartY = 0, panStartX = 0, panStartY = 0;
 
         function ensureLightbox() {
           if (lightbox) return;
@@ -1171,21 +1198,67 @@
           lightbox.setAttribute("aria-label", "图片全屏查看");
           lightbox.setAttribute("role", "dialog");
           lightboxImg = document.createElement("img");
+          lightbox.appendChild(lightboxImg);
+
+          lightboxInfo = document.createElement("div");
+          lightboxInfo.className = "lightbox-zoom-info";
+          lightboxHint = document.createElement("div");
+          lightboxHint.className = "lightbox-hint";
+          lightboxHint.textContent = "滚轮缩放 · 拖拽平移 · 点击切换";
+
           lightboxCloseBtn = document.createElement("button");
           lightboxCloseBtn.className = "lightbox-close";
           lightboxCloseBtn.setAttribute("aria-label", "关闭");
           lightboxCloseBtn.innerHTML = '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
-          lightbox.appendChild(lightboxImg);
+          lightbox.appendChild(lightboxInfo);
+          lightbox.appendChild(lightboxHint);
           lightbox.appendChild(lightboxCloseBtn);
           document.body.appendChild(lightbox);
         }
 
+        function applyTransform() {
+          var t = "scale(" + zoomLevel + ")";
+          if (panX || panY) t += " translate(" + panX + "px," + panY + "px)";
+          lightboxImg.style.transform = t;
+          lightboxImg.style.cursor = zoomLevel > 1.05 ? "grab" : "zoom-in";
+        }
+
+        function showZoomInfo() {
+          var pct = Math.round(zoomLevel * 100);
+          lightboxInfo.textContent = pct + "%";
+          lightboxInfo.classList.add("show");
+          clearTimeout(lightboxInfo._timer);
+          lightboxInfo._timer = setTimeout(function () {
+            lightboxInfo.classList.remove("show");
+          }, 1200);
+        }
+
+        function hideHint() {
+          if (lightboxHint) lightboxHint.classList.remove("show");
+        }
+
+        function setZoom(level, resetPan) {
+          zoomLevel = Math.min(5, Math.max(1, level));
+          if (resetPan) { panX = 0; panY = 0; }
+          if (zoomLevel > 1.05) hideHint();
+          applyTransform();
+          showZoomInfo();
+        }
+
         function openLightbox(src) {
           ensureLightbox();
+          zoomLevel = 1; panX = 0; panY = 0;
           lightboxImg.src = src;
+          applyTransform();
           lightbox.classList.add("open");
           document.body.style.overflow = "hidden";
+          // 显示操作提示，3 秒后自动消失
+          if (lightboxHint) {
+            lightboxHint.classList.add("show");
+            clearTimeout(lightboxHint._timer);
+            lightboxHint._timer = setTimeout(hideHint, 3500);
+          }
           lightboxCloseBtn.focus();
         }
 
@@ -1195,31 +1268,86 @@
           document.body.style.overflow = "";
         }
 
-        // 事件委托：监听 .article-body 中的图片点击
-        document.addEventListener("click", function(e) {
-          const img = e.target.closest(".article-body img");
+        document.addEventListener("click", function (e) {
+          var img = e.target.closest(".article-body img");
           if (!img) return;
           if (lightbox && lightbox.classList.contains("open")) return;
-          const src = img.getAttribute("src") || img.currentSrc;
+          var src = img.getAttribute("src") || img.currentSrc;
           if (src) openLightbox(src);
         });
 
-        // 确保 lightbox 兜底事件在点击图片前就已注册
         ensureLightbox();
 
         if (lightbox) {
           // 点击遮罩关闭
-          lightbox.addEventListener("click", function(e) {
+          lightbox.addEventListener("click", function (e) {
             if (e.target === lightbox) closeLightbox();
           });
-          // 点击关闭按钮
           if (lightboxCloseBtn) {
             lightboxCloseBtn.addEventListener("click", closeLightbox);
           }
+
+          // 点击图片切换缩放
+          if (lightboxImg) {
+            lightboxImg.addEventListener("click", function (e) {
+              e.stopPropagation();
+              if (zoomLevel < 1.05) {
+                setZoom(2, true);
+              } else {
+                setZoom(1, true);
+              }
+            });
+            lightboxImg.addEventListener("dblclick", function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              setZoom(1, true);
+            });
+          }
+
+          // 鼠标滚轮渐进缩放
+          lightbox.addEventListener("wheel", function (e) {
+            e.preventDefault();
+            var delta = e.deltaY > 0 ? -0.1 : 0.1;
+            setZoom(zoomLevel + delta, false);
+          }, { passive: false });
+
+          // 拖拽平移（仅在缩放时生效）
+          lightbox.addEventListener("mousedown", function (e) {
+            if (zoomLevel < 1.05) return;
+            if (e.target === lightboxImg || e.target === lightbox) {
+              hideHint();
+              isDragging = true;
+              dragStartX = e.clientX;
+              dragStartY = e.clientY;
+              panStartX = panX;
+              panStartY = panY;
+              lightboxImg.style.cursor = "grabbing";
+              lightboxImg.style.transition = "none";
+              e.preventDefault();
+            }
+          });
+          window.addEventListener("mousemove", function (e) {
+            if (!isDragging) return;
+            panX = panStartX + (e.clientX - dragStartX) / zoomLevel;
+            panY = panStartY + (e.clientY - dragStartY) / zoomLevel;
+            lightboxImg.style.transform = "scale(" + zoomLevel + ") translate(" + panX + "px," + panY + "px)";
+          });
+          window.addEventListener("mouseup", function () {
+            if (isDragging) {
+              isDragging = false;
+              lightboxImg.style.cursor = zoomLevel > 1.05 ? "grab" : "zoom-in";
+              lightboxImg.style.transition = "";
+            }
+          });
+
           // ESC 关闭
-          document.addEventListener("keydown", function(e) {
+          document.addEventListener("keydown", function (e) {
             if (e.key === "Escape" && lightbox.classList.contains("open")) {
-              closeLightbox();
+              if (zoomLevel > 1.05) {
+                setZoom(1, true);
+              } else {
+                closeLightbox();
+              }
             }
           });
         }
