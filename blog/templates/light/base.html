@@ -331,6 +331,17 @@
     }
 
     /* ---------- Article Detail ---------- */
+    .article-detail{
+      max-width:1200px;
+      margin-left:auto;margin-right:auto;
+    }
+    /* 突破 .container (1060px) 约束：负 margin 补偿容器内边距与宽度差 */
+    /* 仅向右扩展，避免在有 TOC 时遮挡左侧标题 */
+    @media (min-width:1100px){
+      .article-detail{
+        margin-left:auto;margin-right:-70px;
+      }
+    }
     .article-header{margin-bottom:2rem}
     .article-header time{
       display:inline-flex;align-items:center;gap:.4rem;
@@ -834,6 +845,7 @@
       border-right:1px solid var(--border-light);
       transform:translateX(-100%);transition:transform 300ms cubic-bezier(.4,0,.2,1);
       overflow-y:auto;overscroll-behavior:contain;
+      scrollbar-gutter:stable;
     }
     .toc-sidebar.open{transform:translateX(0)}
     .toc-inner{padding:1rem .75rem 2rem}
@@ -905,7 +917,7 @@
       .site-main{padding:3.5rem 0 5rem}
       .article-body{padding:2.5rem 2.25rem}
       .toc-sidebar{transform:translateX(0)!important}
-      .has-toc .container{margin-left:calc(15% + 300px);margin-right:auto}
+      .has-toc .container{margin-left:calc(15% + 310px);margin-right:auto}
       .toc-toggle{display:none!important}
       .toc-backdrop{display:none!important}
       .toc-close{display:none!important}
