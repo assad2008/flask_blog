@@ -22,6 +22,24 @@ class ContentRepository:
         posts.sort(key=lambda p: (p.date is not None, p.date or date.min), reverse=True)
         return posts
 
+    def get_post_raw(self, slug: str) -> str | None:
+        """返回文章原始 Markdown 文本（含 front matter），用于编辑场景。"""
+        path = self.posts_dir / f"{slug}.md"
+        if not path.is_file():
+            return None
+        return path.read_text(encoding="utf-8")
+
+    def delete_post(self, slug: str) -> bool:
+        """删除文章文件，返回是否成功。"""
+        path = self.posts_dir / f"{slug}.md"
+        if not path.is_file():
+            return False
+        try:
+            path.unlink()
+            return True
+        except OSError:
+            return False
+
     def _read_post_meta(self, path: Path) -> Post:
         """仅读取文章元数据，不渲染 Markdown 正文。用于列表页面。"""
         raw = path.read_text(encoding="utf-8")

@@ -384,6 +384,101 @@
     color:var(--text-secondary);
   }
 
+  /* ============ 文章管理（居中模态）============ */
+  .manage-modal{
+    position:absolute;inset:0;z-index:45;
+    display:flex;align-items:center;justify-content:center;
+    padding:1.5rem;
+  }
+  .manage-modal[hidden]{display:none!important}
+  .manage-box{
+    position:relative;z-index:1;width:min(960px,95vw);
+    max-height:92vh;display:flex;flex-direction:column;
+    background:var(--bg-secondary);border:1px solid var(--border-accent);
+    border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
+    overflow:hidden;
+  }
+  .manage-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.85rem 1.1rem;border-bottom:1px solid var(--border-light);
+    flex-shrink:0;
+  }
+  .manage-head h2{
+    font-family:var(--font-mono);font-size:.88rem;font-weight:700;
+    color:var(--accent);text-transform:uppercase;letter-spacing:.06em;
+  }
+  .manage-head-actions{display:flex;align-items:center;gap:.55rem}
+  .manage-body{
+    flex:1;overflow-y:auto;padding:.75rem 1.1rem 1.1rem;
+  }
+  .manage-table{
+    width:100%;border-collapse:collapse;
+    font-size:.85rem;line-height:1.55;
+  }
+  .manage-table th{
+    font-family:var(--font-mono);font-size:.72rem;font-weight:600;
+    color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;
+    text-align:left;padding:.55rem .6rem;
+    border-bottom:2px solid var(--border-light);
+    white-space:nowrap;
+  }
+  .manage-table td{
+    padding:.55rem .6rem;border-bottom:1px solid var(--border-light);
+    color:var(--text-primary);vertical-align:middle;
+  }
+  .manage-table .col-slug{
+    font-family:var(--font-mono);font-size:.78rem;max-width:180px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .manage-table .col-title{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .manage-table .col-date{font-family:var(--font-mono);font-size:.78rem;white-space:nowrap;color:var(--text-tertiary)}
+  .manage-table .col-actions{white-space:nowrap;text-align:right}
+  .manage-table tbody tr:hover td{background:var(--accent-soft)}
+  .manage-link{
+    background:none;border:none;cursor:pointer;
+    font-family:var(--font-mono);font-size:.74rem;font-weight:600;
+    padding:.3rem .55rem;border-radius:var(--radius-sm);
+    transition:all var(--transition);
+  }
+  .manage-link-edit{color:var(--accent)}
+  .manage-link-edit:hover{background:var(--accent-soft)}
+  .manage-link-delete{color:#DC2626}
+  .manage-link-delete:hover{background:rgba(220,38,38,.08)}
+  .manage-empty{
+    text-align:center;padding:2.5rem .5rem;color:var(--text-tertiary);
+    font-family:var(--font-mono);font-size:.82rem;
+  }
+  .manage-edit-form{display:flex;flex-direction:column;gap:.85rem}
+  .manage-edit-form label{
+    font-family:var(--font-mono);font-size:.76rem;font-weight:600;
+    color:var(--text-secondary);text-transform:uppercase;letter-spacing:.04em;
+  }
+  .manage-edit-form input[type="text"],
+  .manage-edit-form textarea{
+    font-family:var(--font-mono);font-size:.85rem;line-height:1.65;
+    color:var(--text-primary);background:var(--bg-primary);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:.6rem .8rem;width:100%;
+    transition:border-color var(--transition);
+  }
+  .manage-edit-form input:focus,
+  .manage-edit-form textarea:focus{
+    outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-glow);
+  }
+  .manage-edit-form textarea{min-height:340px;resize:vertical}
+  .manage-edit-actions{display:flex;justify-content:flex-end;gap:.6rem}
+  .manage-meta{
+    font-family:var(--font-mono);font-size:.74rem;color:var(--text-tertiary);
+    display:flex;gap:1.5rem;flex-wrap:wrap;
+  }
+  @media (max-width:640px){
+    .manage-modal{padding:.5rem}
+    .manage-box{width:100%;max-height:95vh}
+    .manage-table{font-size:.78rem}
+    .manage-table .col-slug,.manage-table .col-title{max-width:100px}
+  }
+
   /* 移动端：编辑/预览标签切换 */
   .editor-tabs{display:none;flex-shrink:0;border-bottom:1px solid var(--border-light)}
   .editor-tabs button{
@@ -447,6 +542,8 @@
     {# 用户「生成」并应用候选后，slug 与简介回填至此，发布时复用、不再调 AI #}
     <input type="hidden" name="gen_slug" id="genSlugInput" value="">
     <input type="hidden" name="gen_summary" id="genSummaryInput" value="">
+    {# 编辑已有文章时的 slug，非空表示编辑模式 #}
+    <input type="hidden" name="edit_slug" id="editSlugInput" value="">
   </form>
   <div class="editor-overlay show-edit" id="editorOverlay">
     <header class="editor-topbar">
@@ -463,6 +560,8 @@
         <button type="button" class="btn-ghost btn-ghost-amber" id="reformatBtn" title="调用大模型将内容整理成结构清晰的 Markdown 文档">格式化</button>
         <button type="button" class="btn-ghost btn-ghost-green" id="genBtn" title="由大模型生成标题/slug/简介">生成标题</button>
         <button type="submit" form="publishForm" class="btn-primary" id="publishBtn">确认发布</button>
+        <button type="button" class="btn-ghost btn-ghost-muted" id="manageBtn" title="查看、编辑、删除已有文章">管理文章</button>
+        <button type="button" class="btn-ghost btn-ghost-muted" id="cancelEditBtn" title="取消编辑，清空内容" style="display:none">取消编辑</button>
       </div>
     </header>
 
@@ -503,6 +602,21 @@
           <div class="import-preview-head">解析结果预览</div>
           <pre class="import-preview-body" id="importPreviewBody"></pre>
         </div>
+      </div>
+    </div>
+
+    {# 文章管理：列表、编辑、删除 #}
+    <div class="manage-modal" id="manageModal" hidden>
+      <div class="gen-backdrop" id="manageBackdrop"></div>
+      <div class="manage-box">
+        <div class="manage-head">
+          <h2 id="manageHeadTitle">文章管理</h2>
+          <div class="manage-head-actions">
+            <button type="button" class="btn-ghost btn-ghost-muted" id="manageRefresh">刷新</button>
+            <button type="button" class="gen-close" id="manageClose" aria-label="关闭">×</button>
+          </div>
+        </div>
+        <div class="manage-body" id="manageBody"></div>
       </div>
     </div>
 
@@ -875,9 +989,16 @@
 
     if (reformatBtn) reformatBtn.addEventListener("click", doReformat);
 
-    // 提交发布：未生成时拦截并提示，否则禁用按钮提示发布中
+    // 提交发布：编辑模式跳过生成检查，新文章需先生成
     if (publishForm && publishBtn) {
       publishForm.addEventListener("submit", function (e) {
+        const editSlug = document.getElementById("editSlugInput");
+        if (editSlug && editSlug.value.trim()) {
+          // 编辑模式：直接提交
+          publishBtn.disabled = true;
+          publishBtn.textContent = "保存中…";
+          return;
+        }
         const genSlug = document.getElementById("genSlugInput");
         if (genSlug && !genSlug.value.trim()) {
           e.preventDefault();
@@ -999,6 +1120,198 @@
       if (slugInput) slugInput.value = c.slug || "";
       if (summaryInput) summaryInput.value = c.summary || "";
     });
+
+    // ============ 文章管理：查看列表 / 删除 / 编辑到主编辑器 ============
+    const manageBtn = document.getElementById("manageBtn");
+    const manageModal = document.getElementById("manageModal");
+    const manageBackdrop = document.getElementById("manageBackdrop");
+    const manageClose = document.getElementById("manageClose");
+    const manageRefresh = document.getElementById("manageRefresh");
+    const manageBody = document.getElementById("manageBody");
+    const manageHeadTitle = document.getElementById("manageHeadTitle");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const editSlugInput = document.getElementById("editSlugInput");
+
+    let isEditing = false;
+
+    function enterEditMode(slug) {
+      isEditing = true;
+      cancelEditBtn.style.display = "";
+      publishBtn.textContent = "更新文章";
+    }
+
+    function exitEditMode() {
+      isEditing = false;
+      cancelEditBtn.style.display = "none";
+      publishBtn.textContent = "确认发布";
+      titleInput.value = "";
+      editor.value = "";
+      if (editSlugInput) editSlugInput.value = "";
+      if (genSlugInput) genSlugInput.value = "";
+      if (genSummaryInput) genSummaryInput.value = "";
+      editor.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    if (cancelEditBtn) {
+      cancelEditBtn.addEventListener("click", function () {
+        if (!isEditing) return;
+        if (editor.value.trim() && !window.confirm("确定要取消编辑吗？当前内容将丢失。")) return;
+        exitEditMode();
+      });
+    }
+
+    // 删除文章后，如果当前编辑器正在编辑该文章，则退出编辑模式
+    function onManageDeleteDone(slug) {
+      if (isEditing && editSlugInput && editSlugInput.value === slug) {
+        exitEditMode();
+      }
+    }
+
+    if (manageBtn && manageModal && manageBody) {
+      function openManage() {
+        manageModal.hidden = false;
+        loadManageList();
+      }
+
+      function closeManage() {
+        manageModal.hidden = true;
+      }
+
+      async function loadManageList() {
+        manageHeadTitle.textContent = "文章管理";
+        manageBody.innerHTML =
+          '<div class="manage-empty">加载中…</div>';
+        try {
+          const params = new URLSearchParams();
+          params.append("action", "manage_list");
+          const resp = await fetch("{{ url_for('postart.postart') }}", {
+            method: "POST",
+            body: params,
+          });
+          const data = await resp.json();
+          if (!data.ok) {
+            manageBody.innerHTML =
+              '<div class="manage-empty">加载失败</div>';
+            return;
+          }
+          if (!data.posts.length) {
+            manageBody.innerHTML =
+              '<div class="manage-empty">暂无文章</div>';
+            return;
+          }
+          const rows = data.posts.map(function (p) {
+            const safe = function (s) {
+              return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+            };
+            return (
+              '<tr>' +
+              '<td class="col-slug" title="' + safe(p.slug) + '">' + safe(p.slug) + "</td>" +
+              '<td class="col-title" title="' + safe(p.title) + '">' + safe(p.title) + "</td>" +
+              '<td class="col-date">' + safe(p.date || "-") + "</td>" +
+              '<td class="col-actions">' +
+              '<button type="button" class="manage-link manage-link-edit" data-slug="' +
+              safe(p.slug) +
+              '">编辑</button>' +
+              '<button type="button" class="manage-link manage-link-delete" data-slug="' +
+              safe(p.slug) +
+              '">删除</button>' +
+              "</td>" +
+              "</tr>"
+            );
+          }).join("");
+          manageBody.innerHTML =
+            '<table class="manage-table"><thead><tr>' +
+            "<th>Slug</th><th>标题</th><th>日期</th><th>操作</th>" +
+            "</tr></thead><tbody>" +
+            rows +
+            "</tbody></table>";
+        } catch (err) {
+          manageBody.innerHTML =
+            '<div class="manage-empty">加载失败：' + err.message + "</div>";
+        }
+      }
+
+      // 处理编辑、删除按钮点击（事件委托）
+      manageBody.addEventListener("click", async function (e) {
+        const editBtn = e.target.closest(".manage-link-edit");
+        const deleteBtn = e.target.closest(".manage-link-delete");
+        if (editBtn) {
+          const slug = editBtn.dataset.slug;
+          if (!slug) return;
+          closeManage();
+          await loadPostIntoEditor(slug);
+        }
+        if (deleteBtn) {
+          const slug = deleteBtn.dataset.slug;
+          if (!slug) return;
+          if (
+            !window.confirm(
+              "确定要删除「" + slug + "」吗？删除后无法恢复。"
+            )
+          )
+            return;
+          await doManageDelete(slug);
+        }
+      });
+
+      async function loadPostIntoEditor(slug) {
+        try {
+          const params = new URLSearchParams();
+          params.append("action", "manage_get");
+          params.append("slug", slug);
+          const resp = await fetch("{{ url_for('postart.postart') }}", {
+            method: "POST",
+            body: params,
+          });
+          const data = await resp.json();
+          if (!data.ok) {
+            showClientNotice(data.error || "加载文章失败");
+            return;
+          }
+          titleInput.value = data.title;
+          editor.value = data.body;
+          if (editSlugInput) editSlugInput.value = slug;
+          // 预填 slug 和简介，避免发布时被「未生成」校验拦截
+          if (genSlugInput) genSlugInput.value = slug;
+          if (genSummaryInput) genSummaryInput.value = data.summary || "";
+          enterEditMode(slug);
+          editor.dispatchEvent(new Event("input", { bubbles: true }));
+          titleInput.focus();
+          showClientNotice("正在编辑「" + slug + "」");
+        } catch (err) {
+          showClientNotice("请求失败：" + err.message);
+        }
+      }
+
+      async function doManageDelete(slug) {
+        try {
+          const params = new URLSearchParams();
+          params.append("action", "manage_delete");
+          params.append("slug", slug);
+          const resp = await fetch("{{ url_for('postart.postart') }}", {
+            method: "POST",
+            body: params,
+          });
+          const data = await resp.json();
+          if (data.ok) {
+            showClientNotice("「" + slug + "」已删除");
+            onManageDeleteDone(slug);
+            loadManageList();
+          } else {
+            showClientNotice(data.error || "删除失败");
+          }
+        } catch (err) {
+          showClientNotice("请求失败：" + err.message);
+        }
+      }
+
+      manageBtn.addEventListener("click", openManage);
+      if (manageBackdrop)
+        manageBackdrop.addEventListener("click", closeManage);
+      if (manageClose) manageClose.addEventListener("click", closeManage);
+      if (manageRefresh)
+        manageRefresh.addEventListener("click", loadManageList);
+    }
   })();
 </script>
 {% endif %}

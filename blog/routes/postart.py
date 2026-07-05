@@ -18,6 +18,7 @@ import threading as _sse_threading
 import time as _sse_time
 from pathlib import Path
 
+import frontmatter
 from flask import (
     Blueprint,
     Response,
@@ -33,7 +34,12 @@ from flask import (
 )
 
 from blog.config import Settings
-from blog.content.writer import resolve_unique_slug, today_iso, write_markdown_post
+from blog.content.writer import (
+    resolve_unique_slug,
+    today_iso,
+    update_post_title_and_body,
+    write_markdown_post,
+)
 from blog.services.git import commit_paths
 from blog.services.llm import (
     LLMError,
@@ -113,6 +119,11 @@ def postart():
             if not _is_authed():
                 abort(403)
             return _handle_reformat(settings)
+        if action in ("manage_list", "manage_get", "manage_delete", "manage_update"):
+            # 文章管理（AJAX）
+            if not _is_authed():
+                abort(403)
+            return _handle_manage(settings, action)
         # 未知 action 视为非法请求
         abort(400)
 
@@ -159,9 +170,10 @@ def _handle_login(settings: Settings):
 
 
 def _handle_publish(settings: Settings):
-    """处理发布表单提交：校验内容、生成元数据、写入文件。"""
+    """处理发布表单提交：校验内容、生成元数据、写入/更新文件。"""
     title = request.form.get("title", "").strip()
     body = request.form.get("body", "").strip()
+    edit_slug = request.form.get("edit_slug", "").strip()
 
     # 标题与正文均不可为空
     if not title or not body:
@@ -177,7 +189,30 @@ def _handle_publish(settings: Settings):
             400,
         )
 
-    # 必须「生成」后才允许发布：未携带 gen_slug 视为未生成，拦截并提示
+    posts_dir: Path = settings.content_dir / "posts"
+
+    # 编辑已有文章模式
+    if edit_slug:
+        update_post_title_and_body(
+            posts_dir, edit_slug, title=title, body=body,
+        )
+        post_path = posts_dir / f"{edit_slug}.md"
+        git_committed, git_pushed, git_detail = commit_paths(
+            settings.base_dir, [post_path], f"更新文章: {title}"
+        )
+        return render_template(
+            "light/postart.html",
+            mode="success",
+            slug=edit_slug,
+            title=title,
+            summary="（已更新）",
+            llm_used=False,
+            git_committed=git_committed,
+            git_pushed=git_pushed,
+            git_detail=git_detail,
+        )
+
+    # 新文章：必须「生成」后才允许发布
     gen_slug = request.form.get("gen_slug", "").strip()
     gen_summary = request.form.get("gen_summary", "").strip()
     if not gen_slug:
@@ -198,7 +233,6 @@ def _handle_publish(settings: Settings):
     summary = gen_summary
     llm_used = True
 
-    posts_dir: Path = settings.content_dir / "posts"
     # 解决文件名冲突
     slug = resolve_unique_slug(slug, posts_dir)
 
@@ -391,3 +425,86 @@ def _handle_reformat(settings: Settings):
         return jsonify({"ok": False, "error": f"格式化失败：{exc}"})
 
     return jsonify({"ok": True, "body": formatted})
+
+
+def _handle_manage(settings: Settings, action: str):
+    """文章管理接口：列出/查看/删除/更新已有文章（AJAX，仅返回 JSON）。"""
+    from blog.content import ContentRepository
+
+    repository: ContentRepository = current_app.config["CONTENT_REPOSITORY"]
+    posts_dir: Path = settings.content_dir / "posts"
+
+    if action == "manage_list":
+        posts = repository.list_posts()
+        return jsonify(
+            {
+                "ok": True,
+                "posts": [
+                    {
+                        "slug": p.slug,
+                        "title": p.title,
+                        "date": p.date.isoformat() if p.date else "",
+                        "summary": p.summary,
+                    }
+                    for p in posts
+                ],
+            }
+        )
+
+    slug = request.form.get("slug", "").strip()
+    if not slug:
+        return jsonify({"ok": False, "error": "缺少文章 slug"}), 400
+
+    if action == "manage_get":
+        raw = repository.get_post_raw(slug)
+        if raw is None:
+            return jsonify({"ok": False, "error": f"文章不存在：{slug}"}), 404
+        parsed = frontmatter.loads(raw)
+        meta = parsed.metadata
+        title = meta.get("title") or meta.get("Title") or slug
+        date_str = ""
+        d = meta.get("date") or meta.get("Date")
+        if d:
+            date_str = str(d)
+        summary = meta.get("summary") or meta.get("Summary") or ""
+        authors = meta.get("authors") or meta.get("Authors") or []
+        if isinstance(authors, str):
+            authors = [authors]
+        return jsonify(
+            {
+                "ok": True,
+                "slug": slug,
+                "title": str(title),
+                "date": date_str,
+                "summary": str(summary),
+                "authors": [str(a) for a in authors],
+                "body": parsed.content.strip(),
+            }
+        )
+
+    if action == "manage_delete":
+        if not repository.delete_post(slug):
+            return jsonify({"ok": False, "error": f"删除失败：{slug}"}), 404
+        post_path = posts_dir / f"{slug}.md"
+        commit_paths(
+            settings.base_dir, [post_path], f"删除文章: {slug}"
+        )
+        return jsonify({"ok": True})
+
+    if action == "manage_update":
+        title = request.form.get("title", "").strip()
+        body = request.form.get("body", "").strip()
+        if not title or not body:
+            return jsonify({"ok": False, "error": "标题和正文都不能为空"}), 400
+        if repository.get_post_raw(slug) is None:
+            return jsonify({"ok": False, "error": f"文章不存在：{slug}"}), 404
+        update_post_title_and_body(
+            posts_dir, slug, title=title, body=body,
+        )
+        post_path = posts_dir / f"{slug}.md"
+        commit_paths(
+            settings.base_dir, [post_path], f"更新文章: {slug}"
+        )
+        return jsonify({"ok": True})
+
+    abort(400)

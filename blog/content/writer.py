@@ -21,6 +21,28 @@ def resolve_unique_slug(slug: str, posts_dir: Path) -> str:
     return candidate
 
 
+def update_post_title_and_body(
+    posts_dir: Path,
+    slug: str,
+    *,
+    title: str,
+    body: str,
+) -> Path:
+    """更新已有文章的标题与正文，保留其他 front matter 字段不变。
+    读取原文件，修改 title 和正文后写回。
+    """
+    path = posts_dir / f"{slug}.md"
+    raw = path.read_text(encoding="utf-8")
+    parsed = frontmatter.loads(raw)
+    parsed["title"] = title
+    # 移除旧的 uppercase 兼容字段，避免前端冲突
+    if "Title" in parsed.metadata:
+        del parsed["Title"]
+    parsed.content = body
+    path.write_text(frontmatter.dumps(parsed), encoding="utf-8")
+    return path
+
+
 def write_markdown_post(
     posts_dir: Path,
     slug: str,
