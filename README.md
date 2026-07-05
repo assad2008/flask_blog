@@ -9,7 +9,7 @@
 - **博客常用页面**：内置首页、分页列表、文章归档、单篇文章页和独立页面。
 - **阅读体验增强**：支持代码高亮、文章目录、标题锚点、阅读进度、返回顶部和响应式布局。
 - **文章发布入口**：配置 `BLOG_POSTART_PASSWORD` 后启用 `/postart`，可通过页面发布文章。
-- **LLM 辅助生成**：可配置 OpenAI 兼容接口，为发布文章生成标题、URL slug 和简介。
+- **LLM 辅助生成**：可配置 OpenAI 兼容接口，为发布文章生成标题、URL slug 和简介。所有 LLM 请求自动记录到 `logs/llm.log`（按天滚动）。
 - **GitHub webhook 拉取**：可配置 GitHub webhook，在收到 push 后执行 `git pull --ff-only` 更新内容。
 
 ## 技术栈
@@ -52,10 +52,12 @@ flask_blog/
 │   │   ├── postart.py        # /postart 文章发布入口
 │   │   └── webhook.py        # /webhook/github GitHub webhook
 │   ├── services/
-│   │   ├── llm.py            # OpenAI 兼容 LLM 元数据生成服务
+│   │   ├── llm.py            # OpenAI 兼容 LLM 元数据生成、LLM 请求日志
+│   │   ├── web_import.py     # 网页正文抓取与大模型提取
 │   │   └── git.py            # 发布后 git add / commit / push 服务
 │   └── templates/
-│       └── light/            # 当前主题模板
+│       └── light/            # 当前主题模板（Jinja2 继承，base.html 为共享壳）
+│           └── _toc.html     # 文章目录 partial（post/topic 页面共享）
 ├── content/
 │   ├── posts/                # 文章 Markdown 文件
 │   └── topics/               # 独立页面 Markdown 文件
@@ -122,7 +124,7 @@ python app.py
 | `BLOG_WEBHOOK_SECRET` | 空 | GitHub webhook 签名密钥；为空时禁用 webhook |
 | `BLOG_WEBHOOK_REPO_DIR` | 项目根目录 | webhook 执行 `git pull --ff-only` 的仓库目录 |
 | `BLOG_WEBHOOK_REF` | 空 | 限定 webhook 监听的 ref，例如 `refs/heads/master` |
-| `BLOG_LOG_DIR` | `./logs` | webhook 日志目录 |
+| `BLOG_LOG_DIR` | `./logs` | 日志目录（webhook、LLM 请求） |
 | `BLOG_POSTART_PASSWORD` | 空 | `/postart` 发布入口密码；为空时禁用发布入口 |
 | `BLOG_POSTART_AUTHOR` | 空 | 发布入口写入文章时使用的默认作者，多个作者用英文逗号分隔 |
 | `BLOG_LLM_BASE_URL` | 空 | OpenAI 兼容接口基址，例如 `https://api.openai.com/v1` |
@@ -237,7 +239,7 @@ git pull --ff-only
 BLOG_WEBHOOK_REF=refs/heads/master
 ```
 
-webhook 日志默认写入 `logs/webhook.log`，按天滚动并保留 30 天。
+webhook 日志写入 `logs/webhook.log`，LLM 请求日志写入 `logs/llm.log`，均按天滚动并保留 30 天。
 
 ## URL 路由
 

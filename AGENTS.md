@@ -67,10 +67,12 @@ flask_blog/
 │   │   ├── postart.py        # /postart 文章发布入口（需密码）
 │   │   └── webhook.py        # /webhook/github GitHub webhook
 │   ├── services/
-│   │   ├── llm.py            # OpenAI 兼容 LLM 元数据生成服务
+│   │   ├── llm.py            # OpenAI 兼容 LLM 元数据生成服务与 LLM 请求日志
+│   │   ├── web_import.py     # 网页正文抓取与大模型提取
 │   │   └── git.py            # 发布后 git add/commit/push 服务
 │   └── templates/
 │       └── light/            # 当前主题模板，Jinja2 继承，base.html 为共享壳
+│           └── _toc.html     # 文章目录 partial（post/topic 页面共享）
 ├── content/
 │   ├── posts/                # 文章 Markdown 文件
 │   └── topics/               # 独立页面 Markdown 文件
@@ -131,7 +133,7 @@ def hello():
 | `BLOG_WEBHOOK_SECRET` | 空 | webhook 签名密钥；为空则禁用 webhook |
 | `BLOG_WEBHOOK_REPO_DIR` | 项目根目录 | webhook git 仓库目录 |
 | `BLOG_WEBHOOK_REF` | 空 | 限定监听 ref（如 `refs/heads/master`） |
-| `BLOG_LOG_DIR` | `./logs` | webhook 日志目录 |
+| `BLOG_LOG_DIR` | `./logs` | 日志目录（webhook、LLM 请求） |
 | `BLOG_POSTART_PASSWORD` | 空 | 发布入口密码；为空则禁用 `/postart` |
 | `BLOG_POSTART_AUTHOR` | 空 | 默认作者，多个用英文逗号分隔 |
 | `BLOG_LLM_BASE_URL` | 空 | OpenAI 兼容接口基址 |

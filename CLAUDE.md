@@ -34,12 +34,18 @@ ruff format .
   - `index.py`：`/`、`/page/<int:page>.html`、`/archives.html`
   - `posts.py`：`/posts/<slug>.html`
   - `topics.py`：`/topic/<slug>.html`
+  - `postart.py`：`/postart` 文章发布入口（需密码）
+  - `webhook.py`：`/webhook/github` GitHub webhook
+- `blog/services/` 包含服务层：
+  - `llm.py`：OpenAI 兼容 LLM 元数据生成、LLM 请求日志（写入 `logs/llm.log`，按天滚动保留 30 天）
+  - `web_import.py`：网页正文抓取与大模型提取
+  - `git.py`：发布后 git add/commit/push
 - `blog/content/` 包含内容层：
   - `types.py`：`Post`、`Topic`、`Page` 数据类
   - `markdown.py`：Markdown 解析和 front matter 提取
   - `repository.py`：`ContentRepository` 从本地文件系统读取内容
   - `pagination.py`：纯分页函数
-- `blog/templates/light/` 是当前主题模板目录。模板使用 Jinja2 继承，`base.html` 为共享 HTML 壳。
+- `blog/templates/light/` 是当前主题模板目录。模板使用 Jinja2 继承，`base.html` 为共享 HTML 壳，`_toc.html` 为文章目录 partial。
 - `content/posts/` 和 `content/topics/` 为本地 Markdown 内容目录。
 - `tests/` 包含 pytest 测试套件，覆盖 markdown 解析、分页、内容仓库和路由。
 
