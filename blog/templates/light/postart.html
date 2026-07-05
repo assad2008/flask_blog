@@ -848,7 +848,7 @@
         showClientNotice("请输入要抓取的网页 URL");
         return;
       }
-      if (editor.value.trim() && !window.confirm("当前正文区域已有内容，确定要用抓取结果覆盖吗？")) {
+      if (editor.value.trim() && !(await showConfirm("当前正文区域已有内容，确定要用抓取结果覆盖吗？"))) {
         return;
       }
 
@@ -1153,9 +1153,9 @@
     }
 
     if (cancelEditBtn) {
-      cancelEditBtn.addEventListener("click", function () {
+      cancelEditBtn.addEventListener("click", async function () {
         if (!isEditing) return;
-        if (editor.value.trim() && !window.confirm("确定要取消编辑吗？当前内容将丢失。")) return;
+        if (editor.value.trim() && !(await showConfirm("确定要取消编辑吗？当前内容将丢失。"))) return;
         exitEditMode();
       });
     }
@@ -1245,9 +1245,9 @@
           const slug = deleteBtn.dataset.slug;
           if (!slug) return;
           if (
-            !window.confirm(
+            !(await showConfirm(
               "确定要删除「" + slug + "」吗？删除后无法恢复。"
-            )
+            ))
           )
             return;
           await doManageDelete(slug);

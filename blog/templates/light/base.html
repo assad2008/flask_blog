@@ -207,7 +207,7 @@
     }
 
     /* ---------- Layout ---------- */
-    .container{width:100%;max-width:1120px;margin:0 auto;padding:0 1.5rem;min-width:0}
+    .container{width:100%;max-width:1060px;margin:0 auto;padding:0 1.5rem;min-width:0}
 
     /* ---------- Header ---------- */
     /* fixed 固定于页面顶部；body 用 padding-top 防止内容被遮挡 */
@@ -331,7 +331,6 @@
     }
 
     /* ---------- Article Detail ---------- */
-    article{max-width:1120px;margin:0 auto}
     .article-header{margin-bottom:2rem}
     .article-header time{
       display:inline-flex;align-items:center;gap:.4rem;
@@ -572,6 +571,48 @@
     }
     .lightbox-close:hover{background:rgba(255,255,255,.25)}
     .lightbox-close svg{width:20px;height:20px;stroke:#fff;stroke-width:2}
+
+    /* ---------- 确认弹窗 ---------- */
+    .confirm-overlay{
+      position:fixed;inset:0;z-index:10001;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.45);
+      backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+      opacity:0;visibility:hidden;
+      transition:opacity .2s ease,visibility .2s ease;
+    }
+    .confirm-overlay.open{opacity:1;visibility:visible}
+    .confirm-dialog{
+      background:var(--bg-secondary);border:1px solid var(--border-accent);
+      border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
+      padding:1.5rem 1.8rem;max-width:420px;width:90vw;
+      transform:scale(.92) translateY(10px);
+      transition:transform .25s cubic-bezier(.25,.46,.45,.94);
+    }
+    .confirm-overlay.open .confirm-dialog{
+      transform:scale(1) translateY(0);
+    }
+    .confirm-dialog p{
+      font-size:.95rem;color:var(--text-primary);line-height:1.65;
+      margin-bottom:1.35rem;
+    }
+    .confirm-dialog .confirm-actions{
+      display:flex;justify-content:flex-end;gap:.65rem;
+    }
+    .confirm-dialog .confirm-actions button{
+      font-family:var(--font-mono);font-size:.82rem;font-weight:600;
+      padding:.5rem 1.15rem;border-radius:var(--radius);
+      cursor:pointer;transition:all var(--transition);
+    }
+    .confirm-btn-cancel{
+      background:none;border:1px solid var(--border);color:var(--text-secondary);
+    }
+    .confirm-btn-cancel:hover{color:var(--accent);border-color:var(--accent)}
+    .confirm-btn-ok{
+      background:var(--gradient-accent);border:none;color:#fff;
+      box-shadow:0 2px 8px var(--accent-glow);
+    }
+    .confirm-btn-ok:hover{transform:translateY(-1px);box-shadow:0 4px 14px var(--accent-glow)}
 
     /* ---------- Pagination ---------- */
     .pagination{
@@ -862,9 +903,9 @@
 
     @media (min-width:1024px){
       .site-main{padding:3.5rem 0 5rem}
-      .article-body{padding:2.5rem 3rem}
+      .article-body{padding:2.5rem 2.25rem}
       .toc-sidebar{transform:translateX(0)!important}
-      .has-toc .container{max-width:1120px;margin-left:calc(15% + 300px);margin-right:auto}
+      .has-toc .container{margin-left:calc(15% + 300px);margin-right:auto}
       .toc-toggle{display:none!important}
       .toc-backdrop{display:none!important}
       .toc-close{display:none!important}
@@ -990,7 +1031,7 @@
     /* Larger screens — subtle layout enhancement */
     @media (min-width:1024px){
       .site-main{padding:3.5rem 0 5rem}
-      .article-body{padding:2.5rem 3rem}
+      .article-body{padding:2.5rem 2.25rem}
     }
   </style>
   {% block extra_styles %}{% endblock %}
@@ -1022,6 +1063,17 @@
     </div>
   </footer>
 
+  <!-- 确认弹窗 -->
+  <div class="confirm-overlay" id="confirmOverlay" role="dialog" aria-modal="true">
+    <div class="confirm-dialog">
+      <p id="confirmMessage"></p>
+      <div class="confirm-actions">
+        <button type="button" class="confirm-btn-cancel" id="confirmCancel">取消</button>
+        <button type="button" class="confirm-btn-ok" id="confirmOk">确认</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 返回顶部 -->
   <button class="back-to-top" id="backToTop" aria-label="返回顶部" title="返回顶部">
     <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
@@ -1038,6 +1090,59 @@
         topBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
         window.addEventListener("scroll", toggleTop, { passive: true });
         toggleTop();
+      }
+
+      /* ---------- 全局确认弹窗 ---------- */
+      const confirmOverlay = document.getElementById("confirmOverlay");
+      if (confirmOverlay) {
+        const confirmMessage = document.getElementById("confirmMessage");
+        const confirmCancel = document.getElementById("confirmCancel");
+        const confirmOk = document.getElementById("confirmOk");
+
+        window.showConfirm = function (message) {
+          return new Promise(function (resolve) {
+            confirmMessage.textContent = message;
+            confirmOverlay.classList.add("open");
+            confirmOk.focus();
+
+            function cleanup() {
+              confirmOverlay.classList.remove("open");
+              confirmOverlay.removeEventListener("click", onBackdrop);
+              confirmCancel.removeEventListener("click", onCancel);
+              confirmOk.removeEventListener("click", onOk);
+              document.removeEventListener("keydown", onKey);
+            }
+
+            function onBackdrop(e) {
+              if (e.target === confirmOverlay) {
+                cleanup();
+                resolve(false);
+              }
+            }
+
+            function onCancel() {
+              cleanup();
+              resolve(false);
+            }
+
+            function onOk() {
+              cleanup();
+              resolve(true);
+            }
+
+            function onKey(e) {
+              if (e.key === "Escape") {
+                cleanup();
+                resolve(false);
+              }
+            }
+
+            confirmOverlay.addEventListener("click", onBackdrop);
+            confirmCancel.addEventListener("click", onCancel);
+            confirmOk.addEventListener("click", onOk);
+            document.addEventListener("keydown", onKey);
+          });
+        };
       }
 
       /* ---------- 图片全屏查看 ---------- */
