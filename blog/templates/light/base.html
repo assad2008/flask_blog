@@ -545,7 +545,32 @@
     .article-body td{padding:.6rem .9rem;border-bottom:1px solid var(--border-light)}
     .article-body tr:last-child td{border-bottom:none}
     .article-body tbody tr:hover td{background:var(--accent-soft)}
-    .article-body img{display:block;max-width:100%;height:auto;border-radius:var(--radius);margin:1.35rem auto}
+    .article-body img{display:block;max-width:100%;height:auto;border-radius:var(--radius);margin:1.35rem auto;cursor:pointer}
+
+    /* ---------- 图片全屏查看 ---------- */
+    .image-lightbox{
+      position:fixed;inset:0;z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.88);opacity:0;visibility:hidden;
+      transition:opacity .25s ease,visibility .25s ease;
+    }
+    .image-lightbox.open{opacity:1;visibility:visible}
+    .image-lightbox img{
+      max-width:90vw;max-height:90vh;object-fit:contain;
+      border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5);
+      cursor:default;transform:scale(.92);
+      transition:transform .25s ease;
+    }
+    .image-lightbox.open img{transform:scale(1)}
+    .lightbox-close{
+      position:absolute;top:1.2rem;right:1.5rem;
+      width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+      border-radius:50%;color:#fff;font-size:1.4rem;cursor:pointer;
+      transition:background .2s ease;z-index:1;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.25)}
+    .lightbox-close svg{width:20px;height:20px;stroke:#fff;stroke-width:2}
 
     /* ---------- Pagination ---------- */
     .pagination{
@@ -869,7 +894,7 @@
         white-space:nowrap;font-size:.82rem;
       }
       .article-body th,.article-body td{padding:.55rem .7rem}
-      .article-body img{max-width:100%;height:auto;margin:1.1rem auto}
+      .article-body img{max-width:100%;height:auto;margin:1.1rem auto;cursor:pointer}
       .article-body iframe,
       .article-body video{max-width:100%;height:auto}
 
@@ -973,6 +998,74 @@
         window.addEventListener("scroll", toggleTop, { passive: true });
         toggleTop();
       }
+
+      /* ---------- 图片全屏查看 ---------- */
+      (function initImageLightbox() {
+        // 惰性创建 lightbox DOM（首次点击图片时才创建）
+        let lightbox = null;
+        let lightboxImg = null;
+        let lightboxCloseBtn = null;
+
+        function ensureLightbox() {
+          if (lightbox) return;
+          lightbox = document.createElement("div");
+          lightbox.className = "image-lightbox";
+          lightbox.setAttribute("aria-label", "图片全屏查看");
+          lightbox.setAttribute("role", "dialog");
+          lightboxImg = document.createElement("img");
+          lightboxCloseBtn = document.createElement("button");
+          lightboxCloseBtn.className = "lightbox-close";
+          lightboxCloseBtn.setAttribute("aria-label", "关闭");
+          lightboxCloseBtn.innerHTML = '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+          lightbox.appendChild(lightboxImg);
+          lightbox.appendChild(lightboxCloseBtn);
+          document.body.appendChild(lightbox);
+        }
+
+        function openLightbox(src) {
+          ensureLightbox();
+          lightboxImg.src = src;
+          lightbox.classList.add("open");
+          document.body.style.overflow = "hidden";
+          lightboxCloseBtn.focus();
+        }
+
+        function closeLightbox() {
+          if (!lightbox) return;
+          lightbox.classList.remove("open");
+          document.body.style.overflow = "";
+        }
+
+        // 事件委托：监听 .article-body 中的图片点击
+        document.addEventListener("click", function(e) {
+          const img = e.target.closest(".article-body img");
+          if (!img) return;
+          if (lightbox && lightbox.classList.contains("open")) return;
+          const src = img.getAttribute("src") || img.currentSrc;
+          if (src) openLightbox(src);
+        });
+
+        // 确保 lightbox 兜底事件在点击图片前就已注册
+        ensureLightbox();
+
+        if (lightbox) {
+          // 点击遮罩关闭
+          lightbox.addEventListener("click", function(e) {
+            if (e.target === lightbox) closeLightbox();
+          });
+          // 点击关闭按钮
+          if (lightboxCloseBtn) {
+            lightboxCloseBtn.addEventListener("click", closeLightbox);
+          }
+          // ESC 关闭
+          document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" && lightbox.classList.contains("open")) {
+              closeLightbox();
+            }
+          });
+        }
+      })();
 
       /* ---------- 目录（TOC）---------- */
       const toc = document.getElementById("tocSidebar");
