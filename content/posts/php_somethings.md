@@ -17,8 +17,9 @@ Date:    2014-10-08
 
 ### 包管理：
 
-	composer psr规范
-
+```php
+composer psr规范
+```
 
 - IDE和编辑器：`phpstrom`, `zendstudio`, `sublime`, `editplus`, `notepad++`, `vim`  
 - 项目和版本管理工具：`git`, `svn`, `github`, `gitcafe`, `gitbucket`, `phabricator`  

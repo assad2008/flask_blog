@@ -111,8 +111,10 @@ Date: 2015-08-05
 - in里面数字的个数建议控制在1000以内  
 - `LIMIT`分页注意效率。`LIMIT`越大，效率越低。可以改写`LIMIT`，比如例子改写：  
 	
-	SELECT id FROM t LIMIT 10000, 10; =>  SELECT id FROM t WHERE id > 10000 LIMIT 10;
-	
+```sql
+SELECT id FROM t LIMIT 10000, 10; =>  SELECT id FROM t WHERE id > 10000 LIMIT 10;
+```
+
 - 使用`UNION ALL`替代`UNION`  
 - 避免使用大表的`JOIN ` 
 - 使用`GROUP BY`分组、自动排序  
@@ -120,7 +122,9 @@ Date: 2015-08-05
 - 减少与数据库的交互次数  
 - 注意使用性能分析工具  
 
-	SQL explain  / showprofile  /   mySQLsla
+```sql
+SQL explain  / showprofile  /   mySQLsla
+```
 
 - SQL语句要求所有研发，SQL关键字全部是大写，每个词只允许有一个空格  
 - SQL语句不可以出现隐式转换，比如`SELECT id FROM TABLE WHERE id='1'`  

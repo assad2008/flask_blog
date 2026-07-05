@@ -19,17 +19,19 @@ Date:    2014-01-23
 
 现在呢，想系统的学习下编程知识，所以在 codecademy 和 coursera 开始学习。完成或进行中的科目如下：
 
-	coursera: 
-	Learn to Program: The Fundamentals
-	Computer Science 101
-	Human-Computer Interaction
+```text
+coursera: 
+Learn to Program: The Fundamentals
+Computer Science 101
+Human-Computer Interaction
 
-	codecademy:
-	HTML Fundamentals
-	Getting Started with Programming
-	JavaScript
-	Python
-	
+codecademy:
+HTML Fundamentals
+Getting Started with Programming
+JavaScript
+Python
+```
+
 现在的问题呢，就在于我自己感觉学习上很不系统，遇见什么抓什么。
 比如我在 Ubuntu 里装上了 Eclipse 写 Python，可我连 Eclipse 这个软件的性质和工作原理都不清楚，又需要四处去找资料学习。
 就觉得这种方式不科学也没效率，所以希望各位能指教下怎么自学编程。

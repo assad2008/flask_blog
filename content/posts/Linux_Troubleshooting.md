@@ -18,8 +18,10 @@ Date:    2013-11-27
 ### 查看运行的进程
 可查看正在运行的进程和用户
 
-	#pstree -a 
-	#ps aux
+```bash
+#pstree -a 
+#ps aux
+```
 
 ### 网络服务
 	#netstat -antup 
@@ -27,30 +29,40 @@ Date:    2013-11-27
 ### CPU和内存
 还有空闲的内存吗？服务器在内存和磁盘之间swap?
 
-	#free -m
-	#uptime
-	#top
+```bash
+#free -m
+#uptime
+#top
+```
 
 ### 硬件罢工了？
 
-	#lspci
-	#dmidecode
-	#ethtool
+```bash
+#lspci
+#dmidecode
+#ethtool
+```
 
 ### IO性能，这个很重要
 
 IO使用率
 
-	#iostat -kx 2
-	# vmstat 2 10
-	
+```bash
+#iostat -kx 2
+# vmstat 2 10
+```
+
 CPU占用，系统进程？用户进程？
 
-	#mpstat 2 10
-	
+```bash
+#mpstat 2 10
+```
+
 查看占用IO的罪魁祸首
 
-	#dstat -cdlmnpsy
+```bash
+#dstat -cdlmnpsy
+```
 
 ### 内核、中断、网络
 	#ss 或者ss -s

@@ -24,34 +24,46 @@ Date:    2014-09-16
 - 本机上已有 id_dsa.pub ,若无。 使用命令 ssh-keygen -t dsa 获得  
 - 远程机上登录用户家目录下，已经有 .ssh 文件夹，若无创建之。  
 
-	$ cat  nopasswd 
-	#!/bin/sh
+```bash
+$ cat  nopasswd 
+#!/bin/sh
 
-	scp ~/.ssh/id_dsa.pub  $1@$2:~/
-	ssh $1@$2 " touch ~/.ssh/authorized_keys ; cat ~/id_dsa.pub  >> ~/.ssh/authorized_keys; chmod 644 ~/.ssh/authorized_keys; exit"
-	
+scp ~/.ssh/id_dsa.pub  $1@$2:~/
+ssh $1@$2 " touch ~/.ssh/authorized_keys ; cat ~/id_dsa.pub  >> ~/.ssh/authorized_keys; chmod 644 ~/.ssh/authorized_keys; exit"
+```
+
 #### 熟悉Bash中常用的任务管理命令
 
-	&,Ctrl-Z,Ctrl-C,jobs,fg,bg,kill 等。
-	
+```bash
+&,Ctrl-Z,Ctrl-C,jobs,fg,bg,kill 等。
+```
+
 #### 基本的文件管理命令
 
-	ls, ls-l, less, head, tail, tail -f, ln, ln -s, chmod, chown, du, du -sk *, df, mount
-	
+```bash
+ls, ls-l, less, head, tail, tail -f, ln, ln -s, chmod, chown, du, du -sk *, df, mount
+```
+
 #### 基本的网络管理命令
 
-	ipconfig, ifconfig, dig
-	
+```bash
+ipconfig, ifconfig, dig
+```
+
 #### 熟悉正则表达式，以及 grep，egrep用到的选项
 
-	-o, -A, -B
-	
+```bash
+-o, -A, -B
+```
+
 #### 软件安装命令了解
 
-	apt-get 和 yum
-	
-	cat -n可以帮助显示行号。
-	
+```bash
+apt-get 和 yum
+
+cat -n可以帮助显示行号。
+```
+
 ## 一些表达式
 
 - `!!` 再次执行上一条命令  
@@ -69,55 +81,76 @@ Date:    2014-09-16
 
 Ctrl-R
 
-	在bash中， Ctrl-R用于在历史命令中搜索
-	
+```bash
+在bash中， Ctrl-R用于在历史命令中搜索
+```
+
 Ctrl-W, Ctrl-U, Alt-BackSpace 
 
-	bash中，Ctrl-W删除最后一个词，Ctrl-U删除最后一行, Alt-BackSpace 删除光标前的一个词 man readline 中包含了大量bash中的默认热键绑定.
-	
+```bash
+bash中，Ctrl-W删除最后一个词，Ctrl-U删除最后一行, Alt-BackSpace 删除光标前的一个词 man readline 中包含了大量bash中的默认热键绑定.
+```
+
 cd -  
 
-	返回前一个工作路径  
+```bash
+返回前一个工作路径  
+```
 
 xargs  
 
-	非常强大的命令。如果你还不确定是否能正确的执行任务，可以先用xargs echo查看。下面是一个用该功能的例子:
-	
-	find . -name \*.py | xargs grep some_function
-	cat hosts | xargs -l {} ssh root@{} hostname
-	
+```bash
+非常强大的命令。如果你还不确定是否能正确的执行任务，可以先用xargs echo查看。下面是一个用该功能的例子:
+
+find . -name \*.py | xargs grep some_function
+cat hosts | xargs -l {} ssh root@{} hostname
+```
+
 parallel
 
-	一个更加强大的命令. 可以实现并行执行任务,并可以分割输入文件, 指定多个节点同时运行命令等功能.详细的功能可以参考这个链接.
+```bash
+一个更加强大的命令. 可以实现并行执行任务,并可以分割输入文件, 指定多个节点同时运行命令等功能.详细的功能可以参考这个链接.
+```
 
 pstree -p
 
-	打印进程树的得力工具
-	
+```bash
+打印进程树的得力工具
+```
+
 pgrep,pkil
 
-	使用名字查找进程，或者直接向指定名字的进程发送信号。
+```bash
+使用名字查找进程，或者直接向指定名字的进程发送信号。
+```
 
 nohup，disown,screen, tmux
 
-	当你需要将进程永远处在后台运行是，这两个命令很有用。
+```bash
+当你需要将进程永远处在后台运行是，这两个命令很有用。
+```
 
 lsof, netstat -lntp
 
-	查询当前什么进程在监听什么端口。
+```bash
+查询当前什么进程在监听什么端口。
+```
 
 set
 
-	在bash脚本中， 使用 set -x 获得debug输出，使用 set -e 获得错误输出。
+```bash
+在bash脚本中， 使用 set -x 获得debug输出，使用 set -e 获得错误输出。
+```
 
 ;
 
 分号用于开启一个子shell并运行至结束后关闭。 例如：
 	
-	#在当前路径下执行一些命令
-	(cd /some/other/dir; other-command)
-	# 工作路径仍然是当前目录
-	
+```bash
+#在当前路径下执行一些命令
+(cd /some/other/dir; other-command)
+# 工作路径仍然是当前目录
+```
 
 ## 数据处理
 
@@ -134,92 +167,131 @@ cut,paste, join
 如下几个命令可以快速的实现一些集合操作。
 
 
-	cat a b | sort | uniq > c   # c is a union b
-	cat a b | sort | uniq -d > c   # c is a intersect b
-	cat a b b | sort | uniq -u > c   # c is set difference a - b
-	
+```bash
+cat a b | sort | uniq > c   # c is a union b
+cat a b | sort | uniq -d > c   # c is a intersect b
+cat a b b | sort | uniq -u > c   # c is set difference a - b
+```
+
 awk,sed
 
 这两个工具能实现复杂的数据替换和修改  
 例如，下面的命令实现对文本文件中低三列的数据求总和。  
 使用shell完成此运算比用Python快3倍
 
-	awk '{ x += $3 } END { print x }'
-	
+```bash
+awk '{ x += $3 } END { print x }'
+```
+
 制表符的输入
 
-	在bash的命令行中，如若需要输入制表符，可以使用 Ctrl-V <tab> 或者 $’\t’ 实现
-	
+```bash
+在bash的命令行中，如若需要输入制表符，可以使用 Ctrl-V <tab> 或者 $’\t’ 实现
+```
+
 strings,grep
 
-	可以帮助在二进制文件中寻找文本。
-	
+```bash
+可以帮助在二进制文件中寻找文本。
+```
+
 iconv,uconv
 
-	可以帮助转换文本编码
-	
+```bash
+可以帮助转换文本编码
+```
+
 split,csplit
 
-	分别可以实现将文件按照大小分割，以及按照特定的模式分割。
-	
+```bash
+分别可以实现将文件按照大小分割，以及按照特定的模式分割。
+```
+
 ## 系统调试
 
 
 iostat,netstat,top,atop,htop,dstat
 
-	可以帮助了解硬盘，CPU，内存，网络的状态。这能帮你对系统正在发生的情况有个第一认识。
+```bash
+可以帮助了解硬盘，CPU，内存，网络的状态。这能帮你对系统正在发生的情况有个第一认识。
+```
 
 free,vmstat
 
-	如果想了解内存的状态，这两个命令很重要。其中cached是Linux内核中文件缓存的大小。
-	
+```bash
+如果想了解内存的状态，这两个命令很重要。其中cached是Linux内核中文件缓存的大小。
+```
+
 kill -3 <pid>
 
-	在调试Java程序时，使用此命令，可以在stderr/logs中找到完整的stack trace，堆信息(包含垃圾收集的细节).
-	
+```bash
+在调试Java程序时，使用此命令，可以在stderr/logs中找到完整的stack trace，堆信息(包含垃圾收集的细节).
+```
+
 mtr,traceroute
 
-	能够帮忙找到网络问题，前者比traceroute更好用。
+```bash
+能够帮忙找到网络问题，前者比traceroute更好用。
+```
 
 iftop,nethogs
 
-	这两个命令可以办刚找出哪个端口或者进程占用了多少网络带宽。
+```bash
+这两个命令可以办刚找出哪个端口或者进程占用了多少网络带宽。
+```
 
 ab,siege
 
-	这个Apache自带的工具能帮助快速检查web服务器的性能。
+```bash
+这个Apache自带的工具能帮助快速检查web服务器的性能。
+```
 
 wireshark,tshark
 
 
-	是进行更高级的网络调试的得力工具。
+```bash
+是进行更高级的网络调试的得力工具。
+```
 
 strace,ltrace
 
-	这两个命令能帮你在一无所知的情况下，对程序运行失败，假死，崩溃等问题带来一些线索。另外，他们还能帮忙发现一些性能问题。比如 -c选项可以做profiling；-p选项可以挂到某个指定的进程上。
-	
+```bash
+这两个命令能帮你在一无所知的情况下，对程序运行失败，假死，崩溃等问题带来一些线索。另外，他们还能帮忙发现一些性能问题。比如 -c选项可以做profiling；-p选项可以挂到某个指定的进程上。
+```
+
 ldd
 
-	检查共享库的情况
+```bash
+检查共享库的情况
+```
 
 gdb
 
-	了解如何利用GDB连接到一个正在运行的进程，并且得到其stack trace。
+```bash
+了解如何利用GDB连接到一个正在运行的进程，并且得到其stack trace。
+```
 
 /proc/
 
-	在做现场调试的时候很有用。比如 /proc/cpuinfo, /proc/XXX/cwd, /proc/XXX/exe, /proc/XXX/fd/, /proc/XXX/smaps
+```bash
+在做现场调试的时候很有用。比如 /proc/cpuinfo, /proc/XXX/cwd, /proc/XXX/exe, /proc/XXX/fd/, /proc/XXX/smaps
+```
 
 sar
 
-	需要判断为何过去某个时间系统会出错时，这个命令能显示CPU，内存和网络的历史情况。
+```bash
+需要判断为何过去某个时间系统会出错时，这个命令能显示CPU，内存和网络的历史情况。
+```
 
 stap, perf
 
-	当需要更深的分析系统，以及性能情况时，这两个工具很有用。
+```bash
+当需要更深的分析系统，以及性能情况时，这两个工具很有用。
+```
 
 dmesg
 
-	当系统出现一些很反常的现象时，比如可能是硬件或驱动问题时，这个很管用。
+```bash
+当系统出现一些很反常的现象时，比如可能是硬件或驱动问题时，这个很管用。
+```
 
-	

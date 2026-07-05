@@ -11,34 +11,44 @@ Date:    2015-12-10
 
 遂执行命令：
 
-	ps -aux | grep defunct
-	
+```python
+ps -aux | grep defunct
+```
+
 发现很多进行ID，看来确实存在僵尸进程。那就需要查到究竟是谁引起这么多僵尸进程的。就必须找到产生僵尸进程的父亲是谁？
 
 执行命令：
 
-	ps -A -o stat,ppid,pid,cmd | grep -e '^[Zz]'
-	
+```python
+ps -A -o stat,ppid,pid,cmd | grep -e '^[Zz]'
+```
+
 ![](/static/attach/img1.jpg)
 	
 命令注解：
 
-	-A 参数列出所有进程
-	-o 自定义输出字段 我们设定显示字段为 stat（状态）, ppid（进程父id）, pid(进程id)，cmd（命令）这四个参数
-	
+```python
+-A 参数列出所有进程
+-o 自定义输出字段 我们设定显示字段为 stat（状态）, ppid（进程父id）, pid(进程id)，cmd（命令）这四个参数
+```
+
 发现了好多将死进程，发现都是5998这个父级进程引起的，那么这个进程是谁呢？
 
 执行命令：
 	
-	ps aux | grep 5998
-	
+```python
+ps aux | grep 5998
+```
+
 发现是一个Python进程引起的。
 
 使用`ps axf`查看，确定为该进程引起的。
 
 先不说，杀死再查问题的原因。
 
-	ps -A -o stat,ppid,pid,cmd | grep -e '^[Zz]' | awk '{print $2}' | xargs kill -9
+```python
+ps -A -o stat,ppid,pid,cmd | grep -e '^[Zz]' | awk '{print $2}' | xargs kill -9
+```
 
 ## 解决
 
@@ -50,4 +60,6 @@ Date:    2015-12-10
 
 wait() 会暂时停止目前进程的执行，直到有信号来到或子进程结束。如果在调用 wait() 时子进程已经结束，则 wait() 会立即返回子进程结束状态值。子进程的结束状态值会由参数 status 返回，而子进程的进程识别码也会一快返回。
 	
-	
+```python
+```
+

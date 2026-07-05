@@ -22,7 +22,9 @@ Date:    2015-10-09
 
 - **PHP网站(PHP Websites)**
 
-    - [PHP The Right Way](http://www.phptherightway.com/) 一个PHP实践的快速参考指导
+```text
+- [PHP The Right Way](http://www.phptherightway.com/) 一个PHP实践的快速参考指导
+```
 
 ---
 

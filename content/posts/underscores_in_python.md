@@ -15,37 +15,43 @@ Date:    2015-03-25
 
 `_`符号是指交互解释器中最后一次执行语句的返回结果。这种用法最初出现在CPython解释器中，其他解释器后来也都跟进了。
 
-	>>> _
-	Traceback (most recent call last):
-	  File "", line 1, in 
-	NameError: name '_' is not defined
-	>>> 42
-	>>> _
-	42
-	>>> 'alright!' if _ else ':('
-	'alright!'
-	>>> _
-	'alright!'
-	
+
+```python
+>>> _
+Traceback (most recent call last):
+	File "", line 1, in 
+NameError: name '_' is not defined
+>>> 42
+>>> _
+42
+>>> 'alright!' if _ else ':('
+'alright!'
+>>> _
+'alright!'
+```
+
 - 作为名称使用
 
 这个跟上面有点类似。`_`用作*被丢弃*的名称。按照惯例，这样做可以让阅读你代码的人知道，这是个不会被使用的特定名称。举个例子，你可能无所谓一个循环计数的值：
 
-	n = 42
-	for _ in range(n):
-		do_something()
-		
+```python
+n = 42
+for _ in range(n):
+	do_something()
+```	
 - i18n
 
 `_`还可以被用作函数名。这种情况，单下划线经常被用作国际化和本地化字符串翻译查询的函数名。这种惯例好像起源于C语言。举个例子，在[Django documentation for translation](https://docs.djangoproject.com/en/dev/topics/i18n/translation/)中你可能会看到：
 
-	from django.utils.translation import ugettext as _
-	from django.http import HttpResponse
+```python
+from django.utils.translation import ugettext as _
+from django.http import HttpResponse
 
-	def my_view(request):
-		output = _("Welcome to my site.")
-		return HttpResponse(output)
-		
+def my_view(request):
+	output = _("Welcome to my site.")
+	return HttpResponse(output)
+```
+
 第二种和第三种用法会引起冲突，所以在任意代码块中，如果使用了_作i18n翻译查询函数，就应该避免再用作被丢弃的变量名。
 
 ## 单下划线前缀的名称（例如`_shahriar`）
@@ -62,24 +68,28 @@ Date:    2015-03-25
 
 看下面这个例子：
 
-	>>> class A(object):
-	...     def _internal_use(self):
-	...         pass
-	...     def __method_name(self):
-	...         pass
-	... 
-	>>> dir(A())
-	['_A__method_name', ..., '_internal_use']
-	
+```python
+>>> class A(object):
+...     def _internal_use(self):
+...         pass
+...     def __method_name(self):
+...         pass
+... 
+>>> dir(A())
+['_A__method_name', ..., '_internal_use']
+```
+
 正如所料，`_internal_use`没有变化，但`__method_name`被改写成了`_ClassName__method_name`。现在创建一个`A`的子类`B`（这可不是个好名字），就不会轻易的覆盖掉`A`中的`__method_name`了：
 
-	>>> class B(A):
-	...     def __method_name(self):
-	...         pass
-	... 
-	>>> dir(B())
-	['_A__method_name', '_B__method_name', ..., '_internal_use']
-	
+```python
+>>> class B(A):
+...     def __method_name(self):
+...         pass
+... 
+>>> dir(B())
+['_A__method_name', '_B__method_name', ..., '_internal_use']
+```
+
 这种特定的行为差不多等价于Java中的`final`方法和C++中的正常方法（非虚方法）。
 
 ## 前后都带有双下划线的名称（例如`__init__`）
@@ -88,13 +98,15 @@ Date:    2015-03-25
 
 你也可以写出自己的“特殊方法”名（但是别这么做）：
 
-	>>> class C(object):
-	...     def __mine__(self):
-	...         pass
-	...
-	>>> dir(C)
-	... [..., '__mine__', ...]
-	
+```python
+>>> class C(object):
+...     def __mine__(self):
+...         pass
+...
+>>> dir(C)
+... [..., '__mine__', ...]
+```
+
 还是不要这样写方法名，只让Python定义的特殊方法名使用这种惯例吧。
 
 -----

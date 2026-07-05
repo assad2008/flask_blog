@@ -15,26 +15,34 @@ Date:    2015-04-28
 
 ## 一键命令  
 
-	docker run --name='gitlab' -it -d -e 'GITLAB_PORT=10080' -e 'GITLAB_SSH_PORT=10022' -p 10022:22 -p 10080:80 -v /var/run/docker.sock:/run/docker.sock -v $(which docker):/bin/docker sameersbn/gitlab:latest
-	
+```bash
+docker run --name='gitlab' -it -d -e 'GITLAB_PORT=10080' -e 'GITLAB_SSH_PORT=10022' -p 10022:22 -p 10080:80 -v /var/run/docker.sock:/run/docker.sock -v $(which docker):/bin/docker sameersbn/gitlab:latest
+```
+
 然后运行：
 
-	docker ps -a
-	
+```bash
+docker ps -a
+```
+
 全部运行起来了
 
-	CONTAINER ID        IMAGE                         COMMAND                CREATED              SMES
-	dc22cedea691        sameersbn/redis:latest        "/start"               About a minute ago   Udis-gitlab        
-	a11a08ab6db0        sameersbn/postgresql:latest   "/start"               About a minute ago   Ustgresql-gitlab   
-	4eb41366c03f        sameersbn/gitlab:latest       "/app/init app:start   About a minute ago   Utlab  
+```bash
+CONTAINER ID        IMAGE                         COMMAND                CREATED              SMES
+dc22cedea691        sameersbn/redis:latest        "/start"               About a minute ago   Udis-gitlab        
+a11a08ab6db0        sameersbn/postgresql:latest   "/start"               About a minute ago   Ustgresql-gitlab   
+4eb41366c03f        sameersbn/gitlab:latest       "/app/init app:start   About a minute ago   Utlab  
+```
 
 等几分钟，访问：http://localhost:10080，熟悉的页面出来啦
 
 默认账户密码：
 
-	username: root
-	password: 5iveL!fe
-	
+```bash
+username: root
+password: 5iveL!fe
+```
+
 ## 对硬件要求如下
 
 ### CPU

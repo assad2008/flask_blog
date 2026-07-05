@@ -7,7 +7,7 @@ Date:    2016-04-29
 
 ## Elements
 
-``` html
+```html
 <title>Page Title</title>
 <base href="https://example.com/page.html">
 <style>
@@ -18,7 +18,7 @@ Date:    2016-04-29
 
 ## Meta Element
 
-``` html
+```html
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,7 +59,7 @@ Date:    2016-04-29
 
 ## Link Element
 
-``` html
+```html
 <link rel="copyright" href="copyright.html">
 <link rel="stylesheet" href="https://example.com/styles.css">
 <link rel="alternate" href="https://feeds.feedburner.com/martini" type="application/rss+xml" title="RSS">
@@ -98,7 +98,7 @@ Date:    2016-04-29
 
 ### Favicons
 
-``` html
+```html
 <!-- For IE 10 and below -->  
 <!-- No link, just place a file called favicon.ico in the root directory -->
 
@@ -116,7 +116,7 @@ Date:    2016-04-29
 
 ### Facebook / Open Graph
 
-``` html
+```html
 <meta property="fb:app_id" content="123456789">
 <meta property="og:url" content="https://example.com/page.html">
 <meta property="og:type" content="website">
@@ -135,7 +135,7 @@ Date:    2016-04-29
 
 ### Twitter
 
-``` html
+```html
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@site_account">
 <meta name="twitter:creator" content="@individual_account">
@@ -152,7 +152,7 @@ Date:    2016-04-29
 
 ### Google+ / Schema.org
 
-``` html
+```html
 <meta itemprop="name" content="Content Title">
 <meta itemprop="description" content="Content description less than 200 characters">
 <meta itemprop="image" content="https://example.com/image.jpg">
@@ -163,7 +163,7 @@ Date:    2016-04-29
 
 ### Apple iOS
 
-``` html
+```html
 <!-- Smart App Banner -->
 <meta name="apple-itunes-app" content="app-id=APP_ID,affiliate-data=AFFILIATE_ID,app-argument=SOME_TEXT">
 
@@ -198,7 +198,7 @@ Date:    2016-04-29
 
 ### Google Android
 
-``` html
+```html
 <meta name="theme-color" content="#E64545">
 
 <!-- Add to homescreen -->
@@ -208,7 +208,7 @@ Date:    2016-04-29
 
 ### Google Chrome
 
-``` html
+```html
 <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/APP_ID">
 
 <!-- Disable translation prompt -->
@@ -217,7 +217,7 @@ Date:    2016-04-29
 
 ### Microsoft Internet Explorer
 
-``` html
+```html
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta http-equiv="cleartype" content="on">
 <meta name="skype_toolbar" content="skype_toolbar_parser_compatible">
@@ -232,7 +232,7 @@ Date:    2016-04-29
 
 ### Microsoft Internet Explorer (LEGACY DO NOT USE)
 
-``` html
+```html
 <!-- Legacy Tags (DO NOT USE) -->
 <meta name="mssmarttagspreventparsing" content="true">
 <meta http-equiv="page-enter" content="revealtrans(duration=2,transition=2)">
@@ -241,7 +241,7 @@ Date:    2016-04-29
 
 ## App Links
 
-``` html
+```html
 <!-- iOS -->
 <meta property="al:ios:url" content="applinks://docs">
 <meta property="al:ios:app_store_id" content="12345">

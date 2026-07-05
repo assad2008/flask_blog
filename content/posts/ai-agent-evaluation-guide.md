@@ -126,7 +126,7 @@ Evaluator 不只看代码，还会用类似 Playwright MCP 的方式去点 UI、
 
 - 为了评估模型在第二轮（Turn 2）的表现，你发送给 LLM 的 messages 列表必须包含完整的“对话历史”（多轮同理）。
 
-```
+```text
   User (Q1)
   Assistant (A1) <-- 模型之前的真实输出
   User (Q2) <-- 新的刁难/追问
@@ -141,7 +141,7 @@ Evaluator 不只看代码，还会用类似 Playwright MCP 的方式去点 UI、
 - 硬性规则评估 deterministic check。输出是否是合法 JSON？是否包含必须字段？是否调用了正确 tool？是否调用了禁止 tool？是否超过 token 限制？是否包含敏感词？是否引用了不存在的 source？是否返回了空答案？
 - 关键点覆盖 Reference-based。这层用于判断模型有没有覆盖标准答案里的关键点。比如可以给每个测试 case 写一个 reference answer，或者更工程化一点，写成 required facts。例如：
 
-```
+```text
   {
  "query": "用了 20 天耳机坏了可以退吗？",
  "required_facts": [
@@ -172,7 +172,7 @@ Evaluator 不只看代码，还会用类似 Playwright MCP 的方式去点 UI、
 - failed_dimensions
 - reason
 
-```
+```text
 
 ```
 { “pass”: false, “failed_dimensions”: [“不过度承诺”, “政策准确性”], “reason”: “回答承诺可以退货/退款，但知识库只支持维修或换货。” } ```

@@ -52,22 +52,26 @@ Just run:
 
 运行：
 
-	$ sudo pip install pil qrcode
-	
+```python
+$ sudo pip install pil qrcode
+```
+
 使用方法:
 
-	from qrcode import *
-	 
-	qr = QRCode(version=20, error_correction=ERROR_CORRECT_L)
-	qr.add_data("http://blog.matael.org/")
-	qr.make() # Generate the QRCode itself
-	 
-	# im contains a PIL.Image.Image object
-	im = qr.make_image()
-	 
-	# To save it
-	im.save("filename.png")
-	
+```python
+from qrcode import *
+ 
+qr = QRCode(version=20, error_correction=ERROR_CORRECT_L)
+qr.add_data("http://blog.matael.org/")
+qr.make() # Generate the QRCode itself
+ 
+# im contains a PIL.Image.Image object
+im = qr.make_image()
+ 
+# To save it
+im.save("filename.png")
+```
+
 At line 3, we instanciate a new qrcode.QRCode object using two parameters.
 This class has other parameters that we don't use here (box_size, border, etc...).  
 
@@ -81,19 +85,21 @@ The second is the correction level (redundancy).As said on Wikipedia, you can ch
 
 第二个参数是修正水平（错误冗余）。正如维基百科所说，你可以选择以下几个参数：
 
-	ERROR_CORRECT_L  
-		7% of codewords can be restored  
-		7%的字码可被修正  
-	ERROR_CORRECT_M (default)  
-		15% can be restored  
-		15%的字码可被修正  
-	ERROR_CORRECT_Q  
-		25% can be restored  
-		25%的字码可被修正  
-	ERROR_CORRECT_H  
-		30% can be restored  
-		30%的字码可被修正  
-	
+```python
+ERROR_CORRECT_L  
+	7% of codewords can be restored  
+	7%的字码可被修正  
+ERROR_CORRECT_M (default)  
+	15% can be restored  
+	15%的字码可被修正  
+ERROR_CORRECT_Q  
+	25% can be restored  
+	25%的字码可被修正  
+ERROR_CORRECT_H  
+	30% can be restored  
+	30%的字码可被修正  
+```
+
 It's this redundancy phenomenon that enables decoding even if the code is damaged.  
 
 正是这种容错能力，使得即便被破坏的QR码依然可以解码。
@@ -110,9 +116,11 @@ This rewriting bring a short version for fast generation :
 
 上述代码有更简单的方法：
 
-	import qrcode
-	img = qrcode.make("your awesome data")
-	
+```python
+import qrcode
+img = qrcode.make("your awesome data")
+```
+
 Chris, thank you for that great work !  
 
 非常感谢Chris的伟大工作！

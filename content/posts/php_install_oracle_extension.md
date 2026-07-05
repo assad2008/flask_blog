@@ -15,35 +15,45 @@ PHP: 5.3.28
 [32位系统](http://www.oracle.com/technetwork/topics/linuxsoft-082809.html)  
 [64位系统](http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html)
 
-	oracle-instantclient-sqlplus-10.2.0.4-1.x86_64.rpm
-	oracle-instantclient-jdbc-10.2.0.4-1.x86_64.rpm
-	oracle-instantclient-devel-10.2.0.4-1.x86_64.rpm
-	oracle-instantclient-basic-10.2.0.4-1.x86_64.rpm
-	
+```php
+oracle-instantclient-sqlplus-10.2.0.4-1.x86_64.rpm
+oracle-instantclient-jdbc-10.2.0.4-1.x86_64.rpm
+oracle-instantclient-devel-10.2.0.4-1.x86_64.rpm
+oracle-instantclient-basic-10.2.0.4-1.x86_64.rpm
+```
+
 执行安装:
 
-	# rpm -ivh *.rpm
-	
+```php
+# rpm -ivh *.rpm
+```
+
 ### 下载Oracle的PHP扩展
 
 [官方下载](http://pecl.php.net/package/oci8)
 
-	wget http://pecl.php.net/get/oci8-2.0.7.tgz
-	# tar zxvf oci8-2.0.7.tgz
-	# cd oci8-2.0.7
-	# /usr/local/php/bin/phpize
-	# ./configure --with-php-config=/usr/local/php/bin/php-config --with-oci8=shared,instantclient,/usr/lib/oracle/10.2.0.4/client64/lib/
-	# make && make install
-	
+```php
+wget http://pecl.php.net/get/oci8-2.0.7.tgz
+# tar zxvf oci8-2.0.7.tgz
+# cd oci8-2.0.7
+# /usr/local/php/bin/phpize
+# ./configure --with-php-config=/usr/local/php/bin/php-config --with-oci8=shared,instantclient,/usr/lib/oracle/10.2.0.4/client64/lib/
+# make && make install
+```
+
 ### 更改php.ini
 
-	# vi /usr/local/php/etc/php.ini
-	
+```php
+# vi /usr/local/php/etc/php.ini
+```
+
 增加 `extension = "oci8.so"`
 
 
 ### 重新启动PHP
 
-	ps aux | grep php | grep root
-	kill -USER2 php_root_pid
+```php
+ps aux | grep php | grep root
+kill -USER2 php_root_pid
+```
 

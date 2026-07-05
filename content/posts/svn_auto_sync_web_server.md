@@ -7,35 +7,41 @@ Date:    2014-11-19
 
 首先启动SVN服务
 
-	svnserve -d --listen-port 9999 -r /opt/svn (以root用户在运行)
-	
+```bash
+svnserve -d --listen-port 9999 -r /opt/svn (以root用户在运行)
+```
+
 测试SVN服务
 
-	[root@analysis wjtest]# svn checkout svn://192.168.1.xxx:9999 /var/www/wjtest/
-	Authentication realm: <svn://192.168.1.xxx:9999> /var/svn/wjtest
-	Password for 'root': 
-	Authentication realm: <svn://192.168.1.xxx:9999> /var/svn/wjtest
-	Username: username
-	Password for 'password': 
-	
+```bash
+[root@analysis wjtest]# svn checkout svn://192.168.1.xxx:9999 /var/www/wjtest/
+Authentication realm: <svn://192.168.1.xxx:9999> /var/svn/wjtest
+Password for 'root': 
+Authentication realm: <svn://192.168.1.xxx:9999> /var/svn/wjtest
+Username: username
+Password for 'password': 
+```
+
 提示
 
-	-----------------------------------------------------------------------
-	ATTENTION!  Your password for authentication realm:
+```bash
+-----------------------------------------------------------------------
+ATTENTION!  Your password for authentication realm:
 
-	   <svn://192.168.1.xxx:9999> /var/svn/wjtest
+   <svn://192.168.1.xxx:9999> /var/svn/wjtest
 
-	can only be stored to disk unencrypted!  You are advised to configure
-	your system so that Subversion can store passwords encrypted, if
-	possible.  See the documentation for details.
+can only be stored to disk unencrypted!  You are advised to configure
+your system so that Subversion can store passwords encrypted, if
+possible.  See the documentation for details.
 
-	You can avoid future appearances of this warning by setting the value
-	of the 'store-plaintext-passwords' option to either 'yes' or 'no' in
-	'/root/.subversion/servers'.
-	-----------------------------------------------------------------------
-	Store password unencrypted (yes/no)? yes
-	A    /var/www/wjtest/index.php
-	
+You can avoid future appearances of this warning by setting the value
+of the 'store-plaintext-passwords' option to either 'yes' or 'no' in
+'/root/.subversion/servers'.
+-----------------------------------------------------------------------
+Store password unencrypted (yes/no)? yes
+A    /var/www/wjtest/index.php
+```
+
 SVN服务应该没什么问题了
 
 配置Hooks post-commit，实现自动同步svn版本库文件到web目录
@@ -51,18 +57,20 @@ chmod +x post-commit这样就有了访问www目录的权限。
 
 文件内容为:
 
-	export LANG=zh_CN.UTF-8
-	REPOS="$1"
-	REV="$2"
-	SVN_PATH=/usr/bin/svn
-	WEB_PATH=/web/project
-	LOG_PATH=/tmp/svn_update.log
-	#/usr/bin/svn update --username user --password password $WEB_PATH --no-auth-cache
-	echo "nnn##########开始提交 " `date "+%Y-%m-%d %H:%M:%S"` '##################' >> $LOG_PATH
-	echo `whoami`,$REPOS,$REV >> $LOG_PATH
-	$SVN_PATH update --username user --password password $WEB_PATH --no-auth-cache >> $LOG_PATH
-	chown -R www:www $WEB_PATH
-	
+```bash
+export LANG=zh_CN.UTF-8
+REPOS="$1"
+REV="$2"
+SVN_PATH=/usr/bin/svn
+WEB_PATH=/web/project
+LOG_PATH=/tmp/svn_update.log
+#/usr/bin/svn update --username user --password password $WEB_PATH --no-auth-cache
+echo "nnn##########开始提交 " `date "+%Y-%m-%d %H:%M:%S"` '##################' >> $LOG_PATH
+echo `whoami`,$REPOS,$REV >> $LOG_PATH
+$SVN_PATH update --username user --password password $WEB_PATH --no-auth-cache >> $LOG_PATH
+chown -R www:www $WEB_PATH
+```
+
 说明:
 
 1. #!/bin/sh 说明是执行shell命令  

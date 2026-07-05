@@ -24,9 +24,11 @@ Date:    2017-12-08
 
 可以使用[Ondřej Surý](https://launchpad.net/~ondrej/+archive/ubuntu/php)的PPA安装PHP 7.2：
 
-	sudo add-apt-repository ppa:ondrej/php
-	sudo apt-get update
-	sudo apt-get install php7.2-cli
+```php
+sudo add-apt-repository ppa:ondrej/php
+sudo apt-get update
+sudo apt-get install php7.2-cli
+```
 
 [在这里查看可用软件包的完整列表](https://launchpad.net/~ondrej/+archive/ubuntu/php/+packages?field.name_filter=php7.2&field.status_filter=published)
 
@@ -34,12 +36,13 @@ Date:    2017-12-08
 
 `Ondřej Surý`还为`Debian`提供[PHP 7.2软件包](https://packages.sury.org/php/)，可以使用这些命令进行安装：
 
-	sudo apt-get install apt-transport-https lsb-release ca-certificates
-	sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-	echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
-	sudo apt-get update
-	sudo apt-get install php7.2-cli
-
+```php
+sudo apt-get install apt-transport-https lsb-release ca-certificates
+sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+sudo apt-get update
+sudo apt-get install php7.2-cli
+```
 
 ## Debian 7（Wheezy）
 
@@ -55,12 +58,16 @@ Date:    2017-12-08
 
 PHP 7.2可以通过[Liip的php-osx](https://php-osx.liip.ch/)工具轻松安装：
 
-	curl -s https://php-osx.liip.ch/install.sh | bash -s 7.2
+```php
+curl -s https://php-osx.liip.ch/install.sh | bash -s 7.2
+```
 
 或者，如果你更喜欢使用brew软件：
 
-	brew tap homebrew/homebrew-php
-	brew install php72
+```php
+brew tap homebrew/homebrew-php
+brew install php72
+```
 
 ## Windows平台
 
@@ -72,11 +79,10 @@ Windows的PHP 7.2发行版可以在[windows.php.net](http://windows.php.net/)网
 
 [phpbrew](https://github.com/phpbrew/phpbrew)是一个非常好的工具，可以帮助您下​​载，编译和管理多个版本的PHP。假设您已经按照[安装说明](https://github.com/phpbrew/phpbrew#requirement)进行了[安装](https://github.com/phpbrew/phpbrew#requirement)，并启动了phpbrew，PHP 7.2.0可以安装两个简单的命令：
 
-	phpbrew update
-	phpbrew install -j $(nproc) 7.2.0 +default
-
-
-
+```php
+phpbrew update
+phpbrew install -j $(nproc) 7.2.0 +default
+```
 
 ##
 

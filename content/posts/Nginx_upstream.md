@@ -12,49 +12,61 @@ Date:    2013-11-27
 指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。
 例如：
 
-	upstream bakend {
-	  server 192.168.1.10 weight=10;
-	  server 192.168.1.11 weight=10;
-	}
+```nginx
+upstream bakend {
+  server 192.168.1.10 weight=10;
+  server 192.168.1.11 weight=10;
+}
+```
 
 ## ip_hash
 每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session的问题。
 例如：
 
-	upstream resinserver{
-	  ip_hash;
-	  server 192.168.1.10:8080;
-	  server 192.168.1.11:8080;
-	}
-	
+```nginx
+upstream resinserver{
+  ip_hash;
+  server 192.168.1.10:8080;
+  server 192.168.1.11:8080;
+}
+```
+
 ## fair（第三方）
 按后端服务器的响应时间来分配请求，响应时间短的优先分配。
 
-	upstream resinserver{
-	  server server1;
-	  server server2;
-	  fair;
-	}
+```nginx
+upstream resinserver{
+  server server1;
+  server server2;
+  fair;
+}
+```
+
 ## url_hash（第三方）
 按访问url的hash结果来分配请求，使每个url定向到同一个后端服务器，后端服务器为缓存时比较有效。
 例：在upstream中加入hash语句，server语句中不能写入weight等其他的参数，hash_method是使用的hash算法
 
-	upstream resinserver{
-	  server squid1:3128;
-	  server squid2:3128;
-	  hash $request_uri;
-	  hash_method crc32;
-	}
+```nginx
+upstream resinserver{
+  server squid1:3128;
+  server squid2:3128;
+  hash $request_uri;
+  hash_method crc32;
+}
+```
 
 ### 注意:
 
-	upstream resinserver{  #定义负载均衡设备的Ip及设备状态
-	  ip_hash;
-	  server 127.0.0.1:8000 down;
-	  server 127.0.0.1:8080 weight=2;
-	  server 127.0.0.1:6801;
-	  server 127.0.0.1:6802 backup;
-	}
+```nginx
+upstream resinserver{  #定义负载均衡设备的Ip及设备状态
+  ip_hash;
+  server 127.0.0.1:8000 down;
+  server 127.0.0.1:8080 weight=2;
+  server 127.0.0.1:6801;
+  server 127.0.0.1:6802 backup;
+}
+```
+
 在需要使用负载均衡的server中增加
 	proxy_pass http://resinserver/;
 

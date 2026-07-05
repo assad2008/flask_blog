@@ -266,13 +266,13 @@ AttributeError: myClass instance has no attribute '__superprivate'
 
 .format在许多方面看起来更便利.对于`%`最烦人的是它无法同时传递一个变量和元组.你可能会想下面的代码不会有什么问题:
 
-```
+```python
 "hi there %s" % name
 ```
 
 但是,如果name恰好是(1,2,3),它将会抛出一个TypeError异常.为了保证它总是正确的,你必须这样做:
 
-```
+```python
 "hi there %s" % (name,)   # 提供一个单元素的数组而不是一个参数
 ```
 
@@ -322,7 +322,7 @@ apple = fruit
 
 你也可以混着用.命名参数首先获得参数值然后所有的其他参数都传递给`*args`和`**kwargs`.命名参数在列表的最前端.例如:
 
-```
+```python
 def table_things(titlestring, **kwargs)
 ```
 
@@ -1096,7 +1096,7 @@ def recursion_merge_sort2(l1, l2):
 
 循环算法
 
-```pyhton
+```python
 def loop_merge_sort(l1, l2):
     tmp = []
     while len(l1) > 0 and len(l2) > 0:
