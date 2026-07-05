@@ -115,6 +115,28 @@ def _unescape_fences(text: str) -> str:
     return text
 
 
+def extract_post_meta(slug: str, raw: str) -> Post:
+    """仅提取文章元数据（title/summary/authors/date），不渲染 Markdown 正文。
+    用于列表页等只需元数据的场景，跳过高成本的 HTML 渲染和代码高亮。"""
+    parsed = frontmatter.loads(raw)
+    metadata = parsed.metadata
+
+    title = _metadata_value(metadata, "title", "Title") or slug
+    summary = _metadata_value(metadata, "summary", "Summary") or ""
+    authors = _metadata_authors(_metadata_value(metadata, "authors", "Authors"))
+    published_date = _metadata_date(_metadata_value(metadata, "date", "Date"))
+
+    return Post(
+        slug=slug,
+        title=str(title),
+        summary=str(summary),
+        authors=authors,
+        date=published_date,
+        html="",
+        headings=(),
+    )
+
+
 def render_markdown(slug: str, raw: str, kind: MarkdownKind) -> Post | Topic:
     parsed = frontmatter.loads(raw)
     metadata = parsed.metadata
