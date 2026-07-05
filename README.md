@@ -1,6 +1,6 @@
 # Flask-Blog
 
-一个现代化的 Flask 博客应用，内容全部存放在本地 Markdown 文件中。项目不依赖数据库、OSS 或 Redis，文章和页面可以直接通过 Git 管理，也可以通过内置发布入口写入 `content/posts/`。
+一个现代化的 Flask 博客应用，内容全部存放在本地 Markdown 文件中。文章和页面可以直接通过 Git 管理，也可以通过内置发布入口写入 `content/posts/`。
 
 ## 核心特性
 
