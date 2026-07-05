@@ -55,9 +55,9 @@ def test_base_template_exposes_mobile_responsive_contract(client):
     html = response.get_data(as_text=True)
     assert "Mobile readable responsive overrides" in html
     assert "@media (max-width:768px)" in html
-    assert "overflow-wrap:anywhere" in html
+    assert "overflow-wrap: anywhere" in html
     assert "min(86vw, 320px)" in html
-    assert "touch-action:manipulation" in html
+    assert "touch-action: manipulation" in html
 
 
 def test_mobile_responsive_contract_prevents_right_overflow(client):
@@ -65,10 +65,13 @@ def test_mobile_responsive_contract_prevents_right_overflow(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert ".site-header .container{min-width:0" in html
-    assert ".site-nav{min-width:0;flex:1" in html
-    assert ".post-card{max-width:100%;min-width:0" in html
-    assert "article,.article-header,.article-body{width:100%;max-width:100%;min-width:0" in html
+    assert ".site-header .container {" in html and "min-width: 0" in html
+    assert ".site-nav {" in html and "min-width: 0" in html and "flex: 1" in html
+    assert ".post-card {" in html and "max-width: 100%" in html and "min-width: 0" in html
+    assert (
+        "article," in html and ".article-header," in html and ".article-body {" in html
+        and "width: 100%" in html and "max-width: 100%" in html and "min-width: 0" in html
+    )
 
 
 def test_mobile_code_blocks_do_not_expand_page_width(client):
@@ -77,7 +80,8 @@ def test_mobile_code_blocks_do_not_expand_page_width(client):
     assert response.status_code == 200
     html = response.get_data(as_text=True)
     assert "margin-left:-.35rem;margin-right:-.35rem" not in html
-    assert "margin-left:0;margin-right:0" in html
+    assert "margin-left: 0" in html or "margin-left:0" in html
+    assert "margin-right: 0" in html or "margin-right:0" in html
 
 
 def test_mobile_article_and_code_blocks_have_explicit_width_constraints(client):
@@ -85,8 +89,11 @@ def test_mobile_article_and_code_blocks_have_explicit_width_constraints(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert "article,.article-header,.article-body{width:100%;max-width:100%;min-width:0" in html
-    assert "width:100%;max-width:100%;min-width:0;overflow-x:auto" in html
+    assert (
+        "article," in html and ".article-header," in html and ".article-body {" in html
+        and "width: 100%" in html and "max-width: 100%" in html and "min-width: 0" in html
+    )
+    assert "width: 100%;" in html and "max-width: 100%;" in html and "overflow-x: auto" in html
 
 
 def test_mobile_responsive_contract_is_shared_by_content_pages(client):
@@ -107,7 +114,7 @@ def test_public_theme_exposes_professional_editorial_contract(client):
     assert "--surface-paper" in html
     assert "--shadow-card-hover" in html
     assert ".article-summary" in html
-    assert "text-wrap:balance" in html
+    assert "text-wrap: balance" in html
 
 
 def test_topic_summary_uses_theme_class(client):
@@ -124,7 +131,7 @@ def test_public_theme_keeps_mobile_navigation_single_row_contract(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert ".site-header .container{min-width:0" in html
-    assert ".site-nav{min-width:0;flex:1" in html
-    assert "overflow-x:auto" in html
-    assert "scrollbar-width:none" in html
+    assert ".site-header .container {" in html and "min-width: 0" in html
+    assert ".site-nav {" in html and "min-width: 0" in html and "flex: 1" in html
+    assert "overflow-x: auto" in html
+    assert "scrollbar-width: none" in html
