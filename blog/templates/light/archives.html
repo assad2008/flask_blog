@@ -9,19 +9,26 @@
   </div>
 
   {% if years %}
-    {% for group in years %}
+    {% for year_group in years %}
       <div class="archive-year">
-        <span class="year-num">{{ group.year }}</span>
-        <span class="year-count">{{ group.count }} 篇</span>
+        <span class="year-num">{{ year_group.year }}</span>
+        <span class="year-count">{{ year_group.count }} 篇</span>
       </div>
-      <ul class="archive-list">
-        {% for post in group.posts %}
-          <li>
-            <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%m-%d') }}</time>
-            <a href="/posts/{{ post.slug }}.html">{{ post.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
+
+      {% for month_group in year_group.months %}
+        <div class="archive-month">
+          <span class="month-label">{{ "%02d" | format(month_group.month) }}月</span>
+          <span class="month-count">{{ month_group.count }} 篇</span>
+        </div>
+        <ul class="archive-list">
+          {% for post in month_group.posts %}
+            <li>
+              <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%m-%d') }}</time>
+              <a href="/posts/{{ post.slug }}.html">{{ post.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
     {% endfor %}
   {% else %}
     <div class="empty-state">

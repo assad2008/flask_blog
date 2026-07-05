@@ -27,15 +27,25 @@ def archives():
     repository: ContentRepository = current_app.config["CONTENT_REPOSITORY"]
     posts = repository.list_posts()
 
-    # 按年份分组
-    year_groups: dict[int, list] = defaultdict(list)
+    # 按年份和月份分组
+    year_groups: dict[int, dict[int, list]] = defaultdict(lambda: defaultdict(list))
     for post in posts:
         if post.date:
-            year_groups[post.date.year].append(post)
+            year_groups[post.date.year][post.date.month].append(post)
 
-    years = [
-        {"year": year, "posts": year_posts, "count": len(year_posts)}
-        for year, year_posts in sorted(year_groups.items(), reverse=True)
-    ]
+    years = []
+    for year in sorted(year_groups, reverse=True):
+        month_dict = year_groups[year]
+        months = []
+        year_total = 0
+        for month in sorted(month_dict, reverse=True):
+            month_posts = month_dict[month]
+            months.append(
+                {"month": month, "posts": month_posts, "count": len(month_posts)}
+            )
+            year_total += len(month_posts)
+        years.append(
+            {"year": year, "months": months, "count": year_total}
+        )
 
     return render_template("light/archives.html", posts=posts, years=years)
