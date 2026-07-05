@@ -37,8 +37,13 @@ def _slugify(text: str) -> str:
 
 
 def extract_headings(markdown_text: str) -> tuple[Heading, ...]:
-    """从原始 Markdown 文本中提取标题列表（仅 h2-h6）。"""
+    """从原始 Markdown 文本中提取标题列表（仅 h2-h6）。
+
+    重复标题自动追加 ``-1``、``-2`` 后缀，与 mdit_py_plugins anchors
+    插件的 ``unique_slug`` 行为完全一致，确保 TOC 锚点与页面标题 id 对应。
+    """
     headings: list[Heading] = []
+    slugs: set[str] = set()
     for line in markdown_text.splitlines():
         stripped = line.strip()
         if not stripped.startswith("#"):
@@ -57,7 +62,14 @@ def extract_headings(markdown_text: str) -> tuple[Heading, ...]:
         if not text:
             continue
         slug = _slugify(text)
-        headings.append(Heading(level=level, text=text, slug=slug))
+        # 处理重复标题：与 anchors 插件一致，追加 -1、-2 后缀
+        uniq = slug
+        i = 1
+        while uniq in slugs:
+            uniq = f"{slug}-{i}"
+            i += 1
+        slugs.add(uniq)
+        headings.append(Heading(level=level, text=text, slug=uniq))
     return tuple(headings)
 
 

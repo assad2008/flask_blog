@@ -119,6 +119,32 @@ _ARTICLE_USER_TEMPLATE = """\
 网页候选内容：
 {candidate_text}"""
 
+# ---------------------------------------------------------------------------
+# 文章格式化系统提示与用户提示模板
+# ---------------------------------------------------------------------------
+_REFORMAT_SYSTEM_PROMPT = "你是一个专业的文档编辑，擅长将原始内容整理为结构清晰的 Markdown 文档。"
+
+_REFORMAT_USER_TEMPLATE = """\
+请将下面的原始内容整理成一篇结构清晰的 Markdown 文档。
+
+要求：
+1. 保留原文核心信息，不改变原意。
+2. 使用 Markdown 标题、列表、表格等格式进行排版。
+3. 在文章开头生成目录。
+4. 内容按主题或项目分段整理。
+5. 如果有图片、视频、链接，请保留原始地址。
+6. 如果有清单类内容，请尽量整理成表格。
+7. 语言表达要清楚、自然、适合阅读。
+8. 不要添加原文没有的信息。
+9. 最后可以增加一个简短总结。
+
+请严格只返回如下 JSON，不要包含解释或 markdown 代码围栏：
+{{"body": "整理后的 Markdown 正文"}}
+
+原始内容如下：
+
+{content}"""
+
 
 def extract_article_markdown(
     source_url: str,
@@ -164,6 +190,52 @@ def extract_article_markdown(
         raise LLMError("LLM returned empty article body")
     usage = raw.get("usage")
     return ArticleMarkdown(body=body, usage=usage)
+
+
+def reformat_markdown(
+    raw_content: str,
+    *,
+    base_url: str,
+    api_key: str,
+    model: str,
+    temperature: float = 0.3,
+) -> str:
+    """调用 LLM 将原始内容整理为结构清晰的 Markdown 文档。
+
+    返回整理后的 Markdown 正文，用于发布页「格式化」按钮。
+    """
+    if not base_url or not api_key or not model:
+        raise LLMError("LLM not configured (base_url/api_key/model missing)")
+    if not raw_content.strip():
+        raise LLMError("empty content to reformat")
+
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": _REFORMAT_SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": _REFORMAT_USER_TEMPLATE.format(
+                    content=raw_content[:_MAX_ARTICLE_CHARS],
+                ),
+            },
+        ],
+        "temperature": temperature,
+    }
+
+    try:
+        raw = _post_json(f"{base_url.rstrip('/')}/chat/completions", api_key, payload)
+        content = raw["choices"][0]["message"]["content"]
+        parsed = _parse_llm_json(content)
+    except LLMError:
+        raise
+    except Exception as exc:  # noqa: BLE001 - 统一转换为调用方可展示的错误
+        raise LLMError(f"LLM request failed: {exc}") from exc
+
+    body = str(parsed.get("body") or "").strip()
+    if not body:
+        raise LLMError("LLM returned empty formatted body")
+    return body
 
 
 def extract_metadata(

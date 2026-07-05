@@ -77,6 +77,8 @@
   .btn-ghost-blue:hover{background:rgba(59,130,246,.1);color:#2563eb}
   .btn-ghost-green{color:#22c55e;border-color:#22c55e}
   .btn-ghost-green:hover{background:rgba(34,197,94,.1);color:#16a34a}
+  .btn-ghost-amber{color:#f59e0b;border-color:#f59e0b}
+  .btn-ghost-amber:hover{background:rgba(245,158,11,.1);color:#d97706}
   .btn-ghost-muted{color:var(--text-tertiary);border-color:var(--border)}
   .btn-ghost-muted:hover{color:var(--text-secondary);border-color:var(--text-tertiary)}
 
@@ -458,6 +460,7 @@
           <button type="submit" class="btn-ghost btn-ghost-muted" title="退出登录">退出</button>
         </form>
         <button type="button" class="btn-ghost btn-ghost-blue" id="importBtn" title="抓取网页正文到编辑区">抓取网页</button>
+        <button type="button" class="btn-ghost btn-ghost-amber" id="reformatBtn" title="调用大模型将内容整理成结构清晰的 Markdown 文档">格式化</button>
         <button type="button" class="btn-ghost btn-ghost-green" id="genBtn" title="由大模型生成标题/slug/简介">生成标题</button>
         <button type="submit" form="publishForm" class="btn-primary" id="publishBtn">确认发布</button>
       </div>
@@ -833,6 +836,44 @@
         }
       });
     }
+
+    // ============ 格式化：调用大模型整理正文格式 ============
+    const reformatBtn = document.getElementById("reformatBtn");
+
+    async function doReformat() {
+      const bodyVal = editor.value.trim();
+      if (!bodyVal) {
+        showClientNotice("正文不能为空，请先写正文或粘贴内容");
+        return;
+      }
+      const oldText = reformatBtn.textContent;
+      reformatBtn.disabled = true;
+      reformatBtn.textContent = "格式化中…";
+      try {
+        const params = new URLSearchParams();
+        params.append("action", "reformat");
+        params.append("body", bodyVal);
+        const resp = await fetch("{{ url_for('postart.postart') }}", {
+          method: "POST",
+          body: params,
+        });
+        const data = await resp.json();
+        if (data.ok) {
+          editor.value = data.body || "";
+          editor.dispatchEvent(new Event("input", { bubbles: true }));
+          showClientNotice("格式化完成，预览区已更新");
+        } else {
+          showClientNotice(data.error || "格式化失败");
+        }
+      } catch (err) {
+        showClientNotice("请求失败：" + err.message);
+      } finally {
+        reformatBtn.disabled = false;
+        reformatBtn.textContent = oldText;
+      }
+    }
+
+    if (reformatBtn) reformatBtn.addEventListener("click", doReformat);
 
     // 提交发布：未生成时拦截并提示，否则禁用按钮提示发布中
     if (publishForm && publishBtn) {

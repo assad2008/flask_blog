@@ -38,6 +38,7 @@ from blog.services.git import commit_paths
 from blog.services.llm import (
     LLMError,
     extract_metadata,
+    reformat_markdown,
     sanitize_slug,
 )
 from blog.services.web_import import WebImportError, fetch_article_markdown
@@ -107,6 +108,11 @@ def postart():
             if not _is_authed():
                 abort(403)
             return _handle_import_url(settings)
+        if action == "reformat":
+            # 调用大模型整理文章格式（AJAX，仅返回 JSON）
+            if not _is_authed():
+                abort(403)
+            return _handle_reformat(settings)
         # 未知 action 视为非法请求
         abort(400)
 
@@ -365,3 +371,23 @@ def _handle_import_url(settings: Settings):
             "Connection": "keep-alive",
         },
     )
+
+
+def _handle_reformat(settings: Settings):
+    """调用大模型将编辑器正文整理为结构清晰的 Markdown 文档（AJAX 接口）。"""
+    body = request.form.get("body", "").strip()
+    if not body:
+        return jsonify({"ok": False, "error": "正文不能为空，请先写正文或粘贴内容"}), 400
+
+    try:
+        formatted = reformat_markdown(
+            body,
+            base_url=settings.llm_base_url,
+            api_key=settings.llm_api_key,
+            model=settings.llm_model,
+            temperature=0.3,
+        )
+    except LLMError as exc:
+        return jsonify({"ok": False, "error": f"格式化失败：{exc}"})
+
+    return jsonify({"ok": True, "body": formatted})

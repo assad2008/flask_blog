@@ -5,7 +5,13 @@
 """
 
 from blog.services.git import commit_paths
-from blog.services.llm import LLMError, PostMetadata, extract_metadata, fallback_metadata
+from blog.services.llm import (
+    LLMError,
+    PostMetadata,
+    extract_metadata,
+    fallback_metadata,
+    reformat_markdown,
+)
 
 __all__ = [
     "LLMError",
@@ -13,4 +19,5 @@ __all__ = [
     "commit_paths",
     "extract_metadata",
     "fallback_metadata",
+    "reformat_markdown",
 ]
