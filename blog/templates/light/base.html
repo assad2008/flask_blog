@@ -2,8 +2,20 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/x-icon" href="https://ittechren.oss-cn-beijing.aliyuncs.com/static/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
+  <script>
+    /* 在页面渲染前设置 data-theme，防止闪烁 */
+    (function () {
+      var stored = localStorage.getItem("theme");
+      if (stored === "dark" || stored === "light") {
+        document.documentElement.setAttribute("data-theme", stored);
+      } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
   <title>{% block title %}随笔记录{% endblock %}</title>
   <style>
 /* ============================================
@@ -55,9 +67,9 @@
   --transition-slow: 350ms ease;
 }
 
-/* Dark */
+/* Dark — system preference fallback (JS-disabled) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --accent: #3B82F6;
     --accent-hover: #60A5FA;
     --accent-soft: #1E293B;
@@ -82,363 +94,398 @@
     --shadow-card: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 2px rgba(0, 0, 0, .15);
     --shadow-card-hover: 0 4px 20px rgba(0, 0, 0, .3), 0 2px 8px rgba(59, 130, 246, .12);
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, .4), 0 4px 12px rgba(0, 0, 0, .2);
-  }
 
-  /* Pygments 语法高亮 — 暗色主题 (monokai) */
-  .highlight {
-    background: #272822;
-    color: #F8F8F2;
-    padding: 1.1rem 1.4rem;
-    border-radius: var(--radius);
-    overflow-x: auto;
-    font-family: var(--font-mono);
-    font-size: .84rem;
-    line-height: 1.7;
-    border: 1px solid #3E3D32
-  }
-
-  .highlight pre {
-    background: none;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
-    overflow: visible;
-    line-height: inherit
-  }
-
-  .highlight code {
-    background: none;
-    padding: 0;
-    border: none;
-    color: inherit;
-    font-size: inherit
-  }
-
-  .highlight .hll {
-    background-color: #49483e
-  }
-
-  .highlight .c {
-    color: #959077
-  }
-
-  .highlight .err {
-    color: #ED007E;
-    background-color: #1E0010
-  }
-
-  .highlight .esc {
-    color: #F8F8F2
-  }
-
-  .highlight .g {
-    color: #F8F8F2
-  }
-
-  .highlight .k {
-    color: #66D9EF
-  }
-
-  .highlight .l {
-    color: #AE81FF
-  }
-
-  .highlight .n {
-    color: #F8F8F2
-  }
-
-  .highlight .o {
-    color: #FF4689
-  }
-
-  .highlight .x {
-    color: #F8F8F2
-  }
-
-  .highlight .p {
-    color: #F8F8F2
-  }
-
-  .highlight .ch {
-    color: #959077
-  }
-
-  .highlight .cm {
-    color: #959077
-  }
-
-  .highlight .cp {
-    color: #959077
-  }
-
-  .highlight .cpf {
-    color: #959077
-  }
-
-  .highlight .c1 {
-    color: #959077
-  }
-
-  .highlight .cs {
-    color: #959077
-  }
-
-  .highlight .gd {
-    color: #FF4689
-  }
-
-  .highlight .ge {
-    color: #F8F8F2;
-    font-style: italic
-  }
-
-  .highlight .ges {
-    color: #F8F8F2;
-    font-weight: bold;
-    font-style: italic
-  }
-
-  .highlight .gr {
-    color: #F8F8F2
-  }
-
-  .highlight .gh {
-    color: #F8F8F2
-  }
-
-  .highlight .gi {
-    color: #A6E22E
-  }
-
-  .highlight .go {
-    color: #66D9EF
-  }
-
-  .highlight .gp {
-    color: #FF4689;
-    font-weight: bold
-  }
-
-  .highlight .gs {
-    color: #F8F8F2;
-    font-weight: bold
-  }
-
-  .highlight .gu {
-    color: #959077
-  }
-
-  .highlight .gt {
-    color: #F8F8F2
-  }
-
-  .highlight .kc {
-    color: #66D9EF
-  }
-
-  .highlight .kd {
-    color: #66D9EF
-  }
-
-  .highlight .kn {
-    color: #FF4689
-  }
-
-  .highlight .kp {
-    color: #66D9EF
-  }
-
-  .highlight .kr {
-    color: #66D9EF
-  }
-
-  .highlight .kt {
-    color: #66D9EF
-  }
-
-  .highlight .ld {
-    color: #E6DB74
-  }
-
-  .highlight .m {
-    color: #AE81FF
-  }
-
-  .highlight .s {
-    color: #E6DB74
-  }
-
-  .highlight .na {
-    color: #A6E22E
-  }
-
-  .highlight .nb {
-    color: #F8F8F2
-  }
-
-  .highlight .nc {
-    color: #A6E22E
-  }
-
-  .highlight .no {
-    color: #66D9EF
-  }
-
-  .highlight .nd {
-    color: #A6E22E
-  }
-
-  .highlight .ni {
-    color: #F8F8F2;
-    font-weight: bold
-  }
-
-  .highlight .ne {
-    color: #A6E22E
-  }
-
-  .highlight .nf {
-    color: #A6E22E
-  }
-
-  .highlight .nl {
-    color: #F8F8F2
-  }
-
-  .highlight .nn {
-    color: #F8F8F2
-  }
-
-  .highlight .nx {
-    color: #A6E22E
-  }
-
-  .highlight .py {
-    color: #F8F8F2
-  }
-
-  .highlight .nt {
-    color: #FF4689
-  }
-
-  .highlight .nv {
-    color: #F8F8F2
-  }
-
-  .highlight .ow {
-    color: #FF4689
-  }
-
-  .highlight .pm {
-    color: #F8F8F2
-  }
-
-  .highlight .w {
-    color: #F8F8F2
-  }
-
-  .highlight .mb {
-    color: #AE81FF
-  }
-
-  .highlight .mf {
-    color: #AE81FF
-  }
-
-  .highlight .mh {
-    color: #AE81FF
-  }
-
-  .highlight .mi {
-    color: #AE81FF
-  }
-
-  .highlight .mo {
-    color: #AE81FF
-  }
-
-  .highlight .sa {
-    color: #E6DB74
-  }
-
-  .highlight .sb {
-    color: #E6DB74
-  }
-
-  .highlight .sc {
-    color: #E6DB74
-  }
-
-  .highlight .dl {
-    color: #E6DB74
-  }
-
-  .highlight .sd {
-    color: #E6DB74
-  }
-
-  .highlight .s2 {
-    color: #E6DB74
-  }
-
-  .highlight .se {
-    color: #AE81FF
-  }
-
-  .highlight .sh {
-    color: #E6DB74
-  }
-
-  .highlight .si {
-    color: #E6DB74
-  }
-
-  .highlight .sx {
-    color: #E6DB74
-  }
-
-  .highlight .sr {
-    color: #E6DB74
-  }
-
-  .highlight .s1 {
-    color: #E6DB74
-  }
-
-  .highlight .ss {
-    color: #E6DB74
-  }
-
-  .highlight .bp {
-    color: #F8F8F2
-  }
-
-  .highlight .fm {
-    color: #A6E22E
-  }
-
-  .highlight .vc {
-    color: #F8F8F2
-  }
-
-  .highlight .vg {
-    color: #F8F8F2
-  }
-
-  .highlight .vi {
-    color: #F8F8F2
-  }
-
-  .highlight .vm {
-    color: #F8F8F2
-  }
-
-  .highlight .il {
-    color: #AE81FF
+    --surface-paper: #151D2B;
+    --surface-muted: #0F172A;
+    --text-on-accent: #FFFFFF;
   }
 }
 
+/* Dark — manual toggle */
+[data-theme="dark"] {
+  --accent: #3B82F6;
+  --accent-hover: #60A5FA;
+  --accent-soft: #1E293B;
+  --accent-glow: rgba(59, 130, 246, 0.18);
+  --gradient-accent: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  --gradient-subtle: linear-gradient(135deg, #0B1121, #0F172A, #0B1121);
+
+  --bg-primary: #0A0F1A;
+  --bg-secondary: #111827;
+  --bg-raised: #151D2B;
+  --bg-code: #0D1520;
+  --bg-glass: rgba(17, 24, 39, 0.78);
+
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+
+  --border: #1E293B;
+  --border-light: #162032;
+  --border-accent: rgba(59, 130, 246, 0.3);
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 2px rgba(0, 0, 0, .15);
+  --shadow-card-hover: 0 4px 20px rgba(0, 0, 0, .3), 0 2px 8px rgba(59, 130, 246, .12);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, .4), 0 4px 12px rgba(0, 0, 0, .2);
+
+  --surface-paper: #151D2B;
+  --surface-muted: #0F172A;
+  --text-on-accent: #FFFFFF;
+}
+
+/* Pygments 语法高亮 — 暗色主题 (monokai) */
+[data-theme="dark"] .highlight {
+  background: #272822;
+  color: #F8F8F2;
+  padding: 1.1rem 1.4rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: .84rem;
+  line-height: 1.7;
+  border: 1px solid #3E3D32
+}
+
+[data-theme="dark"] .highlight pre {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit
+}
+
+[data-theme="dark"] .highlight code {
+  background: none;
+  padding: 0;
+  border: none;
+  color: inherit;
+  font-size: inherit
+}
+
+[data-theme="dark"] .highlight .hll {
+  background-color: #49483e
+}
+
+[data-theme="dark"] .highlight .c {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .err {
+  color: #ED007E;
+  background-color: #1E0010
+}
+
+[data-theme="dark"] .highlight .esc {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .g {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .k {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .l {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .n {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .o {
+  color: #FF4689
+}
+
+[data-theme="dark"] .highlight .x {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .p {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .ch {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .cm {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .cp {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .cpf {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .c1 {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .cs {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .gd {
+  color: #FF4689
+}
+
+[data-theme="dark"] .highlight .ge {
+  color: #F8F8F2;
+  font-style: italic
+}
+
+[data-theme="dark"] .highlight .ges {
+  color: #F8F8F2;
+  font-weight: bold;
+  font-style: italic
+}
+
+[data-theme="dark"] .highlight .gr {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .gh {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .gi {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .go {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .gp {
+  color: #FF4689;
+  font-weight: bold
+}
+
+[data-theme="dark"] .highlight .gs {
+  color: #F8F8F2;
+  font-weight: bold
+}
+
+[data-theme="dark"] .highlight .gu {
+  color: #959077
+}
+
+[data-theme="dark"] .highlight .gt {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .kc {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .kd {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .kn {
+  color: #FF4689
+}
+
+[data-theme="dark"] .highlight .kp {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .kr {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .kt {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .ld {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .m {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .s {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .na {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .nb {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .nc {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .no {
+  color: #66D9EF
+}
+
+[data-theme="dark"] .highlight .nd {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .ni {
+  color: #F8F8F2;
+  font-weight: bold
+}
+
+[data-theme="dark"] .highlight .ne {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .nf {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .nl {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .nn {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .nx {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .py {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .nt {
+  color: #FF4689
+}
+
+[data-theme="dark"] .highlight .nv {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .ow {
+  color: #FF4689
+}
+
+[data-theme="dark"] .highlight .pm {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .w {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .mb {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .mf {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .mh {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .mi {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .mo {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .sa {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .sb {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .sc {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .dl {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .sd {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .s2 {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .se {
+  color: #AE81FF
+}
+
+[data-theme="dark"] .highlight .sh {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .si {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .sx {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .sr {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .s1 {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .ss {
+  color: #E6DB74
+}
+
+[data-theme="dark"] .highlight .bp {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .fm {
+  color: #A6E22E
+}
+
+[data-theme="dark"] .highlight .vc {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .vg {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .vi {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .vm {
+  color: #F8F8F2
+}
+
+[data-theme="dark"] .highlight .il {
+  color: #AE81FF
+}
 /* ---------- Reset ---------- */
 *,
 *::before,
@@ -488,19 +535,17 @@ body::before {
 }
 
 /* Subtle grid overlay (dark only) */
-@media (prefers-color-scheme: dark) {
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: .03;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
+[data-theme="dark"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .03;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: 60px 60px;
 }
 
 /* ---------- Layout ---------- */
@@ -593,6 +638,42 @@ body::before {
   background: var(--accent);
   border-radius: 1px;
 }
+
+/* ---------- Theme Toggle ---------- */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-left: .25rem;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  background: var(--accent-soft);
+}
+
+.theme-icon {
+  width: 18px;
+  height: 18px;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+/* 默认（亮色模式）：显示月亮图标，隐藏太阳 */
+.theme-icon-sun { display: none; }
+.theme-icon-moon { display: block; }
+
+/* 暗色模式：显示太阳图标，隐藏月亮 */
+[data-theme="dark"] .theme-icon-sun { display: block; }
+[data-theme="dark"] .theme-icon-moon { display: none; }
 
 /* ---------- Main ---------- */
 .site-main {
@@ -1650,7 +1731,7 @@ body::before {
 .confirm-btn-ok {
   background: var(--gradient-accent);
   border: none;
-  color: #fff;
+  color: var(--text-on-accent);
   box-shadow: 0 2px 8px var(--accent-glow);
 }
 
@@ -1688,7 +1769,7 @@ body::before {
 
 .pagination a:hover {
   background: var(--accent);
-  color: #fff;
+  color: var(--text-on-accent);
   border-color: var(--accent);
   box-shadow: var(--shadow-card-hover);
   transform: translateY(-1px);
@@ -1766,7 +1847,7 @@ body::before {
 .archive-month .month-count {
   font-size: .72rem;
   font-weight: 500;
-  color: #fff;
+  color: var(--text-on-accent);
   background: var(--gradient-accent);
   padding: .15rem .6rem;
   border-radius: 99px;
@@ -1880,7 +1961,7 @@ body::before {
   font-family: var(--font-mono);
   font-weight: 600;
   font-size: .88rem;
-  color: #fff;
+  color: var(--text-on-accent);
   text-decoration: none;
   padding: .65rem 1.75rem;
   background: var(--accent);
@@ -1978,24 +2059,22 @@ body::before {
 }
 
 /* ---------- Scrollbar ---------- */
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px
-  }
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px
+}
 
-  ::-webkit-scrollbar-track {
-    background: var(--bg-primary)
-  }
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-primary)
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px
-  }
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px
+}
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: #475569
-  }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #475569
 }
 
 /* ---------- A11y ---------- */
@@ -2026,7 +2105,7 @@ body::before {
   border-radius: 50%;
   border: none;
   background: var(--accent);
-  color: #fff;
+  color: var(--text-on-accent);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -2740,6 +2819,14 @@ body::before {
         <a href="{{ url_for('index.archives') }}" {% if request.path == "/archives.html" %}class="active"{% endif %}>归档</a>
         <a href="{{ url_for('topics.detail', slug='about') }}" {% if request.path == "/topic/about.html" %}class="active"{% endif %}>关于</a>
         <a href="https://github.com/assad2008/flask_blog" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="切换暗色模式" title="切换暗色/亮色模式">
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
       </nav>
     </div>
   </header>
@@ -2777,6 +2864,18 @@ body::before {
 
   <script>
 (function () {
+  /* ---------- 主题切换 ---------- */
+  var themeToggle = document.getElementById("themeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      var html = document.documentElement;
+      var current = html.getAttribute("data-theme");
+      var next = current === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+    });
+  }
+
   /* ---------- 返回顶部 ---------- */
   const topBtn = document.getElementById("backToTop");
   if (topBtn) {
