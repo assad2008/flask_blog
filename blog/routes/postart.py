@@ -194,7 +194,10 @@ def _handle_publish(settings: Settings):
     # 编辑已有文章模式
     if edit_slug:
         update_post_title_and_body(
-            posts_dir, edit_slug, title=title, body=body,
+            posts_dir,
+            edit_slug,
+            title=title,
+            body=body,
         )
         post_path = posts_dir / f"{edit_slug}.md"
         git_committed, git_pushed, git_detail = commit_paths(
@@ -486,9 +489,7 @@ def _handle_manage(settings: Settings, action: str):
         if not repository.delete_post(slug):
             return jsonify({"ok": False, "error": f"删除失败：{slug}"}), 404
         post_path = posts_dir / f"{slug}.md"
-        commit_paths(
-            settings.base_dir, [post_path], f"删除文章: {slug}"
-        )
+        commit_paths(settings.base_dir, [post_path], f"删除文章: {slug}")
         return jsonify({"ok": True})
 
     if action == "manage_update":
@@ -499,12 +500,13 @@ def _handle_manage(settings: Settings, action: str):
         if repository.get_post_raw(slug) is None:
             return jsonify({"ok": False, "error": f"文章不存在：{slug}"}), 404
         update_post_title_and_body(
-            posts_dir, slug, title=title, body=body,
+            posts_dir,
+            slug,
+            title=title,
+            body=body,
         )
         post_path = posts_dir / f"{slug}.md"
-        commit_paths(
-            settings.base_dir, [post_path], f"更新文章: {slug}"
-        )
+        commit_paths(settings.base_dir, [post_path], f"更新文章: {slug}")
         return jsonify({"ok": True})
 
     abort(400)

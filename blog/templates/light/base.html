@@ -1997,6 +1997,8 @@ body::before {
 
 /* ---------- Footer ---------- */
 .site-footer {
+  position: relative;
+  z-index: 81;
   border-top: 1px solid var(--border-light);
   padding: 2rem 0;
   text-align: center;
@@ -2344,11 +2346,22 @@ body::before {
   }
 
   .toc-sidebar {
-    transform: translateX(0) !important
+    transform: translateX(0) !important;
+    bottom: auto;
+    max-height: calc(100vh - 59px)
   }
 
   .has-toc .container {
     margin-left: calc(15% + 310px);
+    margin-right: auto
+  }
+
+  .has-toc .site-footer {
+    margin-left: calc(15% + 310px)
+  }
+
+  .has-toc .site-footer .container {
+    margin-left: 0;
     margin-right: auto
   }
 
@@ -3236,12 +3249,30 @@ body::before {
     }
   }
 
+  // 桌面端：目录侧边栏高度随滚动动态调整，在 footer 处截止
+  function adjustTocHeight() {
+    if (window.innerWidth < 1024) return;
+    const footer = document.querySelector(".site-footer");
+    if (!footer) return;
+    const footerTop = footer.getBoundingClientRect().top;
+    const viewportH = window.innerHeight;
+    const headerH = 59;
+    if (footerTop < viewportH) {
+      toc.style.maxHeight = Math.max(0, footerTop - headerH) + "px";
+    } else {
+      toc.style.maxHeight = "calc(100vh - " + headerH + "px)";
+    }
+  }
+
+  window.addEventListener("resize", adjustTocHeight);
+
   // 统一滚动处理
   let ticking = false;
   window.addEventListener("scroll", () => {
     if (!ticking) {
       requestAnimationFrame(() => {
         updateProgress();
+        adjustTocHeight();
         ticking = false;
       });
       ticking = true;
@@ -3249,6 +3280,7 @@ body::before {
   }, { passive: true });
 
   updateProgress();
+  adjustTocHeight();
 })();
 
 </script>

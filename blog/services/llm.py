@@ -50,6 +50,7 @@ def init_llm_logger(log_dir: Path) -> None:
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
+
 # 正文过长时截断到该长度，控制 LLM 调用成本
 _MAX_BODY_CHARS = 4000
 

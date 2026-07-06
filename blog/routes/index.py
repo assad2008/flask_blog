@@ -40,12 +40,8 @@ def archives():
         year_total = 0
         for month in sorted(month_dict, reverse=True):
             month_posts = month_dict[month]
-            months.append(
-                {"month": month, "posts": month_posts, "count": len(month_posts)}
-            )
+            months.append({"month": month, "posts": month_posts, "count": len(month_posts)})
             year_total += len(month_posts)
-        years.append(
-            {"year": year, "months": months, "count": year_total}
-        )
+        years.append({"year": year, "months": months, "count": year_total})
 
     return render_template("light/archives.html", posts=posts, years=years)
