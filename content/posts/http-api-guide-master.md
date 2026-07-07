@@ -1,8 +1,11 @@
 ---
-Title:   HTTP 接口设计指北
-Summary: 文档主要目的是为设计接口时提供建议，使大家不必重复造 HTTP 协议已经完成的轮子
 Authors: Django Wong
-Date:    2015-04-24
+Date: 2015-04-24
+Summary: 文档主要目的是为设计接口时提供建议，使大家不必重复造 HTTP 协议已经完成的轮子
+Title: HTTP 接口设计指北
+seo_description: HTTP 接口设计指北：提供实用建议，避免重复造轮子。涵盖 HTTP/1.1 与 HTTP/2 协议、URL 规范、空字段处理、国际化语言标签、请求方法、状态码、错误处理、身份验证、分页、缓存、并发控制等核心主题。遵循
+  RFC 标准，助力高效、规范的 API 设计，适合开发者参考。
+seo_keywords: HTTP接口设计, API设计指南, HTTP协议, RESTful API, 接口规范
 ---
 
 原文：<https://github.com/bolasblack/http-api-guide>

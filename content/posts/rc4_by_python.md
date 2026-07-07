@@ -1,8 +1,10 @@
 ---
-Title:   RC4算法Python实现
-Summary: RC4算法Python实现
 Authors: Django Wong
-Date:    2013-11-28
+Date: 2013-11-28
+Summary: RC4算法Python实现
+Title: RC4算法Python实现
+seo_description: 本文详细介绍了RC4算法的Python实现，包括class和function两种方式。通过MD5密钥扩展、S盒初始化与伪随机生成，实现字符串的加密与解密。代码支持自定义公钥和有效期验证，适用于数据安全传输场景。附带完整测试示例，帮助开发者快速掌握RC4对称加密的Python编程技巧。
+seo_keywords: RC4算法, Python实现, 加密解密, 对称加密, 代码示例
 ---
 
 闲暇之时，用Python实现了一下`RC4`算法
@@ -147,4 +149,3 @@ print(str)
 rc = rc4(str,'decode')
 print(rc)
 ```
-

@@ -1,8 +1,10 @@
 ---
-Title:   如何用Python生成QR二维码[双语]
-Summary: Few days ago, I decided to try to generate QRCodes. 前几天，我有一些数据要生成QR码。
 Authors: Django Wong
-Date:    2014-01-15
+Date: 2014-01-15
+Summary: Few days ago, I decided to try to generate QRCodes. 前几天，我有一些数据要生成QR码。
+Title: 如何用Python生成QR二维码[双语]
+seo_description: 本文介绍如何使用Python生成QR二维码，包括安装qrcode库和PIL库、设置版本和纠错级别、自动版本推测以及快速生成方法。适合需要离线生成二维码的开发者，内容涵盖Python二维码生成工具对比和代码示例。
+seo_keywords: Python生成二维码, QR码生成, qrcode库, Python二维码教程, 离线生成QR码
 ---
 
 Few days ago, I decided to try to generate QRCodes.  
@@ -152,4 +154,3 @@ Note also that, using processing and QR Codes, you can do Augmented Reality.
 译注：本文原文见[python and qrcodes](http://blog.matael.org/writing/python-and-qrcodes/)
 
 [feisky（盛大云·软件开发）](http://feisky.42qu.com/)
-

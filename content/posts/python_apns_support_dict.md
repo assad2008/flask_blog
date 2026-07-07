@@ -1,8 +1,10 @@
 ---
-Title:   Python apple PUSH APNSWrapper支持字典以及群发
-Summary: APNSWrapper是苹果推送通知服务的Python包装。使用起来也不错。不过发现使用property的时候不支持字典
 Authors: Django Wong
-Date:    2013-11-30
+Date: 2013-11-30
+Summary: APNSWrapper是苹果推送通知服务的Python包装。使用起来也不错。不过发现使用property的时候不支持字典
+Title: Python apple PUSH APNSWrapper支持字典以及群发
+seo_description: 本文详细介绍了如何修改Python的APNSWrapper库，以支持字典类型数据以及群发功能。通过调整APNSProperty类中的类型检查，加入字典支持，并修改APNSNotificationWrapper类实现保持连接、连续发送消息。提供完整代码示例和使用方法，适用于需要批量推送苹果推送通知（APNS）的场景。
+seo_keywords: Python APNSWrapper, 苹果推送通知, 字典支持, 群发推送, APNS
 ---
 
 `APNSWrapper`是苹果推送通知服务的Python包装。使用起来也不错。不过发现使用`property`的时候不支持字典，查阅代码：
@@ -149,4 +151,3 @@ deviceToken可以为不同的。
 ```python
 python PATH/setup.py install
 ```
-

@@ -1,8 +1,10 @@
 ---
-Title: 国内可用的composer镜像
-Summary: composer是PHP中用来管理依赖(dependency)关系的工具。官方的镜像在国内使用起来很慢，特别整理了国内的一些著名的composer镜像站点。
 Authors: Django Wong
-Date:    2020-03-23
+Date: 2020-03-23
+Summary: composer是PHP中用来管理依赖(dependency)关系的工具。官方的镜像在国内使用起来很慢，特别整理了国内的一些著名的composer镜像站点。
+Title: 国内可用的composer镜像
+seo_description: Composer是PHP的依赖管理工具，但官方镜像在国内访问缓慢。本文整理了国内可用的Composer镜像站点，包括腾讯云、阿里云、华为云、上海交通大学和Packagist中国全量镜像，提供详细设置方法，帮助PHP开发者加速依赖安装，提升开发效率。
+seo_keywords: Composer镜像, PHP依赖管理, 国内镜像站点, 腾讯云, 阿里云
 ---
 
 ## Composer简介
@@ -84,4 +86,3 @@ composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu
 ```php
 composer config -g repos.packagist composer https://php.cnpkg.org
 ```
-

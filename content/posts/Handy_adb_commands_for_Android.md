@@ -1,8 +1,11 @@
 ---
-Title:   一些有用的 Android adb 命令
-Summary: 一些常用的 Android adb 命令
 Authors: Django Wong
-Date:    2014-01-23
+Date: 2014-01-23
+Summary: 一些常用的 Android adb 命令
+Title: 一些有用的 Android adb 命令
+seo_description: 本文整理了常用的 Android adb 命令，包括查看设备、安装卸载应用、启动页面、进入 shell、截屏解屏、日志过滤等实用技巧。适合开发者、测试人员及自动化构建流程使用，帮助高效调试和管理
+  Android 设备。
+seo_keywords: Android adb命令, adb常用命令, adb调试, adb日志, adb安装应用
 ---
 
 下面是一些我找到Android的ADB有用的命令。可以手动或使用自动构建和测试过程。

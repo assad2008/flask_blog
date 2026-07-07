@@ -1,8 +1,10 @@
 ---
-Title: 理解Python装饰器
-Summary: 装饰器 (Decorator) 在 Python 编程中极为常见，可轻松实现 Metadata、Proxy、 AOP 等模式。简单点说，装饰器通过返回包装对象实现间接调用，以此来插入额外逻辑。
 Authors: Django Wong
 Date: 2017-01-17
+Summary: 装饰器 (Decorator) 在 Python 编程中极为常见，可轻松实现 Metadata、Proxy、 AOP 等模式。简单点说，装饰器通过返回包装对象实现间接调用，以此来插入额外逻辑。
+Title: 理解Python装饰器
+seo_description: 深入理解Python装饰器（Decorator）的原理与用法，通过生动比喻和代码示例讲解装饰器如何实现AOP、日志、权限校验等功能。涵盖@语法糖、*args和**kwargs参数传递、带参数装饰器等核心概念，帮助Python开发者掌握这一重要编程技巧。
+seo_keywords: Python装饰器,装饰器教程,Python AOP,Python函数装饰器,Python编程技巧
 ---
 
 讲 Python 装饰器前，我想先举个例子，虽有点污，但跟装饰器这个话题很贴切。
@@ -247,4 +249,3 @@ def f ():
 ```python
 f = a(b(c(f)))
 ```
-

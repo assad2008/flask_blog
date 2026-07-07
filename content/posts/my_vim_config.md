@@ -1,8 +1,11 @@
 ---
-Title:   我的VIM配置（代码补全，自动注释）
-Summary: 特意整理了一番，现在分享一下，需装一下插件：neocomplcache,gvimfullscreen,DoxygenToolkit。
 Authors: Django Wong
-Date:    2013-11-30
+Date: 2013-11-30
+Summary: 特意整理了一番，现在分享一下，需装一下插件：neocomplcache,gvimfullscreen,DoxygenToolkit。
+Title: 我的VIM配置（代码补全，自动注释）
+seo_description: 本文分享了作者的 VIM 配置，重点介绍了代码补全和自动注释功能。通过安装 neocomplcache、gvimfullscreen、DoxygenToolkit
+  等插件，实现了高效的代码编写体验。配置包括常用设置、语法高亮、全屏模式、自动提示以及 Doxygen 注释插件等，适合 VIM 用户参考和优化自己的编辑器环境。
+seo_keywords: VIM配置, 代码补全, 自动注释, neocomplcache, DoxygenToolkit
 ---
 
 特意整理了一番，现在分享一下，需装一下插件：`neocomplcache`,`gvimfullscreen`,`DoxygenToolkit`。  
@@ -112,4 +115,3 @@ let g:DoxygenToolkit_licenseTag = s:licenseTag
 let g:DoxygenToolkit_briefTag_funcName="yes"
 let g:doxygen_enhanced_color=1
 ```
-

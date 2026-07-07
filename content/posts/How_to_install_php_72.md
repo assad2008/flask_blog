@@ -1,8 +1,11 @@
 ---
-Title: 如何安装PHP7.2
-Summary: PHP 7.2经过很长时间的开发，官方终于释出了正式版，带来了一些很大的变化，和安全改进。
 Authors: Django Wong
-Date:    2017-12-08
+Date: 2017-12-08
+Summary: PHP 7.2经过很长时间的开发，官方终于释出了正式版，带来了一些很大的变化，和安全改进。
+Title: 如何安装PHP7.2
+seo_description: 本文详细介绍如何安装PHP 7.2，涵盖Ubuntu、Debian、CentOS、Mac OS X和Windows等主流操作系统。提供PPA、RPM、brew及phpbrew等多种安装方法，帮助开发者快速部署PHP
+  7.2，体验object类型提示、count()行为优化等新功能和安全改进。
+seo_keywords: PHP 7.2安装, PHP 7.2教程, Ubuntu安装PHP 7.2, CentOS安装PHP 7.2, Mac安装PHP 7.2
 ---
 
 ### 下载：
@@ -87,4 +90,3 @@ phpbrew install -j $(nproc) 7.2.0 +default
 ##
 
 转自：<https://www.colinodell.com/blog/201711/installing-php-72>
-

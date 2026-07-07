@@ -1,8 +1,12 @@
 ---
-Title:   netstat 的10个基本用法
-Summary: Netstat 是一款命令行工具，可用于列出系统上所有的网络套接字连接情况，包括 tcp, udp 以及 unix套接字，另外它还能列出处于监听状态（即等待接入请求）的套接字。如果你想确认系统上的 Web服务有没有起来，你可以查看80端口有没有打开。以上功能使 netstat成为网管和系统管理员的必备利器。在这篇教程中，我会列出几个例子，教大家如何使用 netstat去查找网络连接信息和系统开启的端口号。
 Authors: Django Wong
-Date:    2014-01-04
+Date: 2014-01-04
+Summary: Netstat 是一款命令行工具，可用于列出系统上所有的网络套接字连接情况，包括 tcp, udp 以及 unix套接字，另外它还能列出处于监听状态（即等待接入请求）的套接字。如果你想确认系统上的
+  Web服务有没有起来，你可以查看80端口有没有打开。以上功能使 netstat成为网管和系统管理员的必备利器。在这篇教程中，我会列出几个例子，教大家如何使用 netstat去查找网络连接信息和系统开启的端口号。
+Title: netstat 的10个基本用法
+seo_description: Netstat 是一款强大的命令行网络工具，用于列出系统所有网络套接字连接（TCP、UDP、Unix套接字）及监听端口。本文详细介绍
+  netstat 的10个基本用法，包括列出所有连接、仅查看TCP或UDP连接、禁用反向域名解析等技巧，帮助网管和系统管理员快速诊断网络问题、确认服务端口状态。掌握这些命令，提升网络管理效率。
+seo_keywords: netstat用法, netstat命令, 网络连接查看, 端口监听, Linux网络工具
 ---
 
 ### 简介
@@ -305,6 +309,3 @@ unix  2      [ ]         DGRAM                    17418    1789/ntpd
 via: <http://www.binarytides.com/linux-netstat-command-examples/>   
 译者：[bazz2](https://github.com/bazz2) 校对：[wxy](https://github.com/wxy)    
 本文由 LCTT 原创翻译，[Linux中国](http://linux.cn/portal.php)
-
-
-

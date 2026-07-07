@@ -2,6 +2,9 @@
 Authors: Django Wong
 Date: 2026-06-30
 Summary: 本博客使用的开发技术细节，以及说明
+seo_description: 了解本博客使用的技术栈，包括Flask 3.x、Python 3.12+、Jinja2模板引擎、Markdown内容管理、代码高亮、GitHub
+  webhook集成、LLM辅助生成等。文章详细介绍了项目结构、配置说明、快速开始指南和生产部署方案，适合开发者参考学习。
+seo_keywords: Flask博客技术栈, Python博客开发, Markdown博客系统, GitHub webhook, LLM内容生成
 title: 本博客使用的技术
 ---
 

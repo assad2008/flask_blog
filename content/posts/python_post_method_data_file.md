@@ -1,8 +1,10 @@
 ---
-Title:   Python脚本POST上传数据以及文件
-Summary: 查了众多，发现都不满意，不是这里有问题，就是那里有问题，真是郁闷，最后参照新浪微博Python SDK写了一个。花了我两个小时，毕竟初学Python，写的不好，分享一下
 Authors: Django Wong
-Date:    2013-11-30
+Date: 2013-11-30
+Summary: 查了众多，发现都不满意，不是这里有问题，就是那里有问题，真是郁闷，最后参照新浪微博Python SDK写了一个。花了我两个小时，毕竟初学Python，写的不好，分享一下
+Title: Python脚本POST上传数据以及文件
+seo_description: 本文分享了一个Python脚本实现POST上传数据及文件的完整代码，参考新浪微博Python SDK编写，适合初学者学习。代码包含multipart/form-data编码、文件类型检测、HTTP请求封装等核心功能，解决常见上传问题，提供可直接使用的http_call和sendwb函数。
+seo_keywords: Python POST上传, Python文件上传, multipart/form-data, Python SDK, 新浪微博
 ---
 
 ```python
@@ -68,4 +70,3 @@ def sendwb(url,data,imgpath = ''):
 		return;
 	ret = http_call(url,data)
 ```
-

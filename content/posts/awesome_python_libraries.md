@@ -1,8 +1,10 @@
 ---
-Title: 让人耳目一新的Python类
-Summary: 工欲善其事，必先利其器。Python社区高产富饶，有大量的美丽，实用的库, 这里挑选出来一些接口设计简洁的库。
 Authors: Django Wong
-Date:    2014-03-21
+Date: 2014-03-21
+Summary: 工欲善其事，必先利其器。Python社区高产富饶，有大量的美丽，实用的库, 这里挑选出来一些接口设计简洁的库。
+Title: 让人耳目一新的Python类
+seo_description: 探索Python生态中那些接口设计简洁、令人耳目一新的优秀库。本文精选了docopt、requests、sh、purl、Peewee等实用库，展示其Pythonic的API设计哲学。从命令行参数解析到HTTP请求，从ORM到函数式编程，这些库让代码更优雅高效。适合所有Python开发者阅读，提升编码体验。
+seo_keywords: Python库, Pythonic API, 简洁接口, 实用Python库, 代码优雅
 ---
 
 docopt

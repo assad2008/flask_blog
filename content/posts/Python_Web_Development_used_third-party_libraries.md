@@ -1,9 +1,13 @@
 ---
-Title:	Python Web开发中常用的第三方库
-Summary: 经常有朋友问，如果用Python来做Web开发，该选用什么框架？用Pyramid开发Web该选用怎样的组合等问题？在这里我将介绍一些Python Web开发中常用的第三方库。基本适用于Django以外的Web框架(Pyramid, Flask, Tornado, Web.py, Bottle等).
 Authors: Django Wong
-Date:    2013-12-27
+Date: 2013-12-27
+Summary: 经常有朋友问，如果用Python来做Web开发，该选用什么框架？用Pyramid开发Web该选用怎样的组合等问题？在这里我将介绍一些Python
+  Web开发中常用的第三方库。基本适用于Django以外的Web框架(Pyramid, Flask, Tornado, Web.py, Bottle等).
+Title: Python Web开发中常用的第三方库
+seo_description: Python Web开发中常用的第三方库推荐，涵盖ORM（SQLAlchemy、MongoEngine）、模板引擎（Jinja2、Mako）、表单处理（WTForms）、缓存（Beaker）、任务队列（Celery、RQ）、Web服务器（Gunicorn、uWSGI）等工具，适用于Pyramid、Flask、Tornado等Django以外的框架，助你高效构建Web应用。
+seo_keywords: Python Web开发, 第三方库, SQLAlchemy, Flask, Pyramid
 ---
+
 ![](/static/attach/post-196.jpg)
 
 ## TL;DR

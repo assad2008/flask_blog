@@ -1,8 +1,10 @@
 ---
-Title:   让APNS支持发送Emoji表情符号
-Summary: iOS设置是默认支持emoji表情的，如何让我们的Apple Push Notification Service的内容更加个性化呢，不要拘泥于文字形式，有时候表情会起到很好的作用
 Authors: Django Wong
-Date:    2013-11-28
+Date: 2013-11-28
+Summary: iOS设置是默认支持emoji表情的，如何让我们的Apple Push Notification Service的内容更加个性化呢，不要拘泥于文字形式，有时候表情会起到很好的作用
+Title: 让APNS支持发送Emoji表情符号
+seo_description: 本文详细讲解如何让Apple Push Notification Service (APNS) 支持发送Emoji表情符号。涵盖Unicode与SoftBank编码区别、iOS版本兼容性、PHP代码实现emoji替换，以及常用emoji对照表。帮助开发者实现个性化推送通知，提升用户体验。
+seo_keywords: APNS, Emoji表情, Apple Push Notification, iOS推送, Unicode编码
 ---
 
 iOS设置是默认支持emoji表情的，如何让我们的Apple Push Notification Service的内容更加个性化呢，不要拘泥于文字形式，有时候表情会起到很好的作用

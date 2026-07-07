@@ -1,8 +1,11 @@
 ---
-Title:   Centos 6.4 64位版设置无线连接
-Summary: 最近用台式机搞了个服务器，安装了最新的Centos6.4最新的64位版本。因为不想使用网线，因此买了一个PCI-E的无线网卡，使用无线连接。无线网卡型号为：腾达（TENDA）W311P 150M PCI无线网卡
 Authors: Django Wong
-Date:    2013-11-27
+Date: 2013-11-27
+Summary: 最近用台式机搞了个服务器，安装了最新的Centos6.4最新的64位版本。因为不想使用网线，因此买了一个PCI-E的无线网卡，使用无线连接。无线网卡型号为：腾达（TENDA）W311P
+  150M PCI无线网卡
+Title: Centos 6.4 64位版设置无线连接
+seo_description: 本文详细介绍了在Centos 6.4 64位系统上设置无线连接的完整步骤，包括使用腾达W311P PCI无线网卡、通过wpa_supplicant工具配置WPA/WPA2加密、命令行下连接无线网络及设置开机自动连接的方法，适合服务器最小安装用户参考。
+seo_keywords: Centos 6.4, 无线连接, wpa_supplicant, 腾达W311P, Linux无线网卡
 ---
 
 最近用台式机搞了个服务器，安装了最新的Centos 6.4最新的64位版本。因为不想使用网线，因此买了一个PCI-E的无线网卡，使用无线连接。

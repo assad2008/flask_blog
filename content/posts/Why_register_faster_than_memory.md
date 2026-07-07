@@ -1,8 +1,10 @@
 ---
-Title:   为什么寄存器比内存快？
-Summary: 计算机的存储层次（memory hierarchy）之中，寄存器（register）最快，内存其次，最慢的是硬盘。同样都是晶体管存储设备，为什么寄存器比内存快呢？
 Authors: Django Wong
-Date:    2013-12-11
+Date: 2013-12-11
+Summary: 计算机的存储层次（memory hierarchy）之中，寄存器（register）最快，内存其次，最慢的是硬盘。同样都是晶体管存储设备，为什么寄存器比内存快呢？
+Title: 为什么寄存器比内存快？
+seo_description: 本文深入解析计算机存储层次中寄存器比内存快的三大原因：距离更近、硬件设计更高效、工作方式更简单。通过通俗易懂的解释，帮助读者理解CPU内部寄存器与内存的速度差异，以及缓存等优化技术如何缓解这一差距。适合对计算机硬件原理感兴趣的读者。
+seo_keywords: 寄存器, 内存, 存储层次, CPU, 硬件设计
 ---
 
 计算机的[存储层次](http://zh.wikipedia.org/wiki/%E5%AD%98%E5%82%A8%E5%B1%82%E6%AC%A1)（memory hierarchy）之中，[寄存器](http://zh.wikipedia.org/wiki/%E5%AF%84%E5%AD%98%E5%99%A8)（register）最快，内存其次，最慢的是硬盘。

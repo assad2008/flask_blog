@@ -1,8 +1,10 @@
 ---
-Title: Bash脚本15分钟进阶指导
-Summary: 这里的技术技巧最初是来自谷歌的“Testing on the Toilet” (TOTT)。这里是一个修订和扩增版本。
 Authors: Django Wong
-Date:    2014-04-22
+Date: 2014-04-22
+Summary: 这里的技术技巧最初是来自谷歌的“Testing on the Toilet” (TOTT)。这里是一个修订和扩增版本。
+Title: Bash脚本15分钟进阶指导
+seo_description: 学习Bash脚本进阶技巧，从谷歌TOTT技术改编而来。本文涵盖脚本安全设置、函数定义、变量注解、使用$()替代反引号、双中括号[[]]的优势、正则表达式与Globbing、字符串操作、避免临时文件及内置变量等实用内容，助你提升Shell脚本编写效率与安全性，适合有一定基础的开发者阅读。
+seo_keywords: Bash脚本进阶, Shell编程技巧, 谷歌TOTT, 脚本安全, 字符串操作
 ---
 
 *这里的技术技巧最初是来自谷歌的“Testing on the Toilet” (TOTT)。这里是一个修订和扩增版本。*

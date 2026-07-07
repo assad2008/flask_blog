@@ -1,8 +1,10 @@
 ---
-Title:   用python以及Inotify监控文件
-Summary: 用python以及Inotify监控文件
 Authors: Django Wong
-Date:    2013-11-27
+Date: 2013-11-27
+Summary: 用python以及Inotify监控文件
+Title: 用python以及Inotify监控文件
+seo_description: 本文介绍如何使用Python和Inotify监控文件系统变化，包括文件创建、删除和修改事件的实时捕获。通过pyinotify库实现高效文件监控，提供完整代码示例和配置说明，适合需要文件系统事件监控的开发者参考。
+seo_keywords: Python, Inotify, 文件监控, pyinotify, 文件系统事件
 ---
 
 Inotify地址：[访问](https://github.com/seb-m/pyinotify)
@@ -55,4 +57,3 @@ def auto_compile(path = '.'):
 if __name__ == "__main__":
 	 auto_compile(WATCH_PATH)
 ```
-

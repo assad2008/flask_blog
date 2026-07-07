@@ -1,8 +1,10 @@
 ---
-Title:   Nginx upstream的几种分配方式
-Summary: 1、轮询（默认）每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。2、weight指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。
 Authors: Django Wong
-Date:    2013-11-27
+Date: 2013-11-27
+Summary: 1、轮询（默认）每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除。2、weight指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。
+Title: Nginx upstream的几种分配方式
+seo_description: 本文详细介绍了Nginx upstream的几种分配方式，包括轮询（默认）、weight权重分配、ip_hash会话保持、fair第三方按响应时间分配以及url_hash缓存优化。每种方式均配有配置示例和参数说明，帮助您根据后端服务器性能和应用需求选择最佳负载均衡策略，提升系统稳定性与访问效率。
+seo_keywords: Nginx upstream, 负载均衡, 分配方式, ip_hash, weight
 ---
 
 ## 轮询（默认）

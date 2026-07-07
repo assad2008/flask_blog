@@ -1,8 +1,10 @@
 ---
-Title:   KeepAlive的一些概念
-Summary: 关于这个问题，是在面试中，面试官提出，nginx的KeepAlive和TCP的KeepAlive的区别是什么，经过想起搜索和总结。得出一个结果！
 Authors: Django Wong
-Date:    2014-11-05
+Date: 2014-11-05
+Summary: 关于这个问题，是在面试中，面试官提出，nginx的KeepAlive和TCP的KeepAlive的区别是什么，经过想起搜索和总结。得出一个结果！
+Title: KeepAlive的一些概念
+seo_description: 本文深入解析KeepAlive概念，对比TCP KeepAlive与HTTP Keep-Alive的区别。从TCP三次握手到HTTP长连接机制，详细说明Nginx中KeepAlive的配置与工作原理。适合运维、后端开发人员理解网络协议优化，提升服务器性能。
+seo_keywords: KeepAlive, TCP KeepAlive, HTTP Keep-Alive, Nginx长连接, 网络协议
 ---
 
 ## 为什么要有KeepAlive？

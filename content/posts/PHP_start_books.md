@@ -1,8 +1,10 @@
 ---
-Title: PHP学习必看的一些书
-Summary: 一些技术人员应该读的书单，欢迎补充
 Authors: Django Wong
-Date:    2013-12-02
+Date: 2013-12-02
+Summary: 一些技术人员应该读的书单，欢迎补充
+Title: PHP学习必看的一些书
+seo_description: 本文为PHP初学者和进阶者推荐了必读书单，涵盖PHP入门、面向对象、性能优化、框架开发等核心书籍，同时包括MySQL数据库、Linux系统管理、C/C++编程、Go和Python等扩展学习资源。适合技术人员系统提升编程技能，从入门到深入成为大牛。
+seo_keywords: PHP学习书籍, PHP入门书单, MySQL必读书, Linux编程书籍, 程序员进阶书单
 ---
 
 对应初学的PHP，应该买什么样的书？到处问人，到处求助？  

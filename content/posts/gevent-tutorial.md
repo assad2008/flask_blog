@@ -1,8 +1,10 @@
 ---
-Title: gevent程序员指南
-Summary: gevent是一个基于libev的并发库。它为各种并发和网络相关的任务提供了整洁的API。
 Authors: Django Wong
-Date:    2013-12-24
+Date: 2013-12-24
+Summary: gevent是一个基于libev的并发库。它为各种并发和网络相关的任务提供了整洁的API。
+Title: gevent程序员指南
+seo_description: gevent程序员指南：基于libev的Python并发库，提供整洁API。学习Greenlet协程、同步与异步执行、上下文切换，掌握高效网络编程与IO调度。适合中级Python开发者，从入门到实战。
+seo_keywords: gevent, Python并发, Greenlet协程, 异步编程, libev
 ---
 
 ### 由Gevent社区编写  
@@ -1073,4 +1075,3 @@ pong.start()
 ping.inbox.put('start')
 gevent.joinall([ping, pong])
 ```
-

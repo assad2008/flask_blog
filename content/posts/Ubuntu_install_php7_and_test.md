@@ -1,8 +1,10 @@
 ---
-Title:   Ubuntu 14.04 LTS 上安装 PHP7以及性能测试
-Summary: PHP7的进度越来越快了，网上关于PHP7的介绍和测试一大堆，但是我还是想自己编译安装一下，亲自体验一下PHP7的强大和高效。
 Authors: Django Wong
-Date:    2015-07-10
+Date: 2015-07-10
+Summary: PHP7的进度越来越快了，网上关于PHP7的介绍和测试一大堆，但是我还是想自己编译安装一下，亲自体验一下PHP7的强大和高效。
+Title: Ubuntu 14.04 LTS 上安装 PHP7以及性能测试
+seo_description: 本文详细介绍了在Ubuntu 14.04 LTS上编译安装PHP7的完整过程，包括依赖安装、configure配置、编译错误解决（如libiconv问题）以及性能测试。适合开发者参考，体验PHP7的高效性能。
+seo_keywords: Ubuntu 14.04 安装 PHP7, PHP7 编译安装, PHP7 性能测试, libiconv 错误解决
 ---
 
 文章介绍：<http://php.net/archive/2015.php#id2015-06-25-1>

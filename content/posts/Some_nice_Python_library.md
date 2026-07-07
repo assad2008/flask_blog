@@ -1,8 +1,11 @@
 ---
-Title: 整理的一些很不错的Python库
-Summary: Python的方便和强大在于拥有很多强大的Python库
 Authors: Django Wong
-Date:    2016-04-08
+Date: 2016-04-08
+Summary: Python的方便和强大在于拥有很多强大的Python库
+Title: 整理的一些很不错的Python库
+seo_description: 本文整理了众多优秀的Python库，涵盖网络、调试与逆向工程、模糊测试等领域。包括Scapy、dpkt等网络数据包处理库，Immunity
+  Debugger、IDAPython等逆向工程工具，以及Sulley、Peach等模糊测试框架。无论你是安全研究人员还是Python开发者，这份精选列表都能帮你找到合适的库，提升开发效率。
+seo_keywords: Python库, 网络库, 逆向工程, 模糊测试, 安全工具
 ---
 
 **网络**

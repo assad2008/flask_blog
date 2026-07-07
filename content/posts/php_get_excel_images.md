@@ -1,8 +1,10 @@
 ---
-Title:   PHPExcel读取EXCEL中的图片
-Summary: PHPExcel是相当强大的 MS Office Excel 文档生成类库，当需要输出比较复杂格式数据的时候，PHPExcel 是个不错的选择。
 Authors: Django Wong
-Date:    2013-11-30
+Date: 2013-11-30
+Summary: PHPExcel是相当强大的 MS Office Excel 文档生成类库，当需要输出比较复杂格式数据的时候，PHPExcel 是个不错的选择。
+Title: PHPExcel读取EXCEL中的图片
+seo_description: 本文详细介绍如何使用PHPExcel库读取Excel 2003格式文档中的图片。通过PHPExcel_Worksheet、PHPExcel_Worksheet_BaseDrawing等API，实现从Excel单元格中提取图片并保存到本地。提供完整PHP代码示例，包括加载文件、获取图片坐标和文件名、保存图片等步骤。适合需要处理Excel图片数据的PHP开发者参考。
+seo_keywords: PHPExcel读取图片, Excel图片提取, PHP处理Excel, PHPExcel API
 ---
 
 PHPExcel是相当强大的 MS Office Excel 文档生成类库，当需要输出比较复杂格式数据的时候，PHPExcel 是个不错的选择。  
@@ -29,4 +31,3 @@ foreach ($objPHPExcel->getSheet(0)->getDrawingCollection() as $k => $drawing) {
 		ob_end_clean();
 }
 ```
-

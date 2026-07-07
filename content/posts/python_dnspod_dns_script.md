@@ -1,8 +1,11 @@
 ---
-Title: Python实现DNSPod DNS动态解析脚本
-Summary: 闲暇之余，在家里自建了个服务器，因为用的小区宽带，IP位动态分配。域名解析就是个问题，我的域名一般停放在DNSPod下。DNSPod有提供修改的API，就用Python简单的实现了一下动态解析。这样，就不用安装花生壳了。
 Authors: Django Wong
 Date: 2013-11-28
+Summary: 闲暇之余，在家里自建了个服务器，因为用的小区宽带，IP位动态分配。域名解析就是个问题，我的域名一般停放在DNSPod下。DNSPod有提供修改的API，就用Python简单的实现了一下动态解析。这样，就不用安装花生壳了。
+Title: Python实现DNSPod DNS动态解析脚本
+seo_description: 本文介绍如何使用Python实现DNSPod DNS动态解析脚本，解决家庭服务器因动态IP导致的域名解析问题。通过调用DNSPod
+  API，自动检测公网IP变化并更新域名解析记录，无需安装花生壳等第三方工具。包含完整代码示例，适合有Python基础的站长参考。
+seo_keywords: Python,DNSPod,动态解析,DNS脚本,域名解析
 ---
 
 闲暇之余，在家里自建了个服务器，因为用的小区宽带，IP位动态分配。域名解析就是个问题，我的域名一般停放在DNSPod下。DNSPod有提供修改的API，就用Python简单的实现了一下动态解析。这样，就不用安装花生壳了。
@@ -113,4 +116,3 @@ if __name__ == '__main__':
 	except:
 		pass
 ```
-

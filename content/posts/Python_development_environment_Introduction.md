@@ -1,8 +1,12 @@
 ---
-Title: Python开发生产环境
-Summary: 当开发人员从PHP，Ruby或者别的开发环境转换到Python时， 所面对的最大问题是缺乏对Python开发的生态环境的充分理解。 开发人员非常想得到一份关于完成大多数任务的指南或资源， 而不论使用的方法是否规范。
 Authors: Django Wong
-Date:    2013-12-02
+Date: 2013-12-02
+Summary: 当开发人员从PHP，Ruby或者别的开发环境转换到Python时， 所面对的最大问题是缺乏对Python开发的生态环境的充分理解。 开发人员非常想得到一份关于完成大多数任务的指南或资源，
+  而不论使用的方法是否规范。
+Title: Python开发生产环境
+seo_description: 从PHP、Ruby等环境转换到Python的开发人员常面临生态理解不足的挑战。本文提供Python开发生产环境的完整指南，涵盖版本选择（2.x
+  vs 3.x）、虚拟机挑选（CPython、PyPy等）、安装方法、包管理机制及模块搜索路径等核心内容，帮助开发者快速上手Python开发。
+seo_keywords: Python开发环境, Python生态, Python版本选择, Python包管理, Python虚拟机
 ---
 
 - 作者: [Mir Nazim](http://mirnazim.org/about/)
@@ -706,4 +710,3 @@ If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
 ```
-

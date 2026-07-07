@@ -1,8 +1,10 @@
 ---
-Title:   一些nginx配置
-Summary: 一些用到以及后面可能用到的nginx配置, 记录一下, 备查备用
 Authors: Django Wong
-Date:    2015-12-13
+Date: 2015-12-13
+Summary: 一些用到以及后面可能用到的nginx配置, 记录一下, 备查备用
+Title: 一些nginx配置
+seo_description: 本文整理了常用的 Nginx 配置，包括 gzip 压缩、多进程优化、静态文件缓存、代理转发、移动端适配等实用技巧，适合开发者备查备用，提升服务器性能与用户体验。
+seo_keywords: Nginx配置, gzip压缩, 静态文件缓存, 代理转发, 移动端适配
 ---
 
 # nginx配置

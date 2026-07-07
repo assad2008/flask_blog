@@ -1,8 +1,12 @@
 ---
-Title: Hadoop的Python框架指南
-Summary: 最近，我加入了Cloudera，在这之前，我在计算生物学/基因组学上已经工作了差不多10年。我的分析工作主要是利用Python语言和它很棒的科学计算栈来进行的。但Apache Hadoop的生态系统大部分都是用Java来实现的，也是为Java准备的，这让我很恼火。所以，我的头等大事变成了寻找一些Python可以用的Hadoop框架。
 Authors: Django Wong
-Date:    2014-04-28
+Date: 2014-04-28
+Summary: 最近，我加入了Cloudera，在这之前，我在计算生物学/基因组学上已经工作了差不多10年。我的分析工作主要是利用Python语言和它很棒的科学计算栈来进行的。但Apache
+  Hadoop的生态系统大部分都是用Java来实现的，也是为Java准备的，这让我很恼火。所以，我的头等大事变成了寻找一些Python可以用的Hadoop框架。
+Title: Hadoop的Python框架指南
+seo_description: 本文是一位计算生物学专家加入Cloudera后，针对Hadoop生态系统以Java为主、Python支持不足的问题，撰写的Python
+  Hadoop框架指南。文章比较了Hadoop Streaming、mrjob、dumbo、hadoopy、pydoop等框架在性能、功能和易用性上的差异，并通过谷歌图书N元数据转换实验进行测试，为Python开发者选择Hadoop框架提供参考。
+seo_keywords: Python Hadoop框架, Hadoop Streaming, mrjob, dumbo, Hadoop Python指南
 ---
 
 最近，我加入了Cloudera，在这之前，我在计算生物学/基因组学上已经工作了差不多10年。我的分析工作主要是利用Python语言和它[很棒的科学计算栈](http://pydata.org/)来进行的。但Apache Hadoop的生态系统大部分都是用Java来实现的，也是为Java准备的，这让我很恼火。所以，我的头等大事变成了寻找一些Python可以用的Hadoop框架。

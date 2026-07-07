@@ -1,8 +1,10 @@
 ---
-Title:   SVN提交代码自动同步到测试环境
-Summary: 只想给自己做个记录，以备查询，网上查了一堆。也遇到些问题，搞得丈二和尚摸不着头脑。
 Authors: Django Wong
-Date:    2014-11-19
+Date: 2014-11-19
+Summary: 只想给自己做个记录，以备查询，网上查了一堆。也遇到些问题，搞得丈二和尚摸不着头脑。
+Title: SVN提交代码自动同步到测试环境
+seo_description: 本文详细记录了如何配置SVN提交代码后自动同步到测试环境的完整步骤。包括启动SVN服务、配置Hooks post-commit钩子、解决中文乱码问题，以及设置文件权限等关键操作。通过shell脚本实现每次commit后自动更新web目录，提升开发效率。适合需要自动化部署的开发者参考。
+seo_keywords: SVN自动同步, post-commit钩子, 代码自动部署, 测试环境同步, SVN钩子配置
 ---
 
 首先启动SVN服务

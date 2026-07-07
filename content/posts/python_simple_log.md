@@ -1,8 +1,10 @@
 ---
-Title:   python简单日志处理
-Summary: 简单的一个python日志处理类
 Authors: Django Wong
-Date:    2013-11-30
+Date: 2013-11-30
+Summary: 简单的一个python日志处理类
+Title: python简单日志处理
+seo_description: 本文介绍了一个简单的Python日志处理类，包含完整的代码示例。通过logsys类实现日志写入、格式化时间戳和自定义通知功能，适合Python开发者快速集成日志记录到项目中。代码简洁易用，支持UTF-8编码和多种数据类型处理。
+seo_keywords: Python日志处理, Python日志类, 日志记录代码, Python日志示例
 ---
 
 简单的一个python日志处理类
@@ -49,4 +51,3 @@ class logsys:
 	def w(self,notice,*formart):
 		self.write2file(self.get_log_time(), '[' + notice + ']', self.project, *formart)
 ```
-

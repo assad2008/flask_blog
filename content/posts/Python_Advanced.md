@@ -1,8 +1,10 @@
 ---
-Title: Python进阶
-Summary: Python进阶的一些知识，生成器，装饰器，函数式编程
 Authors: Django Wong
 Date: 2017-01-06
+Summary: Python进阶的一些知识，生成器，装饰器，函数式编程
+Title: Python进阶
+seo_description: 学习Python进阶知识，掌握生成器、装饰器和函数式编程的核心概念。本文详细讲解生成器与迭代器的区别、map/reduce/filter高阶函数的使用、lambda匿名函数以及装饰器的实现原理，帮助Python开发者提升编程技能。
+seo_keywords: Python进阶,生成器,装饰器,函数式编程,高阶函数
 ---
 
 ## 生成器（Generators）
@@ -238,4 +240,3 @@ def hello():
 >>> hello.__name__
 'hello'
 ```
-

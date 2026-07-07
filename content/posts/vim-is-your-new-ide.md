@@ -1,8 +1,10 @@
 ---
-Title:   终端至上！将Vim打造成全新的集成开发环境！
-Summary: 让GUI都玩儿蛋去！鼠标是你的敌人！只有键盘才是你唯一的朋友！如果把Vim和Tmux结合在一起会发生什么？你将拥有完美的编程环境！下面是我多年来珍藏的一些不传之秘，有了这些，你立刻就能轻松打造出属于你的Vim开发环境。
 Authors: Django Wong
-Date:    2013-12-10
+Date: 2013-12-10
+Summary: 让GUI都玩儿蛋去！鼠标是你的敌人！只有键盘才是你唯一的朋友！如果把Vim和Tmux结合在一起会发生什么？你将拥有完美的编程环境！下面是我多年来珍藏的一些不传之秘，有了这些，你立刻就能轻松打造出属于你的Vim开发环境。
+Title: 终端至上！将Vim打造成全新的集成开发环境！
+seo_description: 将Vim打造成全新集成开发环境的终极指南！本文详细介绍了如何结合Tmux与Vim插件，如Vundle、Syntastic、Supertab、Ack、CtrlP、NERDTree等，打造高效编程环境。包含配置文件、小贴士和用户推荐，助你摆脱鼠标，拥抱键盘，提升开发效率。
+seo_keywords: Vim, Tmux, 集成开发环境, Vim插件, 编程环境
 ---
 
 ![](/static/attach/256px-Icon-Vim.svg.png)
@@ -36,6 +38,3 @@ Date:    2013-12-10
 via: <http://devcharm.com/pages/18-vim-is-your-new-ide>   
 译者：[Mr小眼儿](http://blog.csdn.net/tinyeyeser) 校对：[wxy](https://github.com/wxy)    
 本文由 LCTT 原创翻译，[Linux中国](http://linux.cn/portal.php)
-
-
-

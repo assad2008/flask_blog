@@ -1,8 +1,14 @@
 ---
-Title:	开发者日常使用的 Git 命令
-Summary:	这些命令分四种类型：①不需要和其他开发者协作的独立开发者，会经常用到 git init、git show branch、git commit 等命令；②需要和其他人协作的开发者，会常用到 git clone、git push、git pull、git format patch 。③在项目中负责接收其他开发者发来更新的核心开发者，会常用到 git am、git pull、git format patch、git revert、git push；④ 代码仓库管理员常用 git daemon、git shell……
 Authors: Django Wong
-Date:    2014-01-07
+Date: 2014-01-07
+Summary: 这些命令分四种类型：①不需要和其他开发者协作的独立开发者，会经常用到 git init、git show branch、git commit 等命令；②需要和其他人协作的开发者，会常用到
+  git clone、git push、git pull、git format patch 。③在项目中负责接收其他开发者发来更新的核心开发者，会常用到 git
+  am、git pull、git format patch、git revert、git push；④ 代码仓库管理员常用 git daemon、git shell……
+Title: 开发者日常使用的 Git 命令
+seo_description: 本文详细介绍了开发者日常使用的 Git 命令，按角色分为四类：独立开发者常用 git init、git commit 等；协作开发者需掌握
+  git clone、git push、git pull；集成人员使用 git am、git revert；仓库管理员用 git daemon、git shell。通过实例展示如何创建代码库、管理分支、合并代码，适合所有
+  Git 用户提升效率。
+seo_keywords: Git 命令, 开发者, git init, git commit, git push
 ---
 
 这些命令分四种类型：①不需要和其他开发者协作的独立开发者，会经常用到 git init、git show branch、git commit 等命令；②需要和其他人协作的开发者，会常用到 git clone、git push、git pull、git format patch 。③在项目中负责接收其他开发者发来更新的核心开发者，会常用到 git am、git pull、git format patch、git revert、git push；④ 代码仓库管理员常用 git daemon、git shell……

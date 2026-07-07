@@ -1,10 +1,12 @@
 ---
-Title:  本博客项目CLAUDE.md文件
-Summary: 本博客使用的开发使用的CLAUDE.md文件
 Authors: Django Wong
-Date:    2026-07-02
+Date: 2026-07-02
+Summary: 本博客使用的开发使用的CLAUDE.md文件
+Title: 本博客项目CLAUDE.md文件
+seo_description: 本博客项目CLAUDE.md文件详细介绍了基于Flask的现代化博客应用开发指南。使用本地Markdown文件存储内容，无需数据库、OSS或Redis。技术栈包括Python
+  3.12+、Flask 3.x、Jinja2等。涵盖项目架构、常用命令、内容格式及修改注意事项，适合Flask博客开发者参考。
+seo_keywords: Flask博客, CLAUDE.md, Markdown博客, Python博客, 博客开发
 ---
-
 
 # CLAUDE.md
 

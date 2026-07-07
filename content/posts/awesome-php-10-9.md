@@ -1,8 +1,10 @@
 ---
-Title:   一些常用的PHP类库, 资源以及技巧
-Summary: 收集整理一些常用的PHP类库, 资源以及技巧. 以便在工作中迅速的查找所需...
 Authors: Django Wong
-Date:    2015-10-09
+Date: 2015-10-09
+Summary: 收集整理一些常用的PHP类库, 资源以及技巧. 以便在工作中迅速的查找所需...
+Title: 一些常用的PHP类库, 资源以及技巧
+seo_description: 本文收集整理了常用的PHP类库、资源及技巧，涵盖依赖管理、框架、组件、微框架、路由、模板引擎、静态站生成器、HTTP、中间件、URL和邮件等类别。适合PHP开发者快速查找所需工具，提升开发效率。内容来自awesome-php翻译、开发者周刊及个人积累，是实用的PHP开发参考指南。
+seo_keywords: PHP类库,PHP资源,PHP技巧,PHP框架,PHP开发
 ---
 
 [原文地址](https://github.com/JingwenTian/awesome-php)
@@ -305,4 +307,3 @@ Date:    2015-10-09
 ## 通知( Notifications )
 
 ## 部署( Deployment )
-

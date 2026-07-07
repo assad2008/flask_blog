@@ -1,8 +1,10 @@
 ---
-Title:   码农 骇客 程序员 开发者和计算机科学家的区别
-Summary: 一个朋友最近对我说：“我想学习如何编程，那么，我该从哪里学起呢？”
 Authors: Django Wong
-Date:    2014-01-14
+Date: 2014-01-14
+Summary: 一个朋友最近对我说：“我想学习如何编程，那么，我该从哪里学起呢？”
+Title: 码农 骇客 程序员 开发者和计算机科学家的区别
+seo_description: 本文深入解析码农、骇客、程序员、开发者和计算机科学家的区别，通过维恩图清晰展示各角色特点。同时为编程初学者提供学习路径建议，涵盖Codecademy、KhanAcademy等优质资源，帮助读者明确自身定位与发展方向，高效入门编程。
+seo_keywords: 编程角色区别, 程序员学习路径, 编程入门资源, 码农骇客区别, 开发者计算机科学家
 ---
 
 一个朋友最近对我说：“我想学习如何编程，那么，我该从哪里学起呢？”
@@ -61,13 +63,3 @@ Date:    2014-01-14
 翻译的不好，凑合着看吧
 
 [原文](http://www.hanselman.com/blog/ACoderAProgrammerAHackerADeveloperAndAComputerScientistWalkIntoAVennDiagram.aspx)
-
-
-
-
-
-
-
-
-
-

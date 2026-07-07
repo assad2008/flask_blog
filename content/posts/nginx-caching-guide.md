@@ -1,8 +1,11 @@
 ---
-Title: "[译]NGINX缓存使用官方指南"
-Summary: 我们都知道，应用程序和网站一样，其性能关乎生存。但如何使你的应用程序或者网站性能更好，并没有一个明确的答案。代码质量和架构是其中的一个原因，但是在很多例子中我们看到，你可以通过关注一些十分基础的应用内容分发技术（basic application delivery techniques），来提高终端用户的体验。其中一个例子就是实现和调整应用栈（application stack）的缓存。这篇文章，通过几个例子来讲述如何使用NGINX缓存，此外，结尾处还列举了一些常见问题及解答。
 Authors: Django Wong
 Date: 2015-08-07
+Summary: 我们都知道，应用程序和网站一样，其性能关乎生存。但如何使你的应用程序或者网站性能更好，并没有一个明确的答案。代码质量和架构是其中的一个原因，但是在很多例子中我们看到，你可以通过关注一些十分基础的应用内容分发技术（basic
+  application delivery techniques），来提高终端用户的体验。其中一个例子就是实现和调整应用栈（application stack）的缓存。这篇文章，通过几个例子来讲述如何使用NGINX缓存，此外，结尾处还列举了一些常见问题及解答。
+Title: '[译]NGINX缓存使用官方指南'
+seo_description: 本文是NGINX缓存使用的官方指南，详细介绍了如何通过配置NGINX缓存提升网站性能。内容涵盖基础缓存原理、安装配置步骤、proxy_cache_path和proxy_cache命令参数详解、陈旧内容分发机制以及缓存微调技巧。通过实际案例展示缓存如何减少服务器负载、加快响应速度并提高网站可靠性。适合Web开发者、运维人员学习NGINX缓存优化。
+seo_keywords: NGINX缓存, 性能优化, proxy_cache配置, 反向代理缓存, Web缓存
 ---
 
 ## 基础
@@ -231,4 +234,4 @@ location /images/ {
 
 -----
 译文：<http://www.jointforce.com/jfperiodical/article/949>  
-原文：<https://www.nginx.com/blog/nginx-caching-guide/>  
+原文：<https://www.nginx.com/blog/nginx-caching-guide/>

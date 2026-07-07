@@ -1,8 +1,11 @@
 ---
-Title:   python安装cx_Oracle(RPM)
-Summary: python安装cx_Oracle(RPM)
 Authors: Django Wong
-Date:    2013-11-30
+Date: 2013-11-30
+Summary: python安装cx_Oracle(RPM)
+Title: python安装cx_Oracle(RPM)
+seo_description: 本文详细介绍了在Linux系统下通过RPM包安装Python cx_Oracle模块的完整步骤，包括下载安装包、执行rpm命令、解决libclntsh.so.10.1库文件缺失问题，以及配置ld.so.conf和ldconfig。最后提供Python连接Oracle数据库的示例代码，帮助开发者快速实现Python与Oracle的集成。
+seo_keywords: Python安装cx_Oracle, cx_Oracle RPM安装, Python连接Oracle, libclntsh.so.10.1错误解决,
+  Oracle数据库Python
 ---
 
 cx-oracle官网  

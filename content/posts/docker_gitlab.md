@@ -1,8 +1,10 @@
 ---
-Title:   一键安装docker-gitlab
-Summary: Docker Gitlab 是提供 Gitlab 环境的 Docker 映像，可方便的在 Docker 容器中运行 Gitlab 系统。
 Authors: Django Wong
-Date:    2015-04-28
+Date: 2015-04-28
+Summary: Docker Gitlab 是提供 Gitlab 环境的 Docker 映像，可方便的在 Docker 容器中运行 Gitlab 系统。
+Title: 一键安装docker-gitlab
+seo_description: 一键安装Docker Gitlab，快速部署Gitlab系统。本文详细介绍了使用Docker容器运行Gitlab的步骤，包括安装Docker、执行一键命令、配置端口映射、默认登录信息及硬件要求（CPU、内存、浏览器支持）。适合开发者、运维人员快速搭建私有Git仓库，简化安装流程，提升效率。
+seo_keywords: Docker Gitlab, 一键安装, Docker容器, Gitlab部署, 私有Git仓库
 ---
 
 很强大啊，比起自己一个个安装，那真是简单多了。

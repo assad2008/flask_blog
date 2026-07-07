@@ -1,8 +1,10 @@
 ---
-Title:   关于Python语言特性
-Summary: 才发现自己很多概念还不是很清楚，写Python也不短了，看来需要学习学习一些基础概念了。
 Authors: Django Wong
-Date:    2015-10-13
+Date: 2015-10-13
+Summary: 才发现自己很多概念还不是很清楚，写Python也不短了，看来需要学习学习一些基础概念了。
+Title: 关于Python语言特性
+seo_description: 深入解析Python语言特性，涵盖函数参数传递、元类、静态方法、类变量、自省、迭代器、生成器、装饰器、GIL、协程、闭包、垃圾回收等核心概念。同时涉及操作系统、数据库、网络协议及常见编程题，适合Python开发者巩固基础与面试准备。
+seo_keywords: Python语言特性, Python面试, Python核心概念, 函数参数传递, 元类
 ---
 
 >原文：<https://github.com/taizilongxu/interview_python>

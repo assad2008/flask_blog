@@ -1,8 +1,10 @@
 ---
-Title:   centos5.x升级python至python2.7
-Summary: centos5.x升级python至python2.7
 Authors: Django Wong
-Date:    2013-11-28
+Date: 2013-11-28
+Summary: centos5.x升级python至python2.7
+Title: centos5.x升级python至python2.7
+seo_description: 本文详细介绍了在CentOS 5.x系统上将Python升级至Python 2.7的完整步骤，包括下载编译安装Python 2.7.3、备份旧版本并创建软链接、修复yum工具兼容性以及安装easy_install包管理器。适合需要在老系统上使用新版Python的开发者参考。
+seo_keywords: CentOS 5.x升级Python, Python 2.7安装教程, yum兼容性修复, easy_install安装
 ---
 
 ### 首先到官网下载python2.7.3版本，编译安装

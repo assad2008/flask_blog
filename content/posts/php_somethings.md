@@ -1,8 +1,10 @@
 ---
-Title:   PHP相关技术
-Summary: PHP的一些相关知识以及相关技术等
 Authors: Django Wong
-Date:    2014-10-08
+Date: 2014-10-08
+Summary: PHP的一些相关知识以及相关技术等
+Title: PHP相关技术
+seo_description: 本文全面介绍PHP相关技术，涵盖核心组件如PEAR和PECL，主流框架包括Laravel、Symfony、ThinkPHP等，以及包管理Composer、IDE工具、版本控制、数据库管理、测试调试工具和缓存系统。同时涉及MySQL、Nginx等上下游技术，为PHP开发者提供完整的技术栈参考。
+seo_keywords: PHP技术, PHP框架, PHP工具, Composer, Laravel
 ---
 
 ## PHP相关技术和工具

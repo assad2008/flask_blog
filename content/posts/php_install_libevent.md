@@ -1,8 +1,10 @@
 ---
-Title:   php安装libevent扩展
-Summary: 原本想尝试一下PHP编写高性能网络服务，需要安装libevent扩展，没想到让人很费了点脑袋
 Authors: Django Wong
-Date:    2013-11-28
+Date: 2013-11-28
+Summary: 原本想尝试一下PHP编写高性能网络服务，需要安装libevent扩展，没想到让人很费了点脑袋
+Title: php安装libevent扩展
+seo_description: 本文详细介绍了在PHP中安装libevent扩展的完整步骤，包括解决re2c版本过低和找不到libevent头文件等常见错误。通过编译安装libevent库和PHP扩展，帮助开发者实现高性能网络服务。适合PHP开发者参考。
+seo_keywords: PHP安装libevent扩展, libevent扩展编译, PHP高性能网络服务, re2c错误解决, PHP扩展安装教程
 ---
 
 原本想尝试一下PHP编写高性能网络服务，需要安装libevent扩展，没想到让人很费了点脑袋  

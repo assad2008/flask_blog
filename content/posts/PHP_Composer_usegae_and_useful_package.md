@@ -1,8 +1,11 @@
 ---
-Title: PHP Compsoer使用以及常用的一些Package（2019-8-24更新）
-Summary: composer是PHP中用来管理依赖(dependency)关系的工具。你可以在自己的项目中声明所依赖的外部工具库(libraries)，Composer会帮你安装这些依赖的库文件。
 Authors: Django Wong
 Date: 2017-02-13
+Summary: composer是PHP中用来管理依赖(dependency)关系的工具。你可以在自己的项目中声明所依赖的外部工具库(libraries)，Composer会帮你安装这些依赖的库文件。
+Title: PHP Compsoer使用以及常用的一些Package（2019-8-24更新）
+seo_description: Composer是PHP的依赖管理工具，帮助开发者轻松安装和管理项目所需的库文件。本文详细介绍Composer的安装方法，并汇总了2019年常用的PHP
+  Package，涵盖Web框架（Yaf、Laravel、Yii2等）、数据库、ORM、微信支付宝支付、网络请求、字符串处理及模板引擎等类别，是PHP开发者优化项目依赖的实用指南。
+seo_keywords: PHP Composer, Composer安装, PHP依赖管理, 常用PHP Package, Composer包推荐
 ---
 
 ## Compsoer简介
@@ -179,4 +182,4 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 - `lusitanian/oauth`，Oauth1,2类库。访问：<https://packagist.org/packages/lusitanian/oauth>  
 - `get-stream/stream`，一个Stream类库。访问：<https://packagist.org/packages/get-stream/stream>  
 - `zf1/zend-registry`，ZF1的一个很好用的玩意。<https://packagist.org/packages/zf1/zend-registry>  
-- `ddeboer/data-import`，支持多种数据格式的导入导出库。访问：<https://packagist.org/packages/ddeboer/data-import>  
+- `ddeboer/data-import`，支持多种数据格式的导入导出库。访问：<https://packagist.org/packages/ddeboer/data-import>

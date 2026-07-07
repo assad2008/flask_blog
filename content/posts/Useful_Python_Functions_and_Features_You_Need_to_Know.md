@@ -1,8 +1,10 @@
 ---
-Title: 你需要知道的一些有用的Python功能和函数
-Summary: 在使用Python多年以后，我偶然发现了一些我们过去不知道的功能和特性。一些可以说是非常有用，但却没有充分利用。考虑到这一点，我编辑了一些你应该了解的Python功能特色。
 Authors: Django Wong
-Date:    2014-03-23
+Date: 2014-03-23
+Summary: 在使用Python多年以后，我偶然发现了一些我们过去不知道的功能和特性。一些可以说是非常有用，但却没有充分利用。考虑到这一点，我编辑了一些你应该了解的Python功能特色。
+Title: 你需要知道的一些有用的Python功能和函数
+seo_description: 探索Python中鲜为人知但非常实用的功能和函数，包括带任意数量参数的函数、使用Glob()查找文件、调试技巧、生成唯一ID以及序列化方法。这些Python技巧能提升你的编程效率，适合所有Python开发者学习。
+seo_keywords: Python功能, Python函数, Python技巧, Python调试, Python序列化
 ---
 
 在使用Python多年以后，我偶然发现了一些我们过去不知道的功能和特性。一些可以说是非常有用，但却没有充分利用。考虑到这一点，我编辑了一些你应该了解的Python功能特色。

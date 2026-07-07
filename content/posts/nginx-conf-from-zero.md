@@ -1,8 +1,10 @@
 ---
-Title:  Nginx 配置从零开始
-Summary: 作为一个Nginx的初学者记录一下从零起步的点滴。
 Authors: Django Wong
-Date:    2014-12-30
+Date: 2014-12-30
+Summary: 作为一个Nginx的初学者记录一下从零起步的点滴。
+Title: Nginx 配置从零开始
+seo_description: 从零开始学习Nginx配置，本文详细介绍了Nginx的基本概念、反向代理、负载均衡及虚拟主机配置。通过Ubuntu安装示例、默认配置文件解析和location进阶配置，帮助初学者快速掌握Nginx静态文件转发、反向代理与负载均衡的实现方法。适合Nginx入门者阅读。
+seo_keywords: Nginx配置, 反向代理, 负载均衡, 虚拟主机, 入门教程
 ---
 
 ### 基本概念

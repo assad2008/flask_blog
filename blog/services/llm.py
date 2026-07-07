@@ -191,6 +191,35 @@ _REFORMAT_USER_TEMPLATE = """\
 
 {content}"""
 
+# ---------------------------------------------------------------------------
+# 仅生成 SEO 描述与关键词（用于批量更新已有文章）
+# ---------------------------------------------------------------------------
+_SEO_SYSTEM_PROMPT = "你是一个 SEO 优化专家。根据文章标题和内容，生成适合搜索引擎的描述和关键词。"
+
+_SEO_USER_TEMPLATE = """\
+请根据以下文章信息，生成 SEO 元数据。
+
+seo_description 要求：
+- 用中文撰写
+- 120-160 字，适合搜索引擎结果摘要展示
+- 包含核心关键词，自然流畅吸引用户点击
+- 准确概括文章内容
+
+seo_keywords 要求：
+- 3-5 个中文关键词或短语
+- 用英文逗号分隔
+- 反映文章核心主题，按重要性排序
+
+请严格只返回如下 JSON，不要包含任何解释或 markdown 代码块：
+{{"seo_description": "...", "seo_keywords": "..."}}
+
+文章标题：{title}
+
+文章摘要：{summary}
+
+文章正文：
+{body}"""
+
 
 def extract_article_markdown(
     source_url: str,
@@ -336,6 +365,55 @@ def extract_metadata(
         seo_description=seo_description,
         seo_keywords=seo_keywords,
     )
+
+
+def extract_seo_metadata(
+    title: str,
+    summary: str,
+    body: str,
+    *,
+    base_url: str,
+    api_key: str,
+    model: str,
+) -> tuple[str, str]:
+    """调用 LLM 仅为已有文章生成 SEO 描述与关键词。
+
+    返回 ``(seo_description, seo_keywords)`` 元组。
+    与 ``extract_metadata`` 分离，避免重复生成标题/slug/summary。
+    """
+    if not base_url or not api_key or not model:
+        raise LLMError("LLM not configured (base_url/api_key/model missing)")
+
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": _SEO_SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": _SEO_USER_TEMPLATE.format(
+                    title=title,
+                    summary=summary,
+                    body=body[:_MAX_BODY_CHARS],
+                ),
+            },
+        ],
+        "temperature": 0.3,
+    }
+
+    try:
+        raw = _post_json(f"{base_url.rstrip('/')}/chat/completions", api_key, payload)
+        content = raw["choices"][0]["message"]["content"]
+        parsed = _parse_llm_json(content)
+    except LLMError:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        raise LLMError(f"LLM request failed: {exc}") from exc
+
+    seo_description = str(parsed.get("seo_description") or "").strip()
+    seo_keywords = str(parsed.get("seo_keywords") or "").strip()
+    if not seo_description:
+        raise LLMError("LLM returned empty seo_description")
+    return seo_description, seo_keywords
 
 
 def fallback_metadata(title: str) -> PostMetadata:

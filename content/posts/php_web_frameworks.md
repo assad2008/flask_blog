@@ -1,8 +1,11 @@
 ---
-Title:   PHP Web 框架整理
-Summary: 在PHP开发中，选择合适的框架有助于加快软件开发，节约宝贵的项目时间，让开发者专注于功能的实现上。
 Authors: Django Wong
-Date:    2014-10-21
+Date: 2014-10-21
+Summary: 在PHP开发中，选择合适的框架有助于加快软件开发，节约宝贵的项目时间，让开发者专注于功能的实现上。
+Title: PHP Web 框架整理
+seo_description: 本文整理了PHP Web开发中常用的框架，包括CodeIgniter、Yii、Laravel、Kohana、CakePHP、Symfony、Zend
+  Framework和ThinkPHP。每个框架都有其独特的特点和优势，选择合适的框架可以加快软件开发，节约项目时间，让开发者专注于功能实现。了解这些框架的特性，帮助你在PHP开发中做出最佳选择。
+seo_keywords: PHP框架, Web开发, CodeIgniter, Laravel, Yii
 ---
 
 ## CodeIgniter

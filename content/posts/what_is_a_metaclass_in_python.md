@@ -1,8 +1,12 @@
 ---
-Title:   理解Python中的元类(metaclass)
-Summary: 译注：这是一篇在Stack overflow上很热的帖子。提问者自称已经掌握了有关Python OOP编程中的各种概念，但始终觉得元类(metaclass)难以理解。他知道这肯定和自省有关，但仍然觉得不太明白，希望大家可以给出一些实际的例子和代码片段以帮助理解，以及在什么情况下需要进行元编程。于是e-satis同学给出了神一般的回复，该回复获得了985点的赞同点数，更有人评论说这段回复应该加入到Python的官方文档中去。而e-satis同学本人在Stack Overflow中的声望积分也高达64271分。
 Authors: Django Wong
-Date:    2014-11-03
+Date: 2014-11-03
+Summary: 译注：这是一篇在Stack overflow上很热的帖子。提问者自称已经掌握了有关Python OOP编程中的各种概念，但始终觉得元类(metaclass)难以理解。他知道这肯定和自省有关，但仍然觉得不太明白，希望大家可以给出一些实际的例子和代码片段以帮助理解，以及在什么情况下需要进行元编程。于是e-satis同学给出了神一般的回复，该回复获得了985点的赞同点数，更有人评论说这段回复应该加入到Python的官方文档中去。而e-satis同学本人在Stack
+  Overflow中的声望积分也高达64271分。
+Title: 理解Python中的元类(metaclass)
+seo_description: 深入理解Python元类(metaclass)的概念与用法。本文源自Stack Overflow高赞回答，通过类也是对象、动态创建类等实例，清晰解释元类如何创建类对象，以及何时需要进行元编程。适合已掌握Python
+  OOP但困惑于元类的开发者。
+seo_keywords: Python元类, metaclass, 元编程, 动态创建类, type函数
 ---
 
 >译注：这是一篇在Stack overflow上很热的帖子。提问者自称已经掌握了有关Python OOP编程中的各种概念，但始终觉得元类(metaclass)难以理解。他知道这肯定和自省有关，但仍然觉得不太明白，希望大家可以给出一些实际的例子和代码片段以帮助理解，以及在什么情况下需要进行元编程。于是e-satis同学给出了神一般的回复，该回复获得了985点的赞同点数，更有人评论说这段回复应该加入到Python的官方文档中去。而e-satis同学本人在Stack Overflow中的声望积分也高达64271分。以下就是这篇精彩的回复（提示：非常长）

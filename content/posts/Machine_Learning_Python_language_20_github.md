@@ -1,8 +1,10 @@
 ---
-Title:   20个顶尖的 Python 机器学习开源项目
-Summary: 我们在Github上的贡献者和提交者之中检查了用Python语言进行机器学习的开源项目，并挑选出最受欢迎和最活跃的项目。
 Authors: Django Wong
-Date:    2015-06-08
+Date: 2015-06-08
+Summary: 我们在Github上的贡献者和提交者之中检查了用Python语言进行机器学习的开源项目，并挑选出最受欢迎和最活跃的项目。
+Title: 20个顶尖的 Python 机器学习开源项目
+seo_description: 探索20个顶尖的Python机器学习开源项目，涵盖Scikit-learn、Pylearn2、NuPIC等热门工具。本文基于GitHub贡献者和提交者数据，精选最受欢迎和活跃的项目，包括分类、回归、聚类、深度学习、自然语言处理等功能，助你高效开展机器学习研究与应用。
+seo_keywords: Python机器学习, 开源项目, Scikit-learn, 深度学习, GitHub
 ---
 
 >我们在Github上的贡献者和提交者之中检查了用Python语言进行机器学习的开源项目，并挑选出最受欢迎和最活跃的项目。

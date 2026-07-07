@@ -1,8 +1,10 @@
 ---
-Title:   我自己常用的一些Python Package
-Summary: 一般配置完Python环境的时候，我自己经常会先安装一些自己常用的package或者会用到的package
 Authors: Django Wong
-Date:    2015-02-13
+Date: 2015-02-13
+Summary: 一般配置完Python环境的时候，我自己经常会先安装一些自己常用的package或者会用到的package
+Title: 我自己常用的一些Python Package
+seo_description: 本文整理了作者常用的Python Package清单，涵盖Web框架（Tornado、Flask）、数据库（MySQL-Python、pymongo）、网络工具（requests、gevent）、爬虫（Scrapy、BeautifulSoup）及系统管理（Fabric、supervisor）等类别，为Python开发者提供实用参考。
+seo_keywords: Python Package, 常用Python库, Python开发工具, Python框架, Python爬虫
 ---
 
 一般安装完Python后，我会先装一些常用的Package。做个笔记，记录下来，以备查询
@@ -96,5 +98,3 @@ Date:    2015-02-13
 - Eve 一款Python的REST API框架，用于构建和部署高可定制的、全功能的RESTful的Web服务。访问：<http://python-eve.org/>  
 - Django REST 框架可以轻松部署web APIs，其是一个聚健壮性与弹性于一体的web工具包。访问：<http://www.django-rest-framework.org/>  
 - Flask-RESTful 基于Flask框架开发的Rest APIs。访问：<https://github.com/flask-restful/flask-restful>
-
- 

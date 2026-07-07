@@ -1,8 +1,10 @@
 ---
-Title:  Markdown语言语法
-Summary:  Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）和亚伦·斯沃茨（Aaron Swartz）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。[1]这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。
 Authors: Django Wong
-Date:    2013-12-01
+Date: 2013-12-01
+Summary: Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）和亚伦·斯沃茨（Aaron Swartz）。它允许人们“使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML(或者HTML)文档”。[1]这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。
+Title: Markdown语言语法
+seo_description: Markdown是一种轻量级标记语言，由约翰·格鲁伯和亚伦·斯沃茨创立，旨在实现易读易写的纯文本格式。本文全面介绍Markdown语法，包括概述、区块元素（段落、标题、列表、代码区块等）和区段元素（链接、强调、代码、图片等），并兼容HTML及特殊字符自动转换。适合初学者和开发者快速掌握Markdown书写规范，提升文档编写效率。
+seo_keywords: Markdown语法, 轻量级标记语言, Markdown教程, 纯文本格式, HTML转换
 ---
 
 *   [概述](#overview)

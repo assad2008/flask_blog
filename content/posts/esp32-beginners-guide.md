@@ -2,6 +2,8 @@
 authors:
 - Assad
 date: '2026-07-07'
+seo_description: 本文是一份全面的ESP32入门指南，系统介绍乐鑫ESP32芯片系列的产品线及各型号特点，阐述开发板如何简化硬件设计、加速原型验证。文章对比ESP-IDF、Arduino、MicroPython等主流开发平台，展示ESP32在物联网和智能家居等领域的广阔应用前景，是初学者了解该平台的理想读物。
+seo_keywords: ESP32入门, ESP32芯片, ESP32开发板, ESP32开发平台, 物联网
 summary: 本文是一份全面的ESP32入门指南，系统介绍了乐鑫ESP32芯片系列的产品线及各型号特点，阐述了开发板如何简化硬件设计、加速原型验证。文章还对比了ESP-IDF、Arduino、MicroPython等主流开发平台，并展示了ESP32在物联网和智能家居等领域的广阔应用前景，是初学者了解该平台的理想读物。
 title: ESP32入门指南：从芯片到应用
 ---

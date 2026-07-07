@@ -1,8 +1,10 @@
 ---
-Title:   安装完 MySQL 后必须调整的 10 项配置
-Summary: 当我们被人雇来监测MySQL性能时，人们希望我们能够检视一下MySQL配置然后给出一些提高建议。许多人在事后都非常惊讶，因为我们建议他们仅仅改动几个设置，即使是这里有好几百个配置项。这篇文章的目的在于给你一份非常重要的配置项清单。
 Authors: Django Wong
-Date:    2015-03-31
+Date: 2015-03-31
+Summary: 当我们被人雇来监测MySQL性能时，人们希望我们能够检视一下MySQL配置然后给出一些提高建议。许多人在事后都非常惊讶，因为我们建议他们仅仅改动几个设置，即使是这里有好几百个配置项。这篇文章的目的在于给你一份非常重要的配置项清单。
+Title: 安装完 MySQL 后必须调整的 10 项配置
+seo_description: 安装完MySQL后，调整这10项关键配置可大幅提升性能与稳定性。本文详解innodb_buffer_pool_size、max_connections、innodb_log_file_size等核心设置，帮助您优化数据库缓存、连接数、日志写入等，避免常见错误，快速获得稳健的MySQL配置。适合DBA和开发者参考。
+seo_keywords: MySQL配置优化, MySQL性能调优, InnoDB配置, 数据库优化, MySQL安装后设置
 ---
 
 当我们被人雇来监测MySQL性能时，人们希望我们能够检视一下MySQL配置然后给出一些提高建议。许多人在事后都非常惊讶，因为我们建议他们仅仅改动几个设置，即使是这里有好几百个配置项。这篇文章的目的在于给你一份非常重要的配置项清单。
@@ -64,4 +66,3 @@ MySQL 5.6中，这个属性默认值是ON，因此大部分情况下你什么都
 -----
 翻译：<http://www.oschina.net/translate/10-mysql-settings-to-tune-after-installation>  
 原文：<http://www.percona.com/blog/2014/01/28/10-mysql-settings-to-tune-after-installation/>
-

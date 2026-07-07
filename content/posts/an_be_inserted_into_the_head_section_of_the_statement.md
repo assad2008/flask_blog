@@ -1,8 +1,10 @@
 ---
-Title:   A collection of HTML head elements.
-Summary: HTML的Head部分到底可以写进那些玩意呢，我们整理了一下，还真的不少，有些都不知道。
 Authors: Django Wong
-Date:    2016-04-29
+Date: 2016-04-29
+Summary: HTML的Head部分到底可以写进那些玩意呢，我们整理了一下，还真的不少，有些都不知道。
+Title: A collection of HTML head elements.
+seo_description: 本文全面整理了HTML head元素中可包含的各种标签，包括title、base、style、script、meta和link等。详细介绍了meta元素的charset、viewport、keywords、description等属性，以及link元素的rel属性如stylesheet、alternate、canonical等，帮助开发者优化网页的SEO和用户体验。
+seo_keywords: HTML head元素, meta标签, link标签, SEO优化, 网页元数据
 ---
 
 ## Elements

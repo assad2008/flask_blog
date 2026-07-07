@@ -1,8 +1,10 @@
 ---
-Title:   修改ubuntu系统的open files最大值
-Summary: 本来是一个很简单事情，因为自己以前调优的时候修改，以前使用的CentOS，没注意研究，现在查了一下，作为备用。
 Authors: Django Wong
-Date:    2015-12-22
+Date: 2015-12-22
+Summary: 本来是一个很简单事情，因为自己以前调优的时候修改，以前使用的CentOS，没注意研究，现在查了一下，作为备用。
+Title: 修改ubuntu系统的open files最大值
+seo_description: 本文详细介绍了在Ubuntu系统中修改open files最大值的完整步骤，包括配置/etc/security/limits.conf、启用pam_limits.so模块以及设置/etc/profile。与CentOS不同，Ubuntu需要额外配置PAM模块才能生效。通过本文的指导，您可以轻松将系统文件打开数限制提升至65535，解决默认1024的限制问题。
+seo_keywords: Ubuntu open files, 修改文件打开数限制, limits.conf配置, pam_limits.so, ulimit设置
 ---
 
 ## 前言
@@ -68,7 +70,3 @@ session required /lib/security/pam\_limits.so
 最后加上`ulimit -SHn 65535`
 
 重启系统后。执行`ulimit -n`，发现已经是`65535`了
-
-
-
-

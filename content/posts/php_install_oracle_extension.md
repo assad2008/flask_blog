@@ -1,8 +1,10 @@
 ---
-Title: PHP安装Oracle扩展[重新整理]
-Summary: 每次安装PHP的Oracle扩展，都要临时到网上找，还不一定能安装好，真是麻烦，这次重新整理一下PHP如何安装Oracle扩展！
 Authors: Django Wong
-Date:    2014-02-20
+Date: 2014-02-20
+Summary: 每次安装PHP的Oracle扩展，都要临时到网上找，还不一定能安装好，真是麻烦，这次重新整理一下PHP如何安装Oracle扩展！
+Title: PHP安装Oracle扩展[重新整理]
+seo_description: 本文详细介绍了在CentOS 6系统下为PHP 5.3.28安装Oracle扩展的完整步骤，包括下载Oracle客户端、安装oci8扩展、配置php.ini及重启PHP服务。解决PHP连接Oracle数据库的常见问题，适合需要集成Oracle数据库的PHP开发者参考。
+seo_keywords: PHP安装Oracle扩展, oci8扩展, CentOS安装Oracle客户端, PHP连接Oracle数据库
 ---
 
 ### 环境
@@ -56,4 +58,3 @@ wget http://pecl.php.net/get/oci8-2.0.7.tgz
 ps aux | grep php | grep root
 kill -USER2 php_root_pid
 ```
-

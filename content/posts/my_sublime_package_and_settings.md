@@ -1,8 +1,11 @@
 ---
-Title: 我的Sublime text 3使用的插件和配置
-Summary: Sublime Text 3是一款强大而精巧的文本编辑器。从VIM到Sublime text，它使我的工作效率提高了很多。
 Authors: Django Wong
 Date: 2017-01-12
+Summary: Sublime Text 3是一款强大而精巧的文本编辑器。从VIM到Sublime text，它使我的工作效率提高了很多。
+Title: 我的Sublime text 3使用的插件和配置
+seo_description: 本文详细介绍了Sublime Text 3的插件安装与配置方法，包括Package Control管理、汉化步骤及20余款实用插件（如Align
+  Arguments、AutoPEP8、MarkdownEditing等）的功能说明。适合开发者提升编码效率，优化Python、PHP、前端开发等工作流。
+seo_keywords: Sublime Text 3插件, Sublime Text配置, 代码编辑器插件, Package Control, 开发效率工具
 ---
 
 ## 下载：

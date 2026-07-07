@@ -1,8 +1,10 @@
 ---
-Title:   Python中的下划线
-Summary: 这篇文章讨论Python中下划线的使用。跟Python中很多用法类似，下划线的不同用法绝大部分（不全是）都是一种惯例约定。
 Authors: Django Wong
-Date:    2015-03-25
+Date: 2015-03-25
+Summary: 这篇文章讨论Python中下划线的使用。跟Python中很多用法类似，下划线的不同用法绝大部分（不全是）都是一种惯例约定。
+Title: Python中的下划线
+seo_description: 深入解析Python中下划线_的多种用法，包括单下划线、前缀双下划线及前后双下划线等。了解这些惯例与特殊含义，提升代码可读性与避免命名冲突。适合Python开发者学习参考。
+seo_keywords: Python下划线用法, Python命名规范, Python特殊方法, 下划线前缀, Python代码惯例
 ---
 
 这篇文章讨论Python中下划线_的使用。跟Python中很多用法类似，下划线`_`的不同用法绝大部分（不全是）都是一种惯例约定。
@@ -112,4 +114,3 @@ def my_view(request):
 -----
 翻译：<http://segmentfault.com/blog/chevalier/1190000002611411>  
 原文：<http://shahriar.svbtle.com/underscores-in-python>
-

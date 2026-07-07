@@ -1,8 +1,11 @@
 ---
-Title:   Python Web 框架整理
-Summary: 在各种语言平台中，python涌现的web框架恐怕是最多的,是一个百花齐放的世界，各种micro-framework、framework不可胜数；猜想原因应该是在python中构造框架十分简单，使得...
 Authors: Django Wong
-Date:    2014-10-21
+Date: 2014-10-21
+Summary: 在各种语言平台中，python涌现的web框架恐怕是最多的,是一个百花齐放的世界，各种micro-framework、framework不可胜数；猜想原因应该是在python中构造框架十分简单，使得...
+Title: Python Web 框架整理
+seo_description: 本文整理了Python Web框架的全面指南，涵盖web.py、Flask、Tornado、Bottle、Pylons、Pyramid、Quixote、Zope2和Django等主流框架。每个框架都附有代码示例和官网链接，帮助开发者快速了解轻量级框架、微框架和全栈框架的特点与适用场景，是Python
+  Web开发者的必备参考。
+seo_keywords: Python Web框架, Flask, Django, Tornado, 轻量级框架
 ---
 
 ## web.py

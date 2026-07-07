@@ -1,8 +1,10 @@
 ---
-Title:   PHP未来的一些可能
-Summary: 德国开放源码软件开发者Frank Karlit-schek主导的ownCloud项目，是目前采用PHP编写的最大型开源项目之一。对于PHP的未来，他提出了自己的想法。
 Authors: Django Wong
-Date:    2014-11-27
+Date: 2014-11-27
+Summary: 德国开放源码软件开发者Frank Karlit-schek主导的ownCloud项目，是目前采用PHP编写的最大型开源项目之一。对于PHP的未来，他提出了自己的想法。
+Title: PHP未来的一些可能
+seo_description: 德国ownCloud项目创始人Frank Karlitschek深度剖析PHP的现状与未来。文章探讨了PHP的普遍性、通用性、低门槛等优势，同时指出安全性、函数命名矛盾、静态类型等不足。Frank提出PHP未来改进方向，包括安全性提升、数据库API标准化、引入可选静态类型等。了解PHP发展前景，不容错过。
+seo_keywords: PHP未来, PHP优缺点, ownCloud, Frank Karlitschek, PHP改进方向
 ---
 
 德国开放源码软件开发者Frank Karlit-schek主导的ownCloud项目，是目前采用PHP编写的最大型开源项目之一。他在谈及为何选择PHP时，提到以下几点。

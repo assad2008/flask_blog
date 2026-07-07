@@ -1,8 +1,10 @@
 ---
-Title: Ubuntu 14.04.3 LTS下安装Spark环境
-Summary: 准备学习使用spark，主要用来分析日志文件，借此来学习一下大数据分析技术的一些入门知识。本文是基于Ubuntu 14.04服务器版本完成的。
 Authors: Django Wong
 Date: 2015-10-15
+Summary: 准备学习使用spark，主要用来分析日志文件，借此来学习一下大数据分析技术的一些入门知识。本文是基于Ubuntu 14.04服务器版本完成的。
+Title: Ubuntu 14.04.3 LTS下安装Spark环境
+seo_description: 本文详细介绍了在Ubuntu 14.04.3 LTS服务器版本下安装Spark环境的完整步骤，包括Java、Scala和Spark的下载、配置与启动。适合大数据分析初学者，通过日志分析案例学习Spark入门技术。
+seo_keywords: Ubuntu 14.04安装Spark, Spark环境配置, 大数据分析入门, Scala安装, Java安装
 ---
 
 ### 安装java

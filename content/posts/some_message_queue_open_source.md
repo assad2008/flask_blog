@@ -1,8 +1,10 @@
 ---
-Title: 常见开源消息系统
-Summary: 消息系统的作用：异步处理、削减峰值、减少组件之间的耦合。
 Authors: Django Wong
-Date:    2014-05-12
+Date: 2014-05-12
+Summary: 消息系统的作用：异步处理、削减峰值、减少组件之间的耦合。
+Title: 常见开源消息系统
+seo_description: 本文详细介绍常见开源消息系统，包括Kafka、NSQ、Beanstalkd、Redis等，分析其异步处理、削减峰值、减少耦合的核心作用。涵盖消息系统选择要点如持久化、吞吐能力、高可用、分布式扩展等，并对比各系统协议与性能，助你快速选型。
+seo_keywords: 开源消息系统, Kafka, NSQ, Beanstalkd, 消息队列
 ---
 
 ***消息系统的作用：异步处理、削减峰值、减少组件之间的耦合。***
@@ -169,6 +171,4 @@ Date:    2014-05-12
 - <http://x-aeon.com/wp/2013/04/10/a-quick-message-queue-benchmark-activemq-rabbitmq-hornetq-qpid-apollo/>  
 - <https://news.ycombinator.com/item?id=5531192>  
 - <http://www.javaplex.com/blog/high-performance-message-queues-get-reviewed/>  
-- <http://adam.heroku.com/past/2010/4/24/beanstalkasimpleandfastqueueingbackend/>  
-
-
+- <http://adam.heroku.com/past/2010/4/24/beanstalkasimpleandfastqueueingbackend/>

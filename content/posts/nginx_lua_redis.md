@@ -1,8 +1,10 @@
 ---
-Title:   实践Nginx+Lua+Redis高性能方案
-Summary: 为了寻找一个高性能的Web处理方案，尝试过PHP，Python，PyPy，但是效果还是不怎么好，终于瞄上了Lua
 Authors: Django Wong
-Date:    2015-06-25
+Date: 2015-06-25
+Summary: 为了寻找一个高性能的Web处理方案，尝试过PHP，Python，PyPy，但是效果还是不怎么好，终于瞄上了Lua
+Title: 实践Nginx+Lua+Redis高性能方案
+seo_description: 本文详细介绍了如何实践Nginx+Lua+Redis高性能Web方案，包括安装LuaJIT、编译Tengine、编写Lua脚本进行Redis操作等步骤。通过ab测试验证，QPS可达4W以上，性能强劲。适合追求高并发、低延迟的开发者参考。
+seo_keywords: Nginx Lua Redis, 高性能Web方案, LuaJIT, Tengine, QPS
 ---
 
 - Nginx，选择淘宝的[Tengine](http://tengine.taobao.org/)

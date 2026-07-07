@@ -1,8 +1,10 @@
 ---
-Title:   Python解压和压缩zip
-Summary: zip文件是我们经常使用的打包格式之一，python解压和压缩zip效率非凡。
 Authors: Django Wong
-Date:    2013-11-28
+Date: 2013-11-28
+Summary: zip文件是我们经常使用的打包格式之一，python解压和压缩zip效率非凡。
+Title: Python解压和压缩zip
+seo_description: 学习如何使用Python解压和压缩zip文件，提高文件处理效率。本文提供详细的Python代码示例，演示通过zipfile模块轻松实现zip文件的解压与文件夹压缩，适合Python开发者参考。
+seo_keywords: Python解压zip, Python压缩zip, zipfile模块, Python文件处理
 ---
 
 zip文件是我们经常使用的打包格式之一，python解压和压缩zip效率非凡。
@@ -66,4 +68,3 @@ except:
 	if z:
 		z.close()
 ```
-

@@ -1,8 +1,11 @@
 ---
-Title:   Linux用户需要了解的命令行技能
-Summary: 下面介绍的都是一些命令行工具，这些工具在几位回答者的日常工作中都很有用。对于任何不了解的命令，请使用“man <COMMANDNAME>“查看，或者使用Google。有些命令需要先用 yum, apt-get install 命令安装。
 Authors: Django Wong
-Date:    2014-09-16
+Date: 2014-09-16
+Summary: 下面介绍的都是一些命令行工具，这些工具在几位回答者的日常工作中都很有用。对于任何不了解的命令，请使用“man <COMMANDNAME>“查看，或者使用Google。有些命令需要先用
+  yum, apt-get install 命令安装。
+Title: Linux用户需要了解的命令行技能
+seo_description: 掌握Linux命令行技能是每位系统管理员和开发者的必备能力。本文汇总了多位专家推荐的实用命令，涵盖bash基础、VIM编辑器、SSH无密码登录、文件管理、网络调试、数据处理及系统性能分析等核心技能。从日常操作到高级调试，如awk、sed、strace、top等工具，助你高效管理Linux系统。无论你是新手还是资深用户，这些命令行技巧都能提升工作效率，解决实际问题。
+seo_keywords: Linux命令行, Linux命令教程, 系统管理, bash技巧, 性能调试
 ---
 
 ## 基本命令
@@ -294,4 +297,3 @@ dmesg
 ```bash
 当系统出现一些很反常的现象时，比如可能是硬件或驱动问题时，这个很管用。
 ```
-

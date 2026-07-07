@@ -1,8 +1,11 @@
 ---
-Title:   python实现网卡流量监控
-Summary: python实现网卡流量监控
 Authors: Django Wong
-Date:    2013-11-28
+Date: 2013-11-28
+Summary: python实现网卡流量监控
+Title: python实现网卡流量监控
+seo_description: 本文介绍如何使用Python实现网卡流量监控，通过读取/proc/net/dev文件获取eth0网卡的接收和发送流量数据，并设置流量上限（maxdata），当累计流量超过限制时自动执行关机命令（init
+  0）。适合VPS用户监控流量使用情况，防止超限。
+seo_keywords: Python网卡流量监控, 流量监控脚本, 网卡流量限制, VPS流量监控, Python系统监控
 ---
 
 ```python

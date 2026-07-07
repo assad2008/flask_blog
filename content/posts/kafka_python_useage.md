@@ -1,8 +1,10 @@
 ---
-Title: Kafka基本操作
-Summary: Kafka提供了类似于JMS的特性，但是在设计实现上完全不同，此外它并不是JMS规范的实现。kafka对消息保存时根据Topic进行归类，发送消息者成为Producer,消息接受者成为Consumer,此外kafka集群有多个kafka实例组成，每个实例(server)成为broker。。
 Authors: Django Wong
 Date: 2015-10-20
+Summary: Kafka提供了类似于JMS的特性，但是在设计实现上完全不同，此外它并不是JMS规范的实现。kafka对消息保存时根据Topic进行归类，发送消息者成为Producer,消息接受者成为Consumer,此外kafka集群有多个kafka实例组成，每个实例(server)成为broker。。
+Title: Kafka基本操作
+seo_description: 学习Kafka基本操作，包括启动Kafka、创建Topic、发送和接收消息的详细步骤。本文还提供了Python脚本示例，帮助您快速掌握Kafka消息队列的核心功能，适合初学者和开发者参考。
+seo_keywords: Kafka基本操作, Kafka启动, 创建Topic, Kafka生产者, Kafka消费者
 ---
 
 ## 启动Kafka
@@ -56,4 +58,3 @@ for message in consumer:
 	if message is not None:
 		print message.offset, message.value
 ```
-

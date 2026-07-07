@@ -1,8 +1,10 @@
 ---
-Title: 如何在Python中使用 Linux epoll
-Summary: 从2.6版本开始, python 提供了使用linux epoll 的功能. 这篇文章通过3个例子来大致介绍如何使用它.
 Authors: Django Wong
-Date:    2014-02-17
+Date: 2014-02-17
+Summary: 从2.6版本开始, python 提供了使用linux epoll 的功能. 这篇文章通过3个例子来大致介绍如何使用它.
+Title: 如何在Python中使用 Linux epoll
+seo_description: 本文介绍如何在Python中使用Linux epoll实现高性能异步Socket编程。从Python 2.6版本开始支持epoll，通过三个示例逐步讲解：阻塞式Socket通讯、循环处理客户端请求，以及利用epoll管理大量并发连接的优势。适合需要处理C10K问题的开发者，了解epoll如何比select和poll更高效地监控数千个Socket事件。
+seo_keywords: Python epoll, Linux epoll, 异步Socket编程, Python Socket, C10K
 ---
 
 ## 介绍

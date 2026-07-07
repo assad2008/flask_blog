@@ -1,8 +1,10 @@
 ---
-Title:   Golang struct类型
-Summary: Go语言中，也和C或者其他语言一样，我们可以声明新的类型，作为其它类型的属性或字段的容器。例如，我们可以创建一个自定义类型`person`代表一个人的实体。这个实体拥有属性：姓名和年龄。这样的类型我们称之`struct`。如下代码所示
 Authors: Django Wong
-Date:    2013-11-27
+Date: 2013-11-27
+Summary: Go语言中，也和C或者其他语言一样，我们可以声明新的类型，作为其它类型的属性或字段的容器。例如，我们可以创建一个自定义类型`person`代表一个人的实体。这个实体拥有属性：姓名和年龄。这样的类型我们称之`struct`。如下代码所示
+Title: Golang struct类型
+seo_description: 本文详细介绍了Golang中的struct类型，包括如何声明和初始化struct、访问字段、使用匿名字段实现继承，以及内置类型和自定义类型作为匿名字段的示例。通过代码演示，帮助Go语言开发者掌握struct的核心用法，提升编程效率。
+seo_keywords: Golang struct, Go语言结构体, 匿名字段, struct初始化, Go编程教程
 ---
 
 ## struct

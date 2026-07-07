@@ -1,8 +1,10 @@
 ---
-Title:  Python资源汇总大全
-Summary: 一个Python资源列表，内容包括：解释器、包管理、Web框架、API框架、数据科学、机器学习、爬虫、数据库、测试、代码质量、日志、CLI工具、自动化运维、文档、经典学习项目等
 Authors: River King / ChatGPT
-Date:    2026-06-29
+Date: 2026-06-29
+Summary: 一个Python资源列表，内容包括：解释器、包管理、Web框架、API框架、数据科学、机器学习、爬虫、数据库、测试、代码质量、日志、CLI工具、自动化运维、文档、经典学习项目等
+Title: Python资源汇总大全
+seo_description: Python资源汇总大全，收录社区知名、长期维护的Python项目，涵盖解释器、包管理、Web框架、API、数据科学、机器学习、爬虫、数据库、测试、代码质量、日志、CLI工具、自动化运维、文档及经典学习项目等。适合后端开发、数据处理、AI应用及工程化实践参考，助你高效选择Python工具。
+seo_keywords: Python资源, Python项目, Python工具, Python框架, Python学习
 ---
 
 # Python资源汇总大全

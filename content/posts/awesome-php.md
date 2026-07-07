@@ -1,8 +1,11 @@
 ---
-Title:  Github上的PHP资源汇总大全
-Summary: 一个PHP资源列表，内容包括：库、框架、模板、安全、代码分析、日志、第三方库、配置工具、Web 工具、书籍、电子书、经典博文等等
 Authors: Django Wong
-Date:    2015-01-08
+Date: 2015-01-08
+Summary: 一个PHP资源列表，内容包括：库、框架、模板、安全、代码分析、日志、第三方库、配置工具、Web 工具、书籍、电子书、经典博文等等
+Title: Github上的PHP资源汇总大全
+seo_description: 探索GitHub上最全面的PHP资源汇总大全，涵盖库、框架、模板、安全、代码分析、日志、第三方工具等。从Composer依赖管理到Symfony、Laravel等主流框架，再到Twig模板引擎和Guzzle
+  HTTP客户端，本指南为PHP开发者提供一站式资源导航，助您高效开发与学习。
+seo_keywords: PHP资源, GitHub PHP, PHP框架, PHP库, PHP开发工具
 ---
 
 ## 贡献

@@ -1,8 +1,10 @@
 ---
-Title:  PHP资源汇总大全
-Summary: 一个PHP资源列表，内容包括：库、框架、模板、安全、代码分析、日志、第三方库、配置工具、Web 工具、书籍、电子书、经典博文等等
 Authors: Django Wong
-Date:    2026-06-28
+Date: 2026-06-28
+Summary: 一个PHP资源列表，内容包括：库、框架、模板、安全、代码分析、日志、第三方库、配置工具、Web 工具、书籍、电子书、经典博文等等
+Title: PHP资源汇总大全
+seo_description: PHP资源汇总大全，涵盖库、框架、模板、安全、代码分析、日志、第三方库、配置工具、Web工具、书籍、电子书、经典博文等。适合PHP后端开发、接口开发、Web项目、企业系统、Composer包管理和日常工程化参考。
+seo_keywords: PHP资源, PHP框架, PHP库, Composer, PHP开发
 ---
 
 # PHP资源汇总大全

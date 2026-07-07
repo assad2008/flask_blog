@@ -2,6 +2,8 @@
 authors:
 - Assad
 date: '2026-07-03'
+seo_description: 深入解读Anthropic Agent Skills开放标准，揭示从单次Prompt注入到意向模式固化的范式转移。Agent Skills将工作流程、偏好等操作性知识打包为可复用文件夹，终结重复提示词时代。了解如何通过渐进式加载降低上下文负担，在消费端和生产端大幅降低AI使用门槛，实现人工智能从依赖模型能力转向依赖人类工程注入的演进。
+seo_keywords: Agent Skills, 意向固化, 提示词工程, Anthropic, 人工智能
 summary: 文章深入解读了 Anthropic 推出的 Agent Skills 开放标准，指出其核心是将工作流程、偏好等操作性知识打包为可复用文件夹，实现从单次
   Prompt 注入到意向模式固化的范式转移。Agent Skills 不仅是渐进式加载的提示词工程突破，更解决了上下文负担与重复指导的难题，在消费端和生产端均大幅降低
   AI 使用门槛，预示了人工智能从依赖模型能力转向依赖人类工程注入的演进方向。
