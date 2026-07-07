@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def test_homepage_returns_post_list(client):
     response = client.get("/")
 
@@ -48,16 +51,25 @@ def test_page_route_returns_200(client):
     assert b"Hello" in response.data
 
 
+def _read_css() -> str:
+    """读取主题 CSS 文件全文。"""
+    css_path = Path(__file__).resolve().parent.parent / "blog" / "static" / "light.css"
+    return css_path.read_text(encoding="utf-8")
+
+
 def test_base_template_exposes_mobile_responsive_contract(client):
     response = client.get("/")
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert "Mobile readable responsive overrides" in html
-    assert "@media (max-width:768px)" in html
-    assert "overflow-wrap: anywhere" in html
-    assert "min(86vw, 320px)" in html
-    assert "touch-action: manipulation" in html
+    # 确认 CSS 以外部文件方式引入
+    assert 'href="/static/light.css"' in html
+    css = _read_css()
+    assert "Mobile readable responsive overrides" in css
+    assert "@media (max-width:768px)" in css
+    assert "overflow-wrap: anywhere" in css
+    assert "min(86vw, 320px)" in css
+    assert "touch-action: manipulation" in css
 
 
 def test_mobile_responsive_contract_prevents_right_overflow(client):
@@ -65,12 +77,14 @@ def test_mobile_responsive_contract_prevents_right_overflow(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert ".site-header .container {" in html and "min-width: 0" in html
-    assert ".site-nav {" in html and "min-width: 0" in html and "flex: 1" in html
-    assert ".post-card {" in html and "max-width: 100%" in html and "min-width: 0" in html
+    assert 'href="/static/light.css"' in html
+    css = _read_css()
+    assert ".site-header .container {" in css and "min-width: 0" in css
+    assert ".site-nav {" in css and "min-width: 0" in css and "flex: 1" in css
+    assert ".post-card {" in css and "max-width: 100%" in css and "min-width: 0" in css
     assert (
-        "article," in html and ".article-header," in html and ".article-body {" in html
-        and "width: 100%" in html and "max-width: 100%" in html and "min-width: 0" in html
+        "article," in css and ".article-header," in css and ".article-body {" in css
+        and "width: 100%" in css and "max-width: 100%" in css and "min-width: 0" in css
     )
 
 
@@ -79,9 +93,10 @@ def test_mobile_code_blocks_do_not_expand_page_width(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert "margin-left:-.35rem;margin-right:-.35rem" not in html
-    assert "margin-left: 0" in html or "margin-left:0" in html
-    assert "margin-right: 0" in html or "margin-right:0" in html
+    assert 'href="/static/light.css"' in html
+    css = _read_css()
+    assert "margin-left: 0" in css or "margin-left:0" in css
+    assert "margin-right: 0" in css or "margin-right:0" in css
 
 
 def test_mobile_article_and_code_blocks_have_explicit_width_constraints(client):
@@ -89,11 +104,13 @@ def test_mobile_article_and_code_blocks_have_explicit_width_constraints(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
+    assert 'href="/static/light.css"' in html
+    css = _read_css()
     assert (
-        "article," in html and ".article-header," in html and ".article-body {" in html
-        and "width: 100%" in html and "max-width: 100%" in html and "min-width: 0" in html
+        "article," in css and ".article-header," in css and ".article-body {" in css
+        and "width: 100%" in css and "max-width: 100%" in css and "min-width: 0" in css
     )
-    assert "width: 100%;" in html and "max-width: 100%;" in html and "overflow-x: auto" in html
+    assert "width: 100%;" in css and "max-width: 100%;" in css and "overflow-x: auto" in css
 
 
 def test_mobile_responsive_contract_is_shared_by_content_pages(client):
@@ -102,7 +119,9 @@ def test_mobile_responsive_contract_is_shared_by_content_pages(client):
 
         assert response.status_code == 200
         html = response.get_data(as_text=True)
-        assert "Mobile readable responsive overrides" in html
+        assert 'href="/static/light.css"' in html
+    css = _read_css()
+    assert "Mobile readable responsive overrides" in css
 
 
 def test_public_theme_exposes_professional_editorial_contract(client):
@@ -110,11 +129,13 @@ def test_public_theme_exposes_professional_editorial_contract(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert "Professional editorial polish" in html
-    assert "--surface-paper" in html
-    assert "--shadow-card-hover" in html
-    assert ".article-summary" in html
-    assert "text-wrap: balance" in html
+    assert 'href="/static/light.css"' in html
+    css = _read_css()
+    assert "Professional editorial polish" in css
+    assert "--surface-paper" in css
+    assert "--shadow-card-hover" in css
+    assert ".article-summary" in css
+    assert "text-wrap: balance" in css
 
 
 def test_topic_summary_uses_theme_class(client):
@@ -131,7 +152,9 @@ def test_public_theme_keeps_mobile_navigation_single_row_contract(client):
 
     assert response.status_code == 200
     html = response.get_data(as_text=True)
-    assert ".site-header .container {" in html and "min-width: 0" in html
-    assert ".site-nav {" in html and "min-width: 0" in html and "flex: 1" in html
-    assert "overflow-x: auto" in html
-    assert "scrollbar-width: none" in html
+    assert 'href="/static/light.css"' in html
+    css = _read_css()
+    assert ".site-header .container {" in css and "min-width: 0" in css
+    assert ".site-nav {" in css and "min-width: 0" in css and "flex: 1" in css
+    assert "overflow-x: auto" in css
+    assert "scrollbar-width: none" in css
