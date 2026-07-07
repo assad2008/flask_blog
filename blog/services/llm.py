@@ -87,6 +87,8 @@ class PostMetadata:
     title: str
     slug: str
     summary: str
+    seo_description: str = ""
+    seo_keywords: str = ""
 
 
 @dataclass(frozen=True)
@@ -100,7 +102,7 @@ class ArticleMarkdown:
 # ---------------------------------------------------------------------------
 # 系统提示与用户提示模板
 # ---------------------------------------------------------------------------
-_SYSTEM_PROMPT = "你是一个博客编辑助手。根据文章标题和正文，生成标题、URL slug 和一段简介。"
+_SYSTEM_PROMPT = "你是一个博客编辑助手。根据文章标题和正文，生成标题、URL slug、简介及 SEO 元数据。"
 
 _USER_TEMPLATE = """\
 title 要求：
@@ -118,8 +120,19 @@ summary 要求：
 - 1-2 句话，80-150 字
 - 概括文章核心内容，不要简单复述标题
 
+seo_description 要求：
+- 用中文撰写
+- 120-160 字，适合搜索引擎结果摘要展示
+- 包含核心关键词，自然流畅吸引用户点击
+- 不要简单复述 summary
+
+seo_keywords 要求：
+- 3-5 个中文关键词或短语
+- 用英文逗号分隔
+- 反映文章核心主题，按重要性排序
+
 请严格只返回如下 JSON，不要包含任何解释或 markdown 代码块：
-{{"title": "...", "slug": "...", "summary": "..."}}
+{{"title": "...", "slug": "...", "summary": "...", "seo_description": "...", "seo_keywords": "..."}}
 
 文章标题（可能为空，为空时请根据正文生成）：{title}
 
@@ -312,9 +325,17 @@ def extract_metadata(
     gen_title = str(parsed.get("title") or "").strip()
     slug = sanitize_slug(parsed.get("slug", ""))
     summary = str(parsed.get("summary") or "").strip()
+    seo_description = str(parsed.get("seo_description") or "").strip()
+    seo_keywords = str(parsed.get("seo_keywords") or "").strip()
     if not slug:
         raise LLMError("LLM returned empty slug")
-    return PostMetadata(title=gen_title, slug=slug, summary=summary)
+    return PostMetadata(
+        title=gen_title,
+        slug=slug,
+        summary=summary,
+        seo_description=seo_description,
+        seo_keywords=seo_keywords,
+    )
 
 
 def fallback_metadata(title: str) -> PostMetadata:

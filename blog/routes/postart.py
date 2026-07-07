@@ -218,6 +218,8 @@ def _handle_publish(settings: Settings):
     # 新文章：必须「生成」后才允许发布
     gen_slug = request.form.get("gen_slug", "").strip()
     gen_summary = request.form.get("gen_summary", "").strip()
+    gen_seo_description = request.form.get("gen_seo_description", "").strip()
+    gen_seo_keywords = request.form.get("gen_seo_keywords", "").strip()
     if not gen_slug:
         return (
             render_template(
@@ -247,6 +249,8 @@ def _handle_publish(settings: Settings):
         authors=_parse_authors(settings.postart_author),
         date_str=today_iso(),
         body=body,
+        seo_description=gen_seo_description,
+        seo_keywords=gen_seo_keywords,
     )
 
     # 提交并推送到 git（推送失败不影响发布结果，仅在成功页提示）
@@ -298,6 +302,8 @@ def _handle_generate(settings: Settings):
             "title": metadata.title,
             "slug": metadata.slug,
             "summary": metadata.summary,
+            "seo_description": metadata.seo_description,
+            "seo_keywords": metadata.seo_keywords,
         }
     )
 
@@ -471,6 +477,8 @@ def _handle_manage(settings: Settings, action: str):
             date_str = str(d)
         summary = meta.get("summary") or meta.get("Summary") or ""
         authors = meta.get("authors") or meta.get("Authors") or []
+        seo_description = meta.get("seo_description") or meta.get("Seo_Description") or ""
+        seo_keywords = meta.get("seo_keywords") or meta.get("Seo_Keywords") or ""
         if isinstance(authors, str):
             authors = [authors]
         return jsonify(
@@ -482,6 +490,8 @@ def _handle_manage(settings: Settings, action: str):
                 "summary": str(summary),
                 "authors": [str(a) for a in authors],
                 "body": parsed.content.strip(),
+                "seo_description": str(seo_description),
+                "seo_keywords": str(seo_keywords),
             }
         )
 

@@ -2,6 +2,89 @@
 
 {% block title %}{{ post.title }} — 随笔记录{% endblock %}
 
+{% set page_description = post.seo_description or post.summary %}
+
+{%- if page_description -%}
+{% block meta_description %}
+  <meta name="description" content="{{ page_description }}">
+{% endblock %}
+{%- endif -%}
+
+{%- if post.seo_keywords -%}
+{% block meta_keywords %}
+  <meta name="keywords" content="{{ post.seo_keywords }}">
+{% endblock %}
+{%- endif -%}
+
+{% block meta_og %}
+  <meta property="og:title" content="{{ post.title }} — {{ site_name or '随笔记录' }}">
+  {%- if page_description %}
+  <meta property="og:description" content="{{ page_description }}">
+  {%- endif %}
+  <meta property="og:type" content="article">
+  {%- if canonical_url %}
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- endif %}
+  <meta property="og:site_name" content="{{ site_name or '随笔记录' }}">
+  {%- if post.date %}
+  <meta property="article:published_time" content="{{ post.date.isoformat() }}">
+  {%- endif %}
+  {%- if post.authors %}
+  {%- for author in post.authors %}
+  <meta property="article:author" content="{{ author }}">
+  {%- endfor %}
+  {%- endif %}
+  {%- if post.seo_keywords %}
+  <meta property="article:tag" content="{{ post.seo_keywords }}">
+  {%- endif %}
+{% endblock %}
+
+{% block meta_twitter %}
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ post.title }} — {{ site_name or '随笔记录' }}">
+  {%- if page_description %}
+  <meta name="twitter:description" content="{{ page_description }}">
+  {%- endif %}
+{% endblock %}
+
+{% block canonical_url %}
+  {%- if canonical_url %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- endif %}
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ post.title | tojson }},
+  {%- if page_description %}
+  "description": {{ page_description | tojson }},
+  {%- endif %}
+  {%- if post.date %}
+  "datePublished": {{ post.date.isoformat() | tojson }},
+  {%- endif %}
+  {%- if canonical_url %}
+  "url": {{ canonical_url | tojson }},
+  {%- endif %}
+  {%- if post.authors %}
+  "author": {
+    "@type": "Person",
+    "name": {{ post.authors[0] | tojson }}
+  },
+  {%- endif %}
+  {%- if post.seo_keywords %}
+  "keywords": {{ post.seo_keywords | tojson }},
+  {%- endif %}
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ site_name | tojson or '随笔记录' | tojson }}
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
   {% if post.headings %}
   {% with headings = post.headings %}{% include "light/_toc.html" %}{% endwith %}

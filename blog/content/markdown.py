@@ -135,10 +135,12 @@ class _PostMeta(NamedTuple):
     summary: str
     authors: tuple[str, ...]
     date: date | None
+    seo_description: str
+    seo_keywords: str
 
 
 def _extract_meta(parsed: frontmatter.Post, slug: str) -> _PostMeta:
-    """从已解析的 front matter 中提取 title/summary/authors/date。
+    """从已解析的 front matter 中提取 title/summary/authors/date/seo 字段。
 
     同时兼容小写与旧版大写字段；title/summary 缺失时回退为 slug/空串。
     此函数被 ``extract_post_meta`` 与 ``render_markdown`` 共用，避免逻辑重复。
@@ -148,7 +150,16 @@ def _extract_meta(parsed: frontmatter.Post, slug: str) -> _PostMeta:
     summary = _metadata_value(metadata, "summary", "Summary") or ""
     authors = _metadata_authors(_metadata_value(metadata, "authors", "Authors"))
     published_date = _metadata_date(_metadata_value(metadata, "date", "Date"))
-    return _PostMeta(str(title), str(summary), authors, published_date)
+    seo_description = _metadata_value(metadata, "seo_description", "Seo_Description") or ""
+    seo_keywords = _metadata_value(metadata, "seo_keywords", "Seo_Keywords") or ""
+    return _PostMeta(
+        str(title),
+        str(summary),
+        authors,
+        published_date,
+        str(seo_description),
+        str(seo_keywords),
+    )
 
 
 def extract_post_meta(slug: str, raw: str) -> Post:
@@ -164,6 +175,8 @@ def extract_post_meta(slug: str, raw: str) -> Post:
         date=meta.date,
         html="",
         headings=(),
+        seo_description=meta.seo_description,
+        seo_keywords=meta.seo_keywords,
     )
 
 
@@ -184,6 +197,8 @@ def render_markdown(slug: str, raw: str, kind: MarkdownKind) -> Post | Topic:
             date=meta.date,
             html=html,
             headings=headings,
+            seo_description=meta.seo_description,
+            seo_keywords=meta.seo_keywords,
         )
 
     return Topic(
@@ -194,6 +209,8 @@ def render_markdown(slug: str, raw: str, kind: MarkdownKind) -> Post | Topic:
         date=meta.date,
         html=html,
         headings=headings,
+        seo_description=meta.seo_description,
+        seo_keywords=meta.seo_keywords,
     )
 
 

@@ -52,11 +52,14 @@ def write_markdown_post(
     authors: list[str],
     date_str: str,
     body: str,
+    seo_description: str = "",
+    seo_keywords: str = "",
 ) -> Path:
     """将文章写入 ``posts_dir/<slug>.md``，包含 front matter。
 
     - ``authors`` 为空时不写 authors 字段；
-    - ``date_str`` 形如 ``YYYY-MM-DD``。
+    - ``date_str`` 形如 ``YYYY-MM-DD``；
+    - ``seo_description`` / ``seo_keywords`` 为空时不写对应字段。
     """
     post = frontmatter.Post(body)
     post["title"] = title
@@ -64,6 +67,10 @@ def write_markdown_post(
     if authors:
         post["authors"] = authors
     post["date"] = date_str
+    if seo_description:
+        post["seo_description"] = seo_description
+    if seo_keywords:
+        post["seo_keywords"] = seo_keywords
 
     posts_dir.mkdir(parents=True, exist_ok=True)
     path = posts_dir / f"{slug}.md"

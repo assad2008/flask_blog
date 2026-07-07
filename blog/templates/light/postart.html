@@ -1266,6 +1266,8 @@
     {# 用户「生成」并应用候选后，slug 与简介回填至此，发布时复用、不再调 AI #}
     <input type="hidden" name="gen_slug" id="genSlugInput" value="">
     <input type="hidden" name="gen_summary" id="genSummaryInput" value="">
+    <input type="hidden" name="gen_seo_description" id="genSeoDescriptionInput" value="">
+    <input type="hidden" name="gen_seo_keywords" id="genSeoKeywordsInput" value="">
     {# 编辑已有文章时的 slug，非空表示编辑模式 #}
     <input type="hidden" name="edit_slug" id="editSlugInput" value="">
   </form>
@@ -1766,6 +1768,8 @@
           '<div class="gen-item-meta">' +
           safe(c.slug) +
           (c.summary ? '<br><span class="gen-summary">' + safe(c.summary) + "</span>" : "") +
+          (c.seo_description ? '<br><span style="color:var(--text-tertiary);font-size:.72rem;">SEO: ' + safe(c.seo_description) + "</span>" : "") +
+          (c.seo_keywords ? '<br><span style="color:var(--accent);font-size:.72rem;">关键词: ' + safe(c.seo_keywords) + "</span>" : "") +
           "</div>" +
           "</div>"
         );
@@ -1799,6 +1803,8 @@
           title: data.title || "（未返回标题）",
           slug: data.slug || "",
           summary: data.summary || "",
+          seo_description: data.seo_description || "",
+          seo_keywords: data.seo_keywords || "",
         });
       } else {
         candidates.push({ error: data.error || "生成失败" });
@@ -1842,8 +1848,12 @@
     // 回填隐藏字段，发布时直接复用、不再调用 AI
     const slugInput = document.getElementById("genSlugInput");
     const summaryInput = document.getElementById("genSummaryInput");
+    const seoDescInput = document.getElementById("genSeoDescriptionInput");
+    const seoKeywordsInput = document.getElementById("genSeoKeywordsInput");
     if (slugInput) slugInput.value = c.slug || "";
     if (summaryInput) summaryInput.value = c.summary || "";
+    if (seoDescInput) seoDescInput.value = c.seo_description || "";
+    if (seoKeywordsInput) seoKeywordsInput.value = c.seo_keywords || "";
   });
 
   // ============ 文章管理：查看列表 / 删除 / 编辑到主编辑器 ============
@@ -1874,6 +1884,8 @@
     if (editSlugInput) editSlugInput.value = "";
     if (genSlugInput) genSlugInput.value = "";
     if (genSummaryInput) genSummaryInput.value = "";
+    document.getElementById("genSeoDescriptionInput") && (document.getElementById("genSeoDescriptionInput").value = "");
+    document.getElementById("genSeoKeywordsInput") && (document.getElementById("genSeoKeywordsInput").value = "");
     editor.dispatchEvent(new Event("input", { bubbles: true }));
   }
 
@@ -2013,6 +2025,8 @@
         // 预填 slug 和简介，避免发布时被「未生成」校验拦截
         if (genSlugInput) genSlugInput.value = slug;
         if (genSummaryInput) genSummaryInput.value = data.summary || "";
+        document.getElementById("genSeoDescriptionInput") && (document.getElementById("genSeoDescriptionInput").value = data.seo_description || "");
+        document.getElementById("genSeoKeywordsInput") && (document.getElementById("genSeoKeywordsInput").value = data.seo_keywords || "");
         enterEditMode(slug);
         editor.dispatchEvent(new Event("input", { bubbles: true }));
         titleInput.focus();

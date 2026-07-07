@@ -22,6 +22,8 @@ class Post:
     date: date | None
     html: str
     headings: tuple[Heading, ...] = ()
+    seo_description: str = ""
+    seo_keywords: str = ""
 
 
 @dataclass(frozen=True)
@@ -33,6 +35,8 @@ class Topic:
     date: date | None
     html: str
     headings: tuple[Heading, ...] = ()
+    seo_description: str = ""
+    seo_keywords: str = ""
 
 
 @dataclass(frozen=True)
