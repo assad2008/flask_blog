@@ -13,6 +13,7 @@ from html.parser import HTMLParser
 from typing import Any
 
 from blog.services.llm import LLMError, extract_article_markdown
+from blog.services.oss import OssImageConfig, rewrite_markdown_images_to_oss
 
 _MAX_HTML_BYTES = 10_000_000
 _MAX_CANDIDATE_CHARS = 100000
@@ -47,6 +48,7 @@ def fetch_article_markdown(
     base_url: str,
     api_key: str,
     model: str,
+    oss_config: OssImageConfig | None = None,
     on_progress: Callable[[dict[str, Any]], None] | None = None,
 ) -> str:
     """抓取网页并返回由 LLM 提取的 Markdown 正文。
@@ -107,6 +109,14 @@ def fetch_article_markdown(
     body = article.body.strip()
     if not body:
         raise WebImportError("未提取到正文")
+
+    if oss_config and oss_config.is_ready:
+        _log("正在转存文章图片到 OSS…")
+        body = rewrite_markdown_images_to_oss(
+            body,
+            config=oss_config,
+            on_progress=on_progress,
+        )
 
     # 从 HTML 中提取文章标题，附加转载声明
     page_title = _extract_html_title(html)
@@ -226,14 +236,15 @@ class _CandidateMarkdownParser(HTMLParser):
         elif tag == "br":
             self._newline(1)
         elif tag == "img":
-            # 将图片转换为 Markdown 图片语法，相对路径解析为绝对地址
-            src = attrs_dict.get("src", "")
+            # 兼容懒加载和响应式图片属性，并统一解析为绝对地址。
+            src = self._pick_image_src(attrs_dict)
             alt = attrs_dict.get("alt", "")
             if src:
-                src = self._resolve_url(src)
-                self._newline(2)
-                self._parts.append(f"![{alt}]({src})")
-                self._newline(2)
+                self._append_image(src, alt)
+        elif tag == "source":
+            src = self._pick_image_src(attrs_dict)
+            if src:
+                self._append_image(src, "")
         elif tag in {"ul", "ol"}:
             self._list_depth += 1
             self._newline(1)
@@ -297,8 +308,33 @@ class _CandidateMarkdownParser(HTMLParser):
         if needed:
             self._parts.append("\n" * needed)
 
+    def _append_image(self, src: str, alt: str) -> None:
+        """追加 Markdown 图片，并把相对地址补全为绝对地址。"""
+        src = self._resolve_url(src)
+        self._newline(2)
+        self._parts.append(f"![{alt}]({src})")
+        self._newline(2)
+
+    def _pick_image_src(self, attrs: dict[str, str]) -> str:
+        """从常见图片、懒加载和响应式属性中选出最清晰的图片地址。"""
+        for name in ("src", "data-src", "data-original", "data-lazy-src", "data-url"):
+            src = attrs.get(name, "").strip()
+            if src and not src.startswith("data:"):
+                return src
+        return _pick_srcset_candidate(attrs.get("srcset", ""))
+
     def _resolve_url(self, src: str) -> str:
         """将相对路径的图片 URL 解析为绝对地址。"""
-        if not self._source_url or src.startswith(("http://", "https://", "//")):
+        if src.startswith("//"):
+            return "https:" + src
+        if not self._source_url or src.startswith(("http://", "https://")):
             return src
         return urllib.parse.urljoin(self._source_url, src)
+
+
+def _pick_srcset_candidate(srcset: str) -> str:
+    """从 srcset 中选择最后一个候选，通常是更高分辨率图片。"""
+    candidates = [item.strip() for item in srcset.split(",") if item.strip()]
+    if not candidates:
+        return ""
+    return candidates[-1].split()[0]

@@ -53,6 +53,11 @@ class Settings:
     llm_api_key: str
     # LLM 模型名，如 gpt-4o-mini / deepseek-chat
     llm_model: str
+    # 阿里云 OSS 图片转存配置；四项齐全时启用网页导入图片上传
+    oss_access_key_id: str = ""
+    oss_access_key_secret: str = ""
+    oss_endpoint: str = ""
+    oss_bucket: str = ""
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -70,6 +75,10 @@ class Settings:
         llm_base_url = os.environ.get("BLOG_LLM_BASE_URL", "")
         llm_api_key = os.environ.get("BLOG_LLM_API_KEY", "")
         llm_model = os.environ.get("BLOG_LLM_MODEL", "")
+        oss_access_key_id = os.environ.get("BLOG_OSS_ACCESS_KEY_ID", "")
+        oss_access_key_secret = os.environ.get("BLOG_OSS_ACCESS_KEY_SECRET", "")
+        oss_endpoint = os.environ.get("BLOG_OSS_ENDPOINT", "")
+        oss_bucket = os.environ.get("BLOG_OSS_BUCKET", "")
         return cls(
             content_dir=content_dir,
             posts_per_page=posts_per_page,
@@ -85,4 +94,8 @@ class Settings:
             llm_base_url=llm_base_url,
             llm_api_key=llm_api_key,
             llm_model=llm_model,
+            oss_access_key_id=oss_access_key_id,
+            oss_access_key_secret=oss_access_key_secret,
+            oss_endpoint=oss_endpoint,
+            oss_bucket=oss_bucket,
         )

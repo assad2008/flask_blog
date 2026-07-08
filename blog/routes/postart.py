@@ -47,6 +47,7 @@ from blog.services.llm import (
     reformat_markdown,
     sanitize_slug,
 )
+from blog.services.oss import OssImageConfig
 from blog.services.web_import import WebImportError, fetch_article_markdown
 
 postart_bp = Blueprint("postart", __name__)
@@ -83,6 +84,16 @@ def _new_captcha() -> tuple[str, str]:
 def _parse_authors(raw: str) -> list[str]:
     """将 .env 中的默认作者按逗号拆分为列表。"""
     return [name.strip() for name in raw.split(",") if name.strip()]
+
+
+def _oss_image_config(settings: Settings) -> OssImageConfig:
+    """从应用配置构造网页导入图片转存所需的 OSS 配置。"""
+    return OssImageConfig(
+        access_key_id=settings.oss_access_key_id,
+        access_key_secret=settings.oss_access_key_secret,
+        endpoint=settings.oss_endpoint,
+        bucket=settings.oss_bucket,
+    )
 
 
 @postart_bp.route("/postart", methods=["GET", "POST"])
@@ -346,6 +357,7 @@ def _handle_import_url(settings: Settings):
                     base_url=settings.llm_base_url,
                     api_key=settings.llm_api_key,
                     model=settings.llm_model,
+                    oss_config=_oss_image_config(settings),
                     on_progress=on_progress,
                 )
                 total_elapsed = round(_sse_time.time() - start_time, 1)
