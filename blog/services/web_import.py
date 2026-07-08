@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import ssl
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -16,6 +17,7 @@ from blog.services.llm import LLMError, extract_article_markdown
 _MAX_HTML_BYTES = 10_000_000
 _MAX_CANDIDATE_CHARS = 100000
 _TIMEOUT_SECONDS = 20
+_FETCH_ATTEMPTS = 2
 _ALLOWED_SCHEMES = {"http", "https"}
 _BLOCK_TAGS = {"p", "div", "section", "article"}
 _HEADING_TAGS = {"h1", "h2", "h3", "h4", "h5", "h6"}
@@ -148,16 +150,20 @@ def _fetch_html(url: str) -> str:
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         },
     )
-    try:
-        with urllib.request.urlopen(req, timeout=_TIMEOUT_SECONDS) as resp:
-            content_type = resp.headers.get("Content-Type", "")
-            if "text/html" not in content_type and "application/xhtml+xml" not in content_type:
-                raise WebImportError("目标地址返回的不是 HTML 页面")
-            data = resp.read(_MAX_HTML_BYTES + 1)
-    except urllib.error.HTTPError as exc:
-        raise WebImportError(f"网页抓取失败：HTTP {exc.code}") from exc
-    except urllib.error.URLError as exc:
-        raise WebImportError(f"网页抓取失败：{exc.reason}") from exc
+    for attempt in range(1, _FETCH_ATTEMPTS + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=_TIMEOUT_SECONDS) as resp:
+                content_type = resp.headers.get("Content-Type", "")
+                if "text/html" not in content_type and "application/xhtml+xml" not in content_type:
+                    raise WebImportError("目标地址返回的不是 HTML 页面")
+                data = resp.read(_MAX_HTML_BYTES + 1)
+            break
+        except urllib.error.HTTPError as exc:
+            raise WebImportError(f"网页抓取失败：HTTP {exc.code}") from exc
+        except urllib.error.URLError as exc:
+            if attempt < _FETCH_ATTEMPTS and isinstance(exc.reason, ssl.SSLError):
+                continue
+            raise WebImportError(f"网页抓取失败：{exc.reason}") from exc
 
     if len(data) > _MAX_HTML_BYTES:
         raise WebImportError(
