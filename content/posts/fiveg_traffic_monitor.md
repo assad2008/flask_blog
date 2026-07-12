@@ -82,6 +82,9 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 **对话视图：按联系人分组，气泡式展示，可直接回复**
 ![Web 短信中心对话视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist1.png)
 
+**对话视图：对话详情可直接回复**
+![Web 短信中心对话视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/smschat.png)
+
 ### HTTP API
 
 顺带提供 REST 接口给本机脚本调用，支持 `X-API-Key` 请求头免密鉴权，API Key 每次启动自动重新生成。常用接口：
