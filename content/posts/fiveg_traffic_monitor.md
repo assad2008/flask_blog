@@ -15,7 +15,7 @@ seo_keywords: 5G CPE, VN007+, 流量监控, C#, .NET 8, Windows Forms, 短信收
 
 于是干脆写个小工具常驻任务栏：一眼看到本月用了多少流量，顺便把短信也收发做了。这就是 FiveGTrafficMonitor。
 
-> ![托盘图标效果][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/tuopan.png]
+> ![托盘图标效果](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/tuopan.png)
 >
 > *任务栏图标直接显示紧凑数值，鼠标悬停看精确 MB*
 
@@ -44,11 +44,11 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 
 卡片整体是圆角渐变 + 主题色辉光，主题色随流量状态变（绿/橙/红）。左键单击立即刷新，左键拖动能挪到任意屏幕位置，松开自动记住坐标。读取出错时主题色变红、数值显示 `--`，并提示去检查路由器连接。
 
-> ![桌面流量条完整模式][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/llt.png]
+> ![桌面流量条完整模式](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/llt.png)
 >
 > *完整模式：已用 / 剩余 / 预估天数 / 实时速度 / 今日峰值*
 
-> ![桌面流量条紧凑模式][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/minillt.png]
+> ![桌面流量条紧凑模式](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/minillt.png)
 >
 > *紧凑模式：省略峰值，体积更小，适合角落常驻*
 
@@ -61,7 +61,7 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 
 通知面板为无边框置顶窗口，可拖动；点 × 关闭只隐藏不销毁，下次复用。发送按钮会变色反馈：发送中变 `发送中…`，成功变绿色 `✓ 短信已发送`，失败变红色 `✕ 发送失败`。已通知过的短信按索引去重，不会反复弹窗。
 
-> ![新短信通知面板][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/recvsms.png]
+> ![新短信通知面板](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/recvsms.png)
 >
 > *收到新短信弹出的通知面板，可直接回复*
 
@@ -75,11 +75,11 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 - 右侧「发送短信」卡片填收件人和内容即可发送，支持 `+86` 开头号码。
 - 仅监听 `localhost` / `127.0.0.1`，不对外网开放。
 
-> ![Web 短信中心列表视图][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist.png]
+> ![Web 短信中心列表视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist.png)
 >
 > *列表视图：所有短信按索引降序，未读带绿色徽标*
 
-> ![Web 短信中心对话视图][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist1.png]
+> ![Web 短信中心对话视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist1.png)
 >
 > *对话视图：按联系人分组，气泡式展示，可直接回复*
 
@@ -121,11 +121,11 @@ print(resp.json())
 - **显示**：测速网卡下拉、托盘图标显示模式（已用流量 / 剩余流量 / 使用百分比 / 实时下载速度）、流量条透明度与字体缩放、紧凑模式、始终置顶。
 - **短信 / Web**：短信通知开关、Web 服务开关与端口、API Key（只读）、Web 密码（带显示 / 隐藏切换）。
 
-> ![设置窗口-连接][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/setting.png]
+> ![设置窗口-连接](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/setting.png)
 >
 > *连接设置：地址 / 用户名 / 密码 + 测试连接*
 
-> ![设置窗口-显示与 Web][https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/set_webui.png]
+> ![设置窗口-显示与 Web](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/set_webui.png)
 >
 > *显示与 Web 设置：托盘模式、流量条外观、短信与 Web 服务*
 
