@@ -62,7 +62,7 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 通知面板为无边框置顶窗口，可拖动；点 × 关闭只隐藏不销毁，下次复用。发送按钮会变色反馈：发送中变 `发送中…`，成功变绿色 `✓ 短信已发送`，失败变红色 `✕ 发送失败`。已通知过的短信按索引去重，不会反复弹窗。
 
 **收到新短信弹出的通知面板，可直接回复**
-![新短信通知面板](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/recvsms.png)
+![新短信通知面板](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/newsms.png)
 
 
 ### Web 短信中心
