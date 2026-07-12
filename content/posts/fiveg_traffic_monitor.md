@@ -77,7 +77,7 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 - 仅监听 `localhost` / `127.0.0.1`，不对外网开放。
 
 **列表视图：所有短信按索引降序，未读带绿色徽标**
-![Web 短信中心列表视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist.png)
+![Web 短信中心列表视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist_1.png)
 
 **对话视图：按联系人分组，气泡式展示，可直接回复**
 ![Web 短信中心对话视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist1.png)
