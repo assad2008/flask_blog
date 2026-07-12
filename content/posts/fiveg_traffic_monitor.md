@@ -2,7 +2,7 @@
 Authors: assad
 Date: 2026-07-12
 Summary: 折腾了一台联通 VN007+ 5G CPE，因为用的是流量卡，总担心超额，于是用 C# / .NET 8 / Windows Forms 写了个常驻任务栏的小工具：FiveGTrafficMonitor。除了实时显示本月已用流量，还顺手把路由器的短信收发也做进去了，附带一个本机 Web 短信中心和 HTTP API。本文介绍项目背景、功能、编译与使用方式。
-Title: 用 C# 给 5G CPE 写一个任务栏流量监控 + 短信收发小工具
+Title: 用 C# 给 联通 VN007+ 5G CPE 写一个任务栏流量监控 + 短信收发小工具
 seo_description: 介绍 FiveGTrafficMonitor，一个基于 C# / .NET 8 / Windows Forms 的 5G CPE 任务栏流量监控与短信收发小工具，支持联通 VN007+，包含 Web 短信中心与 HTTP API。讲解项目背景、功能特性、编译与使用方法。
 seo_keywords: 5G CPE, VN007+, 流量监控, C#, .NET 8, Windows Forms, 短信收发, 任务栏, 托盘程序
 ---
