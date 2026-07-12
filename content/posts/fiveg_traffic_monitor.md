@@ -15,9 +15,8 @@ seo_keywords: 5G CPE, VN007+, 流量监控, C#, .NET 8, Windows Forms, 短信收
 
 于是干脆写个小工具常驻任务栏：一眼看到本月用了多少流量，顺便把短信也收发做了。这就是 FiveGTrafficMonitor。
 
-> ![托盘图标效果](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/tuopan.png)
->
-> *任务栏图标直接显示紧凑数值，鼠标悬停看精确 MB*
+*任务栏图标直接显示紧凑数值，鼠标悬停看精确 MB*
+![托盘图标效果](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/tuopan.png)
 
 ## 为什么用 C#
 
