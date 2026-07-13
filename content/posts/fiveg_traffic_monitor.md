@@ -16,8 +16,8 @@ seo_keywords: 5G CPE, VN007+, 流量监控, C#, .NET 8, Windows Forms, 短信收
 于是干脆写个小工具常驻任务栏：一眼看到本月用了多少流量，顺便把短信也收发做了。这就是 FiveGTrafficMonitor。
 
 **任务栏图标直接显示紧凑数值，鼠标悬停看精确 MB**
-![托盘图标效果](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/usege.png)
-![托盘图标效果](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/tuopan.png)
+![托盘图标效果](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/usege.png)
+![托盘图标效果](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/tuopan.png)
 
 
 ## 项目地址
@@ -49,11 +49,11 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 卡片整体是圆角渐变 + 主题色辉光，主题色随流量状态变（绿/橙/红）。左键单击立即刷新，左键拖动能挪到任意屏幕位置，松开自动记住坐标。读取出错时主题色变红、数值显示 `--`，并提示去检查路由器连接。
 
 **完整模式：已用 / 剩余 / 预估天数 / 实时速度 / 今日峰值**
-![桌面流量条完整模式](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/llt.png)
+![桌面流量条完整模式](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/llt.png)
 
 
 **紧凑模式：省略峰值，体积更小，适合角落常驻**
-![桌面流量条紧凑模式](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/minillt.png)
+![桌面流量条紧凑模式](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/minillt.png)
 
 
 ### 短信收发
@@ -66,7 +66,7 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 通知面板为无边框置顶窗口，可拖动；点 × 关闭只隐藏不销毁，下次复用。发送按钮会变色反馈：发送中变 `发送中…`，成功变绿色 `✓ 短信已发送`，失败变红色 `✕ 发送失败`。已通知过的短信按索引去重，不会反复弹窗。
 
 **收到新短信弹出的通知面板，可直接回复**
-![新短信通知面板](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/newsms.png)
+![新短信通知面板](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/newsms.png)
 
 
 ### Web 短信中心
@@ -80,13 +80,13 @@ Windows 11 已经不再正式支持传统任务栏 DeskBand，最稳的做法是
 - 仅监听 `localhost` / `127.0.0.1`，不对外网开放。
 
 **列表视图：所有短信按索引降序，未读带绿色徽标**
-![Web 短信中心列表视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist_1.png)
+![Web 短信中心列表视图](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/webui_smslist_1.png)
 
 **对话视图：按联系人分组，气泡式展示，可直接回复**
-![Web 短信中心对话视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/webui_smslist1.png)
+![Web 短信中心对话视图](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/webui_smslist1.png)
 
 **对话视图：对话详情可直接回复**
-![Web 短信中心对话视图](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/smschat.png)
+![Web 短信中心对话视图](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/smschat.png)
 
 ### HTTP API
 
@@ -127,10 +127,10 @@ print(resp.json())
 - **短信 / Web**：短信通知开关、Web 服务开关与端口、API Key（只读）、Web 密码（带显示 / 隐藏切换）。
 
 **连接设置：地址 / 用户名 / 密码 + 测试连接**
-![设置窗口-连接](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/setting.png)
+![设置窗口-连接](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/setting.png)
 
 **显示与 Web 设置：托盘模式、流量条外观、短信与 Web 服务**
-![设置窗口-显示与 Web](https://ittechren.oss-cn-beijing.aliyuncs.com/posts/images/2026/07/11/1648/set_webui.png)
+![设置窗口-显示与 Web](https://img.wangjiang.me/blog_post_images/fiveg_traffic_monitor/set_webui.png)
 
 ## 怎么编译
 
