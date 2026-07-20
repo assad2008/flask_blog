@@ -10,6 +10,7 @@
 - **阅读体验增强**：支持代码高亮、文章目录、标题锚点、阅读进度、返回顶部和响应式布局。
 - **文章发布入口**：配置 `BLOG_POSTART_PASSWORD` 后启用 `/postart`，可通过页面发布文章。
 - **LLM 辅助生成**：可配置 OpenAI 兼容接口，为发布文章生成标题、URL slug 和简介。所有 LLM 请求自动记录到 `logs/llm.log`（按天滚动）。
+- **网页导入图片转存**：通过发布入口抓取网页正文时，可将远程图片自动转存到阿里云 OSS 或 Cloudflare R2（二者互斥，由 `BLOG_IMAGE_STORAGE` 选择），避免外链失效。
 - **GitHub webhook 拉取**：可配置 GitHub webhook，在收到 push 后执行 `git pull --ff-only` 更新内容。
 
 ## 技术栈
@@ -54,6 +55,8 @@ flask_blog/
 │   ├── services/
 │   │   ├── llm.py            # OpenAI 兼容 LLM 元数据生成、LLM 请求日志
 │   │   ├── web_import.py     # 网页正文抓取与大模型提取
+│   │   ├── oss.py            # 阿里云 OSS 图片转存服务（网页导入时转存远程图片）
+│   │   ├── r2.py             # Cloudflare R2 图片转存服务（AWS Sig V4，与 OSS 互斥）
 │   │   └── git.py            # 发布后 git add / commit / push 服务
 │   └── templates/
 │       └── light/            # 当前主题模板（Jinja2 继承，base.html 为共享壳）
@@ -130,6 +133,16 @@ python app.py
 | `BLOG_LLM_BASE_URL` | 空 | OpenAI 兼容接口基址，例如 `https://api.openai.com/v1` |
 | `BLOG_LLM_API_KEY` | 空 | LLM 服务密钥 |
 | `BLOG_LLM_MODEL` | 空 | LLM 模型名，例如 `gpt-4o-mini`、`deepseek-chat` |
+| `BLOG_IMAGE_STORAGE` | `oss` | 网页导入图片转存后端：`oss` 或 `r2`，二者互斥 |
+| `BLOG_OSS_ACCESS_KEY_ID` | 空 | 阿里云 OSS AccessKey ID；四项齐全时启用 OSS 转存 |
+| `BLOG_OSS_ACCESS_KEY_SECRET` | 空 | 阿里云 OSS AccessKey Secret |
+| `BLOG_OSS_ENDPOINT` | 空 | OSS 公网 endpoint（如 `oss-cn-hangzhou.aliyuncs.com`） |
+| `BLOG_OSS_BUCKET` | 空 | OSS 存储桶名 |
+| `BLOG_R2_ACCOUNT_ID` | 空 | Cloudflare R2 账户 ID；五项齐全时启用 R2 转存 |
+| `BLOG_R2_ACCESS_KEY_ID` | 空 | R2 Access Key ID |
+| `BLOG_R2_SECRET_ACCESS_KEY` | 空 | R2 Secret Access Key |
+| `BLOG_R2_BUCKET` | 空 | R2 存储桶名 |
+| `BLOG_R2_PUBLIC_BASE_URL` | 空 | R2 公开访问基址（自定义域名或 `*.r2.dev`） |
 
 示例 `.env`：
 
@@ -150,6 +163,21 @@ BLOG_LLM_MODEL=gpt-4o-mini
 # 可选：启用 GitHub webhook 自动拉取
 BLOG_WEBHOOK_SECRET=change-me
 BLOG_WEBHOOK_REF=refs/heads/master
+
+# 可选：网页导入图片转存到阿里云 OSS（四项齐全时启用）
+# BLOG_IMAGE_STORAGE=oss
+# BLOG_OSS_ACCESS_KEY_ID=...
+# BLOG_OSS_ACCESS_KEY_SECRET=...
+# BLOG_OSS_ENDPOINT=oss-cn-hangzhou.aliyuncs.com
+# BLOG_OSS_BUCKET=your-bucket
+
+# 可选：网页导入图片转存到 Cloudflare R2（五项齐全时启用；与 OSS 互斥）
+# BLOG_IMAGE_STORAGE=r2
+# BLOG_R2_ACCOUNT_ID=...
+# BLOG_R2_ACCESS_KEY_ID=...
+# BLOG_R2_SECRET_ACCESS_KEY=...
+# BLOG_R2_BUCKET=your-bucket
+# BLOG_R2_PUBLIC_BASE_URL=https://images.example.com
 ```
 
 ## 内容编写
@@ -212,7 +240,7 @@ content/topics/about.md -> /topic/about.html
 
 1. 输入发布密码并通过简单数学验证码登录。
 2. 填写标题和正文。
-- 可点击”抓取网页”输入文章 URL，将网页正文提取为 Markdown 并填入正文区域；该功能需要完整配置 `BLOG_LLM_*`。
+- 可点击”抓取网页”输入文章 URL，将网页正文提取为 Markdown 并填入正文区域；该功能需要完整配置 `BLOG_LLM_*`。抓取时会自动把远程图片转存到 OSS 或 R2（按 `BLOG_IMAGE_STORAGE` 选择的后端，对应配置齐全时生效）。
 3. 点击”生成”生成标题、slug 和简介。
 4. 确认后发布，系统会写入 `content/posts/<slug>.md`。
 5. 发布后会尝试执行 `git add`、`git commit` 和 `git push`。

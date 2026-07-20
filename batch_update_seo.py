@@ -40,8 +40,8 @@ def _update_post(path: Path, settings: Settings) -> bool:
     raw = path.read_text(encoding="utf-8")
     post = frontmatter.loads(raw)
 
-    title = (post.metadata.get("title") or post.metadata.get("Title") or path.stem)
-    summary = (post.metadata.get("summary") or post.metadata.get("Summary") or "")
+    title = post.metadata.get("title") or post.metadata.get("Title") or path.stem
+    summary = post.metadata.get("summary") or post.metadata.get("Summary") or ""
     body = post.content or ""
 
     print(f"  [{path.name}] 标题: {title}")

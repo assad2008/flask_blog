@@ -69,6 +69,8 @@ flask_blog/
 │   ├── services/
 │   │   ├── llm.py            # OpenAI 兼容 LLM 元数据生成服务与 LLM 请求日志
 │   │   ├── web_import.py     # 网页正文抓取与大模型提取
+│   │   ├── oss.py            # 阿里云 OSS 图片转存服务（网页导入时转存远程图片）
+│   │   ├── r2.py             # Cloudflare R2 图片转存服务（AWS Sig V4，与 OSS 互斥）
 │   │   └── git.py            # 发布后 git add/commit/push 服务
 │   └── templates/
 │       └── light/            # 当前主题模板，Jinja2 继承，base.html 为共享壳
@@ -139,6 +141,16 @@ def hello():
 | `BLOG_LLM_BASE_URL` | 空 | OpenAI 兼容接口基址 |
 | `BLOG_LLM_API_KEY` | 空 | LLM 服务密钥 |
 | `BLOG_LLM_MODEL` | 空 | LLM 模型名 |
+| `BLOG_IMAGE_STORAGE` | `oss` | 网页导入图片转存后端：`oss` 或 `r2`，二者互斥 |
+| `BLOG_OSS_ACCESS_KEY_ID` | 空 | 阿里云 OSS AccessKey ID；四项齐全时启用 OSS 转存 |
+| `BLOG_OSS_ACCESS_KEY_SECRET` | 空 | 阿里云 OSS AccessKey Secret |
+| `BLOG_OSS_ENDPOINT` | 空 | OSS 公网 endpoint（如 `oss-cn-hangzhou.aliyuncs.com`） |
+| `BLOG_OSS_BUCKET` | 空 | OSS 存储桶名 |
+| `BLOG_R2_ACCOUNT_ID` | 空 | Cloudflare R2 账户 ID；五项齐全时启用 R2 转存 |
+| `BLOG_R2_ACCESS_KEY_ID` | 空 | R2 Access Key ID |
+| `BLOG_R2_SECRET_ACCESS_KEY` | 空 | R2 Secret Access Key |
+| `BLOG_R2_BUCKET` | 空 | R2 存储桶名 |
+| `BLOG_R2_PUBLIC_BASE_URL` | 空 | R2 公开访问基址（自定义域名或 `*.r2.dev`） |
 
 ## 修改注意事项
 

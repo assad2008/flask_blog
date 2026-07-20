@@ -58,6 +58,14 @@ class Settings:
     oss_access_key_secret: str = ""
     oss_endpoint: str = ""
     oss_bucket: str = ""
+    # 图片转存后端选择：oss（默认）或 r2；与对应后端配置配合使用，二者互斥
+    image_storage: str = "oss"
+    # Cloudflare R2 图片转存配置；五项齐全时启用 R2 上传
+    r2_account_id: str = ""
+    r2_access_key_id: str = ""
+    r2_secret_access_key: str = ""
+    r2_bucket: str = ""
+    r2_public_base_url: str = ""
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -79,6 +87,15 @@ class Settings:
         oss_access_key_secret = os.environ.get("BLOG_OSS_ACCESS_KEY_SECRET", "")
         oss_endpoint = os.environ.get("BLOG_OSS_ENDPOINT", "")
         oss_bucket = os.environ.get("BLOG_OSS_BUCKET", "")
+        # 图片转存后端选择：oss（默认）或 r2，未知值回退为 oss
+        image_storage = os.environ.get("BLOG_IMAGE_STORAGE", "oss").strip().lower() or "oss"
+        if image_storage not in {"oss", "r2"}:
+            image_storage = "oss"
+        r2_account_id = os.environ.get("BLOG_R2_ACCOUNT_ID", "")
+        r2_access_key_id = os.environ.get("BLOG_R2_ACCESS_KEY_ID", "")
+        r2_secret_access_key = os.environ.get("BLOG_R2_SECRET_ACCESS_KEY", "")
+        r2_bucket = os.environ.get("BLOG_R2_BUCKET", "")
+        r2_public_base_url = os.environ.get("BLOG_R2_PUBLIC_BASE_URL", "")
         return cls(
             content_dir=content_dir,
             posts_per_page=posts_per_page,
@@ -98,4 +115,10 @@ class Settings:
             oss_access_key_secret=oss_access_key_secret,
             oss_endpoint=oss_endpoint,
             oss_bucket=oss_bucket,
+            image_storage=image_storage,
+            r2_account_id=r2_account_id,
+            r2_access_key_id=r2_access_key_id,
+            r2_secret_access_key=r2_secret_access_key,
+            r2_bucket=r2_bucket,
+            r2_public_base_url=r2_public_base_url,
         )

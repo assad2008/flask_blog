@@ -14,6 +14,7 @@ from typing import Any
 
 from blog.services.llm import LLMError, extract_article_markdown
 from blog.services.oss import OssImageConfig, rewrite_markdown_images_to_oss
+from blog.services.r2 import R2ImageConfig, rewrite_markdown_images_to_r2
 
 _MAX_HTML_BYTES = 10_000_000
 _MAX_CANDIDATE_CHARS = 100000
@@ -49,6 +50,7 @@ def fetch_article_markdown(
     api_key: str,
     model: str,
     oss_config: OssImageConfig | None = None,
+    r2_config: R2ImageConfig | None = None,
     on_progress: Callable[[dict[str, Any]], None] | None = None,
 ) -> str:
     """抓取网页并返回由 LLM 提取的 Markdown 正文。
@@ -110,7 +112,15 @@ def fetch_article_markdown(
     if not body:
         raise WebImportError("未提取到正文")
 
-    if oss_config and oss_config.is_ready:
+    # 远程图片转存：优先 R2，其次 OSS，二者互斥（由路由层按配置决定传哪一个）
+    if r2_config and r2_config.is_ready:
+        _log("正在转存文章图片到 R2…")
+        body = rewrite_markdown_images_to_r2(
+            body,
+            config=r2_config,
+            on_progress=on_progress,
+        )
+    elif oss_config and oss_config.is_ready:
         _log("正在转存文章图片到 OSS…")
         body = rewrite_markdown_images_to_oss(
             body,

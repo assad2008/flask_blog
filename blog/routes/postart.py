@@ -48,6 +48,7 @@ from blog.services.llm import (
     sanitize_slug,
 )
 from blog.services.oss import OssImageConfig
+from blog.services.r2 import R2ImageConfig
 from blog.services.web_import import WebImportError, fetch_article_markdown
 
 postart_bp = Blueprint("postart", __name__)
@@ -94,6 +95,29 @@ def _oss_image_config(settings: Settings) -> OssImageConfig:
         endpoint=settings.oss_endpoint,
         bucket=settings.oss_bucket,
     )
+
+
+def _r2_image_config(settings: Settings) -> R2ImageConfig:
+    """从应用配置构造网页导入图片转存所需的 R2 配置。"""
+    return R2ImageConfig(
+        account_id=settings.r2_account_id,
+        access_key_id=settings.r2_access_key_id,
+        secret_access_key=settings.r2_secret_access_key,
+        bucket=settings.r2_bucket,
+        public_base_url=settings.r2_public_base_url,
+    )
+
+
+def _image_storage_configs(
+    settings: Settings,
+) -> tuple[OssImageConfig | None, R2ImageConfig | None]:
+    """按 ``image_storage`` 选择器构造对应后端配置，另一个返回 None。
+
+    两个后端互斥：选择 r2 时只构造 R2 配置，否则只构造 OSS 配置。
+    """
+    if settings.image_storage == "r2":
+        return None, _r2_image_config(settings)
+    return _oss_image_config(settings), None
 
 
 @postart_bp.route("/postart", methods=["GET", "POST"])
@@ -352,12 +376,14 @@ def _handle_import_url(settings: Settings):
 
         def worker():
             try:
+                oss_config, r2_config = _image_storage_configs(settings)
                 body = fetch_article_markdown(
                     url,
                     base_url=settings.llm_base_url,
                     api_key=settings.llm_api_key,
                     model=settings.llm_model,
-                    oss_config=_oss_image_config(settings),
+                    oss_config=oss_config,
+                    r2_config=r2_config,
                     on_progress=on_progress,
                 )
                 total_elapsed = round(_sse_time.time() - start_time, 1)
